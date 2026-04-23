@@ -96,14 +96,27 @@ go run main.go
 
 ## 📣 Status do projeto
 
-🚧 Em desenvolvimento
+🚧 Projeto em fase inicial
 
----
+Ainda não há interface ou deploy disponível.
 
+Se queres aprender, colaborar ou acompanhar a evolução,
+este é o melhor momento para entrar 🚀
 ## 🧑‍💻 Autor
 
 Desenvolvido por estudantes do INSTIC.
 
+## 👀 Procuramos colaboradores
+
+Este projeto está no início e precisa de pessoas que queiram:
+
+- Aprender na prática
+- Trabalhar em equipe
+- Contribuir com ideias
+
+Não importa se és iniciante — o objetivo é crescer juntos.
+
+Se tens interesse, faz um fork e começa 💻
 ---
 
 ## ⭐ Apoia o projeto

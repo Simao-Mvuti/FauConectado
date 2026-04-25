@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculdade Tech</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>FACULDADE TECH</h1>
+    <p>Gestão & Tecnologia</p>
+</header>
+
+<main>
+
+    <form class="formulario">
+
+        <h2>Cadastro de Estudante</h2>
+
+        <input type="text" placeholder="Nome completo" required>
+
+        <!-- 🎯 UX CORRETO: Ano limitado 1 a 5 -->
+        <label>Ano de estudo</label>
+        <select required>
+            <option value="">Selecione o ano</option>
+            <option value="1">1º Ano</option>
+            <option value="2">2º Ano</option>
+            <option value="3">3º Ano</option>
+            <option value="4">4º Ano</option>
+            <option value="5">5º Ano</option>
+        </select>
+
+        <input type="email" placeholder="Email" required>
+        <input type="password" placeholder="Senha" required>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" required>
+                Aceito os termos
+            </label>
+        </div>
+
+        <button type="submit">Entrar no Sistema</button>
+
+    </form>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 Faculdade Tech</p>
+</footer>
+
+</body>
+</html>

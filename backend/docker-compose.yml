@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:15
+    container_name: faculdade_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USUARIO}
+      POSTGRES_PASSWORD: ${DB_SENHA}
+      POSTGRES_DB: ${DB_NOME}
+    ports:
+      - "${DB_PORTA}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

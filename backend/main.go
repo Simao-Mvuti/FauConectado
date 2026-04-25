@@ -2,6 +2,7 @@ package main
 
 import (
 	"faculdadeConectado/internal/config"
+	"faculdadeConectado/internal/database"
 	"faculdadeConectado/internal/routas"
 	"log"
 
@@ -13,7 +14,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db, err := database.Conectar(&config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	api := gin.Default()
-	routas.AlunoRotas(api)
+	routas.UsuarioRotas(api, db)
 	api.Run(":" + config.PORTA_API)
 }

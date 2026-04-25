@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 🌌 Fundo futurista */
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+    color: white;
+    height: 100vh;
+}
+
+/* 🔷 Header */
+header {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 32px;
+    color: #00eaff;
+    transition: 0.3s;
+}
+
+/* efeito neon */
+h1:hover {
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+}
+
+header p {
+    color: #ccc;
+}
+
+/* 🧠 Centro */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+}
+
+/* 🧾 Formulário */
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    background: rgba(0,0,0,0.6);
+    padding: 25px;
+    border-radius: 10px;
+
+    width: 300px;
+
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.formulario h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* 🔹 Inputs */
+input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+input::placeholder {
+    color: #bbb;
+}
+
+/* efeito ao focar */
+input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #00ffff;
+}
+
+/* checkbox */
+.checkbox {
+    font-size: 14px;
+}
+
+/* 🔘 Botão */
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+
+    background: #00eaff;
+    color: black;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #00ffff;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+/* 🔻 Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    color: #aaa;
+}
+
+select {
+    padding: 10px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: none;
+}

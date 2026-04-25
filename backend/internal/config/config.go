@@ -9,6 +9,11 @@ import (
 
 type CONFIG struct {
 	PORTA_API string
+	PORTA     string
+	HOST      string
+	USUARIO   string
+	SENHA     string
+	NOME      string
 }
 
 func LeituraEnv(pasta string) (CONFIG, error) {
@@ -17,10 +22,28 @@ func LeituraEnv(pasta string) (CONFIG, error) {
 	}
 
 	porta_api := os.Getenv("PORTA_API")
+	porta := os.Getenv("DB_PORTA")
+	host := os.Getenv("DB_HOST")
+	usuario := os.Getenv("DB_USUARIO")
+	senha := os.Getenv("DB_SENHA")
+	nome := os.Getenv("DB_NOME")
 
-	if porta_api == "" {
+	if porta_api == "" ||
+		porta == "" ||
+		host == "" ||
+		usuario == "" ||
+		senha == "" ||
+		nome == "" {
 		return CONFIG{}, errors.New("Váriavel da porta da api ,está vázio")
 	}
 
-	return CONFIG{PORTA_API: porta_api}, nil
+	config := CONFIG{
+		PORTA_API: porta_api,
+		PORTA:     porta,
+		NOME:      nome,
+		SENHA:     senha,
+		USUARIO:   usuario,
+		HOST:      host}
+
+	return config, nil
 }

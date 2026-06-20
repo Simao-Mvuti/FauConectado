@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -19,6 +20,10 @@ func Conection(dsn string) (*sql.DB, error) {
 	if err := db.Ping(); err != nil {
 		return db, err
 	}
+
+	db.SetMaxOpenConns(25)                 // Máximo de conexões abertas ao mesmo tempo
+	db.SetMaxIdleConns(25)                 // Quantas conexões ficam abertas esperando em cache
+	db.SetConnMaxLifetime(5 * time.Minute) // Tempo de vida de cada conexão
 
 	return db, nil
 }

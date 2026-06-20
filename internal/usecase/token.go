@@ -19,7 +19,7 @@ func GerarToken(userID uint, email string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(configuretion.JWT_KEY)
+	return token.SignedString([]byte(configuretion.JWT_KEY))
 }
 
 // ValidarToken checa se o token está expirado ou é inválido

@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"projeto/internal/domain"
 )
 
@@ -10,6 +11,6 @@ type AuthService interface {
 }
 
 type AuthRepository interface {
-	FindUserByEmail(email string) (*domain.User, error)
-	RegiterUser(input *domain.User) error
+	FindUserByEmail(ctx context.Context, email string) (*domain.User, error)
+	RegiterUser(ctx context.Context, input *domain.User) error
 }

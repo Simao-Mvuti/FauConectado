@@ -54,7 +54,7 @@ func (h *Handler) Login(c *gin.Context) {
 		return
 	}
 
-	err := h.Service.Login(loginUser)
+	token, err := h.Service.Login(loginUser)
 	if err != nil {
 
 		if errors.Is(err, domain.ErrUserNotFound) {
@@ -71,6 +71,7 @@ func (h *Handler) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"token":   token,
 		"message": "login successful",
 		"next":    "/",
 	})

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"projeto/internal/domain"
 	"projeto/internal/usecase"
@@ -13,6 +14,15 @@ type Handler struct {
 	Service usecase.AuthService
 }
 
+// Register godoc
+// @Summary Realiza o cadastro do usuário
+// @Description Cadastra o usuário
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400
+// @Router /auth/register [post]
 func (h *Handler) Register(c *gin.Context) {
 	createUser := new(domain.UserCreate)
 
@@ -36,6 +46,7 @@ func (h *Handler) Register(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "internal server error",
 		})
+		log.Println(err)
 		return
 	}
 
@@ -44,6 +55,16 @@ func (h *Handler) Register(c *gin.Context) {
 	})
 }
 
+// Login godoc
+// @Summary Realiza o login do usuário
+// @Description Autentica o usuário com e-mail e senha e devolve um token JWT
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param input body domain.UserLogin true "Credenciais de Acesso"
+// @Success 200 {object} map[string]string "token: jwt_token"
+// @Failure 400 {object} map[string]string "erro: dados inválidos"
+// @Router /auth/login [post]
 func (h *Handler) Login(c *gin.Context) {
 	loginUser := new(domain.UserLogin)
 
@@ -67,6 +88,7 @@ func (h *Handler) Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "internal server error",
 		})
+		log.Println(err)
 		return
 	}
 

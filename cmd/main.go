@@ -1,25 +1,33 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"projeto/internal/configuretion"
 	"projeto/internal/database"
 	"projeto/internal/handler"
 	"projeto/internal/repository"
+	"projeto/internal/routes"
 	"projeto/internal/service"
 
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
+// @title API de Autenticação
+// @version 1.0
+// @description Servidor de testes de rotas e estresse.
+// @host localhost:8080
+// @BasePath /api/v1
 func main() {
-	e := gin.Default()
 	if err := godotenv.Load(".env"); err != nil {
 		panic(err)
 	}
 
 	dsn, err := configuretion.DatabaseConf()
+	if err != nil {
+		panic(err)
+	}
+
+	err = configuretion.JWTKeyConf()
 	if err != nil {
 		panic(err)
 	}
@@ -38,12 +46,6 @@ func main() {
 	userRepository := repository.NewAuthRepository(db)
 	userService := service.NewAuthService(&userRepository)
 	userHandler := handler.Handler{Service: &userService}
-
-	api := e.Group("/api/v1/")
-	authRoutes := api.Group("/auth")
-	authRoutes.POST("/login", userHandler.Login)
-	authRoutes.POST("/register", userHandler.Register)
-
-	fmt.Println("Servidor Rodando...")
+	e := routes.SetupRoute(&userHandler)
 	e.Run()
 }

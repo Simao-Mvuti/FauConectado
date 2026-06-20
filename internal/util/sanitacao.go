@@ -14,7 +14,7 @@ func Saniticacao_login(input *domain.UserLogin) *domain.User {
 
 func Saniticacao_create(input *domain.UserCreate) *domain.User {
 	return &domain.User{
-		Nome:     strings.TrimSpace(input.Nome),
+		Name:     strings.TrimSpace(input.Name),
 		Email:    strings.TrimSpace(input.Email),
 		Password: strings.TrimSpace(input.Password),
 	}

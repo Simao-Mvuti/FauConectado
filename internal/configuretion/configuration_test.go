@@ -4,6 +4,7 @@ import (
 	"projeto/internal/configuretion"
 	"testing"
 
+	"github.com/go-playground/assert/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -39,9 +40,7 @@ func TestConfigution(t *testing.T) {
 
 			// Só testamos a DatabaseConf se o env foi carregado com sucesso
 			_, err = configuretion.DatabaseConf()
-			if err != nil {
-				t.Errorf("Erro ao ler as configurações do banco: %v", err)
-			}
+			assert.Equal(t, err, nil)
 		})
 	}
 }

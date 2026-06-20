@@ -4,7 +4,6 @@ services:
     container_name: postgres_container
     restart: always
     environment:
-      # O Docker Compose vai substituir estes valores pelos do arquivo .env
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}

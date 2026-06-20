@@ -2,7 +2,7 @@ package domain
 
 type User struct {
 	Id       int
-	Nome     string
+	Name     string
 	Email    string
 	Password string
 }

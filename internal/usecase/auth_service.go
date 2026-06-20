@@ -1,9 +1,11 @@
 package usecase
 
-import "projeto/internal/domain"
+import (
+	"projeto/internal/domain"
+)
 
 type AuthService interface {
-	Login(input *domain.UserLogin) error
+	Login(input *domain.UserLogin) (string, error)
 	CreateUser(input *domain.UserCreate) error
 }
 

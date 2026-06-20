@@ -30,7 +30,7 @@ func (r *authRepository) FindUserByEmail(email string) (*domain.User, error) {
 
 	err := row.Scan(
 		&user.Id,
-		&user.Nome,
+		&user.Name,
 		&user.Email,
 		&user.Password,
 	)
@@ -47,8 +47,17 @@ func (r *authRepository) FindUserByEmail(email string) (*domain.User, error) {
 }
 
 func (r *authRepository) RegiterUser(input *domain.User) error {
+	existeUser, err := r.FindUserByEmail(input.Email)
+	if existeUser != nil && err == nil {
+		return domain.ErrEmailAlreadyExists
+	}
+
+	if err != nil && !errors.Is(err, domain.ErrUserNotFound) {
+		return err
+	}
+
 	query := "INSERT INTO users (name,email,password) VALUES ($1,$2,$3)"
-	_, err := r.DB.Exec(query, input.Nome, input.Email, input.Password)
+	_, err = r.DB.Exec(query, input.Name, input.Email, input.Password)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {

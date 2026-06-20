@@ -2,76 +2,111 @@ package handler_test
 
 import (
 	"bytes"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"projeto/internal/domain"
 	"projeto/internal/handler"
+	"projeto/internal/routes"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/assert/v2"
 )
 
-func setupRouterGet(routa string, hander func(c *gin.Context)) *gin.Engine {
-	gin.SetMode(gin.TestMode)
-	r := gin.New()
-	r.GET(routa, hander)
-	return r
+// 1. Criamos um Mock do seu Serviço de Autenticação
+type AuthServiceMock struct {
+	// Defina aqui variáveis para controlar o retorno do mock, ex:
+	RetornoErro error
 }
 
-func TestPingHandler(t *testing.T) {
-	routa := "/ping"
-	router := setupRouterGet(routa, func(c *gin.Context) {
-		c.String(200, "Pong")
-	})
+// Simulando o método Login que o seu handler provavelmente chama
+func (m *AuthServiceMock) Login(input *domain.UserLogin) (string, error) {
+	return "token_falso_jwt", m.RetornoErro
+}
 
-	req, _ := http.NewRequest(http.MethodGet, routa, nil)
+// Simulando o método Register
+func (m *AuthServiceMock) CreateUser(input *domain.UserCreate) error {
+	return m.RetornoErro
+}
+
+func TestCreateUserSucess(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockService := &AuthServiceMock{}
+	mockHandler := handler.Handler{mockService}
+
+	routes := routes.SetupRoute(&mockHandler)
 	w := httptest.NewRecorder()
 
+	body := bytes.NewBufferString(`{"name":"samuel","email":"sammvuti@gmail.com","password":"123456776"}`)
+	req, _ := http.NewRequest("POST", "/api/v1/auth/register", body)
+	req.Header.Set("Content-Type", "application/json")
+
+	routes.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusCreated, w.Code)
+}
+
+func TestCreateUserFail(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mockService := &AuthServiceMock{}
+	mockHandler := handler.Handler{mockService}
+
+	routes := routes.SetupRoute(&mockHandler)
+	w := httptest.NewRecorder()
+
+	body := bytes.NewBufferString(`{"nome":"sl","email":"sammvuticom","password":"127"}`)
+	req, _ := http.NewRequest("POST", "/api/v1/auth/register", body)
+	req.Header.Set("Content-Type", "application/json")
+
+	routes.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestRotaLoginSucess(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
+	// 2. Instancia o mock do serviço (sem banco de dados!)
+	mockService := &AuthServiceMock{}
+
+	// 3. Cria o Handler injetando o Mock
+	mockHandler := handler.Handler{Service: mockService}
+
+	// 4. Cria o roteador isolado usando o Mock
+	router := routes.SetupRoute(&mockHandler)
+	w := httptest.NewRecorder()
+
+	// 5. Prepara a requisição simulada
+	body := bytes.NewBufferString(`{"email":"teste@email.com", "password":"123345555"}`)
+	req, _ := http.NewRequest("POST", "/api/v1/auth/login", body)
+	req.Header.Set("Content-Type", "application/json")
+
+	// 6. Executa
 	router.ServeHTTP(w, req)
 
+	// 7. Valida o resultado esperado do Handler
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
-type ServiceFack struct {
-}
-
-func (s *ServiceFack) Login(input *domain.UserLogin) (string, error) {
-	return "", nil
-}
-func (s *ServiceFack) CreateUser(input *domain.UserCreate) error {
-	return nil
-}
-
-func TestRegisterHandler(t *testing.T) {
-	// Configuração
+func TestRotaLoginFail(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 
-	// Setup do router
-	router := gin.Default()
-	serviceFack := ServiceFack{}
-	handler := handler.Handler{&serviceFack} // Você provavelmente vai injetar um service/mock aqui
-	router.POST("/auth/register", handler.Register)
+	// 2. Instancia o mock do serviço (sem banco de dados!)
+	mockService := &AuthServiceMock{}
 
-	// Dados de teste
-	testUser := gin.H{
-		"nome":     "Lucas",
-		"email":    "lucas@email.com",
-		"password": "12344578",
-	}
+	// 3. Cria o Handler injetando o Mock
+	mockHandler := handler.Handler{Service: mockService}
 
-	body, _ := json.Marshal(testUser)
+	// 4. Cria o roteador isolado usando o Mock
+	router := routes.SetupRoute(&mockHandler)
+	w := httptest.NewRecorder()
 
-	// Criar requisição
-	req, _ := http.NewRequest("POST", "/auth/register", bytes.NewBuffer(body))
+	// 5. Prepara a requisição simulada
+	body := bytes.NewBufferString(`{"email":"testcom", "password":"123"}`)
+	req, _ := http.NewRequest("POST", "/api/v1/auth/login", body)
 	req.Header.Set("Content-Type", "application/json")
 
-	// Executar
-	w := httptest.NewRecorder()
+	// 6. Executa
 	router.ServeHTTP(w, req)
 
-	// Verificações
-
-	assert.Equal(t, http.StatusCreated, w.Code)
+	// 7. Valida o resultado esperado do Handler
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 }

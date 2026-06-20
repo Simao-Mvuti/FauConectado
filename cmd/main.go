@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
-	"projeto/internal/auth"
+	"log"
 	"projeto/internal/configuretion"
 	"projeto/internal/database"
+	"projeto/internal/handler"
+	"projeto/internal/repository"
+	"projeto/internal/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -21,11 +24,20 @@ func main() {
 		panic(err)
 	}
 
-	db := database.Conection(dsn)
+	db, err := database.Conection(dsn)
+	if err != nil {
+		panic(err)
+	}
+
 	defer db.Close()
-	userRepository := auth.Repository{DB: db}
-	userService := auth.Service{Repository: &userRepository}
-	userHandler := auth.Handler{Service: &userService}
+
+	if err := database.AplicarMigracoes(db); err != nil {
+		log.Println(err.Error())
+	}
+
+	userRepository := repository.NewAuthRepository(db)
+	userService := service.NewAuthService(&userRepository)
+	userHandler := handler.Handler{Service: &userService}
 
 	api := e.Group("/api/v1/")
 	authRoutes := api.Group("/auth")

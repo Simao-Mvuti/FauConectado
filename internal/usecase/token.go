@@ -8,10 +8,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GerarToken(userID uint, email string) (string, error) {
+func GerarToken(userID uint, email string, role string) (string, error) {
 	claims := domain.CustomClaims{
 		UserID: userID,
 		Email:  email,
+		Role:   role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(2 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

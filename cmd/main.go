@@ -9,6 +9,7 @@ import (
 	"projeto/internal/routes"
 	"projeto/internal/service"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
@@ -44,8 +45,16 @@ func main() {
 	}
 
 	userRepository := repository.NewAuthRepository(db)
+	admRepository := repository.NewADMpository(db)
 	userService := service.NewAuthService(&userRepository)
+	admService := service.NewADMService(&admRepository)
 	userHandler := handler.Handler{Service: &userService}
-	e := routes.SetupRoute(&userHandler)
+	admHandler := handler.ADMHandler{Service: &admService}
+
+	e := gin.Default()
+	routes.SetupRouteLimite(e)
+	routes.SetupRouteAuth(e, &userHandler)
+	routes.SetupRouteADM(e, &admHandler)
+
 	e.Run()
 }

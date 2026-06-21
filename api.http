@@ -1,11 +1,5 @@
-POST http://localhost:8080/api/v1/auth/register 
-Content-Type: application/json
+GET http://localhost:8080/api/v1/adm/users
 
-{
-    "name":"simao",
-    "email":"sammvuddti@gmail.com",
-    "password":"1234567668"
-}
 
 ###
 POST http://localhost:8080/api/v1/auth/login

@@ -34,14 +34,15 @@ func TestCreateUserSucess(t *testing.T) {
 	mockService := &AuthServiceMock{}
 	mockHandler := handler.Handler{mockService}
 
-	routes := routes.SetupRoute(&mockHandler)
+	e := gin.Default()
+	routes.SetupRouteAuth(e, &mockHandler)
 	w := httptest.NewRecorder()
 
 	body := bytes.NewBufferString(`{"name":"samuel","email":"sammvuti@gmail.com","password":"123456776"}`)
 	req, _ := http.NewRequest("POST", "/api/v1/auth/register", body)
 	req.Header.Set("Content-Type", "application/json")
 
-	routes.ServeHTTP(w, req)
+	e.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusCreated, w.Code)
 }
 
@@ -50,14 +51,15 @@ func TestCreateUserFail(t *testing.T) {
 	mockService := &AuthServiceMock{}
 	mockHandler := handler.Handler{mockService}
 
-	routes := routes.SetupRoute(&mockHandler)
+	e := gin.Default()
+	routes.SetupRouteAuth(e, &mockHandler)
 	w := httptest.NewRecorder()
 
 	body := bytes.NewBufferString(`{"nome":"sl","email":"sammvuticom","password":"127"}`)
 	req, _ := http.NewRequest("POST", "/api/v1/auth/register", body)
 	req.Header.Set("Content-Type", "application/json")
 
-	routes.ServeHTTP(w, req)
+	e.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
@@ -71,7 +73,8 @@ func TestRotaLoginSucess(t *testing.T) {
 	mockHandler := handler.Handler{Service: mockService}
 
 	// 4. Cria o roteador isolado usando o Mock
-	router := routes.SetupRoute(&mockHandler)
+	e := gin.Default()
+	routes.SetupRouteAuth(e, &mockHandler)
 	w := httptest.NewRecorder()
 
 	// 5. Prepara a requisição simulada
@@ -80,7 +83,7 @@ func TestRotaLoginSucess(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 
 	// 6. Executa
-	router.ServeHTTP(w, req)
+	e.ServeHTTP(w, req)
 
 	// 7. Valida o resultado esperado do Handler
 	assert.Equal(t, http.StatusOK, w.Code)
@@ -96,7 +99,8 @@ func TestRotaLoginFail(t *testing.T) {
 	mockHandler := handler.Handler{Service: mockService}
 
 	// 4. Cria o roteador isolado usando o Mock
-	router := routes.SetupRoute(&mockHandler)
+	e := gin.Default()
+	routes.SetupRouteAuth(e, &mockHandler)
 	w := httptest.NewRecorder()
 
 	// 5. Prepara a requisição simulada
@@ -105,7 +109,7 @@ func TestRotaLoginFail(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 
 	// 6. Executa
-	router.ServeHTTP(w, req)
+	e.ServeHTTP(w, req)
 
 	// 7. Valida o resultado esperado do Handler
 	assert.Equal(t, http.StatusBadRequest, w.Code)

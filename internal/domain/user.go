@@ -5,4 +5,8 @@ type User struct {
 	Name     string
 	Email    string
 	Password string
+	Course   string
+	Year     string
+	Photo    string
+	Role     string
 }

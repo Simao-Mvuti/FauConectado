@@ -22,7 +22,7 @@ func (r *authRepository) FindUserByEmail(ctx context.Context, email string) (*do
 	user := new(domain.User)
 
 	query := `
-		SELECT id,name,email,password
+		SELECT id,name,email,password,course,year,photo,role
 		FROM users
 		WHERE email = $1
 	`
@@ -34,6 +34,10 @@ func (r *authRepository) FindUserByEmail(ctx context.Context, email string) (*do
 		&user.Name,
 		&user.Email,
 		&user.Password,
+		&user.Course,
+		&user.Year,
+		&user.Photo,
+		&user.Role,
 	)
 
 	if err != nil {
@@ -48,8 +52,8 @@ func (r *authRepository) FindUserByEmail(ctx context.Context, email string) (*do
 }
 
 func (r *authRepository) RegiterUser(ctx context.Context, input *domain.User) error {
-	query := "INSERT INTO users (name,email,password) VALUES ($1,$2,$3)"
-	_, err := r.DB.ExecContext(ctx, query, input.Name, input.Email, input.Password)
+	query := "INSERT INTO users (name,email,password,course,year,photo,role) VALUES ($1,$2,$3,$4,$5,$6,$7)"
+	_, err := r.DB.ExecContext(ctx, query, input.Name, input.Email, input.Password, input.Course, input.Year, input.Photo, input.Role)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {

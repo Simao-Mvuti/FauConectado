@@ -38,7 +38,7 @@ func (s *authService) Login(input *domain.UserLogin) (string, error) {
 	cost, err := bcrypt.Cost([]byte(user.Password))
 	fmt.Println(cost)
 
-	token, err := usecase.GerarToken(uint(userfinded.Id), userfinded.Email)
+	token, err := usecase.GerarToken(uint(userfinded.Id), userfinded.Email, userfinded.Role)
 
 	return token, err
 }

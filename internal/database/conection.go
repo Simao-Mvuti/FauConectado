@@ -1,18 +1,19 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"time"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
-func Conection(dsn string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", dsn)
+func Conection(dsn string) (*sqlx.DB, error) {
+	db, err := sqlx.Connect("pgx", dsn)
 	if err != nil {
 		return db, err
 	}
@@ -28,8 +29,8 @@ func Conection(dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
-func AplicarMigracoes(db *sql.DB) error {
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
+func AplicarMigracoes(db *sqlx.DB) error {
+	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
 	if err != nil {
 		return fmt.Errorf("Erro ao criar driver de migração: %v", err)
 	}

@@ -13,11 +13,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// @title API de Autenticação
-// @version 1.0
-// @description Servidor de testes de rotas e estresse.
-// @host localhost:8080
-// @BasePath /api/v1
 func main() {
 	if err := godotenv.Load(".env"); err != nil {
 		panic(err)
@@ -51,6 +46,7 @@ func main() {
 	userHandler := handler.Handler{Service: &userService}
 	admHandler := handler.ADMHandler{Service: &admService}
 
+	gin.SetMode(gin.TestMode)
 	e := gin.Default()
 	routes.SetupRouteLimite(e)
 	routes.SetupRouteAuth(e, &userHandler)

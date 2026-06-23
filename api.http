@@ -7,5 +7,17 @@ Content-Type: application/json
 
 {
     "email":"sammvuti@gmail.com",
-     "password":"1234567668"
+    "password":"1234567668"
+}
+
+###
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "name":"samuel",
+    "email":"sammvuti@gmail.com",
+    "password":"1234567668",
+    "course":"Informatica de Gestão",
+    "year":"2"
 }

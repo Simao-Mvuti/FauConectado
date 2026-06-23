@@ -14,21 +14,12 @@ type Handler struct {
 	Service usecase.AuthService
 }
 
-// Register godoc
-// @Summary Realiza o cadastro do usuário
-// @Description Cadastra o usuário
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Success 200
-// @Failure 400
-// @Router /auth/register [post]
 func (h *Handler) Register(c *gin.Context) {
 	createUser := new(domain.UserCreate)
 
 	if err := c.ShouldBindJSON(createUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid request body",
+			"error": err.Error(),
 		})
 		return
 	}
@@ -55,22 +46,12 @@ func (h *Handler) Register(c *gin.Context) {
 	})
 }
 
-// Login godoc
-// @Summary Realiza o login do usuário
-// @Description Autentica o usuário com e-mail e senha e devolve um token JWT
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Param input body domain.UserLogin true "Credenciais de Acesso"
-// @Success 200 {object} map[string]string "token: jwt_token"
-// @Failure 400 {object} map[string]string "erro: dados inválidos"
-// @Router /auth/login [post]
 func (h *Handler) Login(c *gin.Context) {
 	loginUser := new(domain.UserLogin)
 
 	if err := c.ShouldBindJSON(loginUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid request body",
+			"error": err.Error(),
 		})
 		return
 	}
@@ -95,6 +76,6 @@ func (h *Handler) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"token":   token,
 		"message": "login successful",
-		"next":    "/",
+		"next":    "/me",
 	})
 }

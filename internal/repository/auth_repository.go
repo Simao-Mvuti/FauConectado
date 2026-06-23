@@ -6,40 +6,30 @@ import (
 	"errors"
 	"projeto/internal/domain"
 	"strings"
+
+	"github.com/jmoiron/sqlx"
 )
 
-func NewAuthRepository(db *sql.DB) authRepository {
+func NewAuthRepository(db *sqlx.DB) authRepository {
 	return authRepository{
 		DB: db,
 	}
 }
 
 type authRepository struct {
-	DB *sql.DB
+	DB *sqlx.DB
 }
 
 func (r *authRepository) FindUserByEmail(ctx context.Context, email string) (*domain.User, error) {
-	user := new(domain.User)
+	user := domain.User{}
 
 	query := `
-		SELECT id,name,email,password,course,year,photo,role
+		SELECT id,name,email,password,course,year,role
 		FROM users
 		WHERE email = $1
 	`
 
-	row := r.DB.QueryRowContext(ctx, query, email)
-
-	err := row.Scan(
-		&user.Id,
-		&user.Name,
-		&user.Email,
-		&user.Password,
-		&user.Course,
-		&user.Year,
-		&user.Photo,
-		&user.Role,
-	)
-
+	err := r.DB.GetContext(ctx, &user, query, email)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, domain.ErrUserNotFound
@@ -48,12 +38,12 @@ func (r *authRepository) FindUserByEmail(ctx context.Context, email string) (*do
 		return nil, err
 	}
 
-	return user, nil
+	return &user, nil
 }
 
 func (r *authRepository) RegiterUser(ctx context.Context, input *domain.User) error {
-	query := "INSERT INTO users (name,email,password,course,year,photo,role) VALUES ($1,$2,$3,$4,$5,$6,$7)"
-	_, err := r.DB.ExecContext(ctx, query, input.Name, input.Email, input.Password, input.Course, input.Year, input.Photo, input.Role)
+	query := "INSERT INTO users (name,email,password,course,year,role) VALUES ($1,$2,$3,$4,$5,$6)"
+	_, err := r.DB.ExecContext(ctx, query, input.Name, input.Email, input.Password, input.Course, input.Year, input.Role)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {

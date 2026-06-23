@@ -1,21 +1,24 @@
 package domain
 
-type Material struct {
-	Id          int
-	Title       string
-	Description string
-	User_id     string
-	File_Url    string
-	Type        string
-	Point       string
-	Created_at  string
-}
+import "time"
 
 type MaterialCreated struct {
 	Title       string `json:"title" binding:"required min=2 max=50"`
 	Description string `json:"description"`
-	User_id     string `json:"user_id" binding:"required"`
-	File_Url    string `json:"file_url" binding:"required"`
+	UserID      int    `json:"user_id" binding:"required"`
+	FileUrl     string `json:"file_url" binding:"required"`
 	Type        string `json:"type_file" binding:"required"`
-	Created_at  string `json:"time_created"`
+	MaterialID  int    `db:"material_id"`
+}
+
+type Material struct {
+	id          int       `db:"id"`
+	Title       string    `db:"title"`
+	Description string    `db:"description"`
+	UserID      int       `db:"user_id"`
+	FileURL     string    `db:"file_url"`
+	Type        string    `db:"document_type"`
+	Point       int       `db:"point"`
+	CuorseID    int       `db:"cuorse_id"`
+	CreatedAt   time.Time `db:"created_at"`
 }

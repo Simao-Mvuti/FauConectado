@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS users(
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL, 
     course VARCHAR(50) NOT NULL,
-    Year INTEGER NOT NULL,
-    Photo TEXT,
-    Role  VARCHAR(20),
+    year INTEGER NOT NULL,
+    role  VARCHAR(20)
 );

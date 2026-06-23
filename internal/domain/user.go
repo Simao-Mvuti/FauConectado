@@ -1,12 +1,11 @@
 package domain
 
 type User struct {
-	Id       int
-	Name     string
-	Email    string
-	Password string
-	Course   string
-	Year     string
-	Photo    string
-	Role     string
+	Id       int    `db:"id"`
+	Name     string `db:"name"`
+	Email    string `db:"email"`
+	Password string `db:"password"`
+	Course   string `db:"course"`
+	Year     int    `db:"year"`
+	Role     string `db:"role"`
 }

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"projeto/internal/domain"
 	"projeto/internal/util"
 	"strings"
 
@@ -28,9 +29,9 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		}
 
 		tokenString := parts[1]
-
+		claims := domain.CustomClaims{}
 		// 3. Faz o Parse e Valida o Token usando a sua chave secreta ([]byte!)
-		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
 			// Garante que o método de assinatura é HMAC
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, jwt.ErrSignatureInvalid
@@ -44,46 +45,9 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 			return
 		}
 
-		// 4. Se o token for válido, extrai os claims (ex: user_id)
-		if claims, ok := token.Claims.(jwt.MapClaims); ok {
-			// Salva o ID do usuário no contexto do Gin para os próximos Handlers usarem
-			c.Set(util.ID_USER, claims["sub"])
-		}
+		c.Set(util.ID_USER, claims.UserID)
 
 		// Continua para o próximo Handler/Rota
-		c.Next()
-	}
-}
-func ADMMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// 1. Recupera o objeto do contexto (retorna um 'any')
-		claimsInterface, existe := c.Get(util.ID_USER)
-		if !existe {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "usuário não autenticado"})
-			c.Abort()
-			return
-		}
-
-		// 2. ASSERÇÃO DE TIPO: Diz ao Go que essa interface é um jwt.MapClaims
-		claims, ok := claimsInterface.(jwt.MapClaims)
-		if !ok {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "erro interno ao ler permissões"})
-			c.Abort()
-			return
-		}
-
-		// 3. VALIDAÇÃO DE ADMINISTRADOR: Agora sim, podes ler o ["isAdm"] com segurança
-		isAdm, exists := claims[util.IS_ADM].(bool)
-		if !exists || !isAdm {
-			c.JSON(http.StatusForbidden, gin.H{"error": "acesso negado: esta rota exige privilégios de administrador"})
-			c.Abort()
-			return
-		}
-
-		// Define no contexto que este utilizador está confirmado como Admin
-		c.Set(util.IS_ADM, true)
-
-		// Sinal verde para a rota de Admin
 		c.Next()
 	}
 }

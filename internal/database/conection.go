@@ -1,11 +1,9 @@
 package database
 
 import (
-	"fmt"
+	"os"
 	"time"
 
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
@@ -29,29 +27,8 @@ func Conection(dsn string) (*sqlx.DB, error) {
 	return db, nil
 }
 
-func AplicarMigracoes(db *sqlx.DB) error {
-	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
-	if err != nil {
-		return fmt.Errorf("Erro ao criar driver de migração: %v", err)
-	}
-
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://db/migrations",
-		"postgres", driver,
-	)
-	if err != nil {
-		return fmt.Errorf("Erro ao inicializar migração: %v", err)
-	}
-
-	// 4. Executa as migrações (A mágica acontece aqui!)
-	err = m.Up()
-	if err != nil && err != migrate.ErrNoChange {
-		return fmt.Errorf("Erro ao rodar migrações: %v", err)
-	}
-
-	if err == migrate.ErrNoChange {
-		return fmt.Errorf("O banco já está atualizado! Nenhuma migração pendente.")
-	} else {
-		return fmt.Errorf("Migrações aplicadas com sucesso! Tabela criada.")
-	}
+func AplicarMigracoes(db *sqlx.DB, ArquivoSchame string) error {
+	file, err := os.ReadFile(ArquivoSchame)
+	db.MustExec(string(file))
+	return err
 }

@@ -3,6 +3,11 @@ services:
     image: postgres:15-alpine
     container_name: postgres_container
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}

@@ -42,7 +42,7 @@ func (r *authRepository) FindUserByEmail(ctx context.Context, email string) (*do
 }
 
 func (r *authRepository) RegiterUser(ctx context.Context, input *domain.User) error {
-	query := "INSERT INTO users (name,email,password,course,year,role) VALUES ($1,$2,$3,$4,$5,$6)"
+	query := "INSERT INTO users (name,email,password,course ,year,role) VALUES ($1,$2,$3,$4,$5,$6)"
 	_, err := r.DB.ExecContext(ctx, query, input.Name, input.Email, input.Password, input.Course, input.Year, input.Role)
 
 	if err != nil {

@@ -35,22 +35,27 @@ func main() {
 
 	defer db.Close()
 
-	if err := database.AplicarMigracoes(db); err != nil {
+	if err := database.AplicarMigracoes(db, "./db/schema.sql"); err != nil {
 		log.Println(err.Error())
 	}
 
+	materialRepository := repository.NewMaterialRepository(db)
 	userRepository := repository.NewAuthRepository(db)
 	admRepository := repository.NewADMpository(db)
+
+	materialService := service.NewMaterialService(&materialRepository)
 	userService := service.NewAuthService(&userRepository)
 	admService := service.NewADMService(&admRepository)
-	userHandler := handler.Handler{Service: &userService}
+
+	materialHandler := handler.MaterialHandler{Service: &materialService}
 	admHandler := handler.ADMHandler{Service: &admService}
+	userHandler := handler.Handler{Service: &userService}
 
 	gin.SetMode(gin.TestMode)
 	e := gin.Default()
-	routes.SetupRouteLimite(e)
+	//routes.SetupRouteLimite(e)
 	routes.SetupRouteAuth(e, &userHandler)
-	routes.SetupRouteADM(e, &admHandler)
+	routes.SetupRouteProteted(e, &admHandler, &materialHandler)
 
 	e.Run()
 }

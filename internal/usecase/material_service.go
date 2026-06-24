@@ -6,11 +6,13 @@ import (
 )
 
 type MaterilService interface {
-	Create(material *domain.MaterialCreated) error
-	FindMaterials(limit, offset uint) ([]domain.Material, error)
+	CreateMaterial(material *domain.MaterialCreated, userID uint, url string) error
+	FindMaterials(inicio, limite uint) ([]domain.Material, error)
+	DeleteMaterial(id uint) error
 }
 
 type MaterilRepository interface {
-	Create(ctx context.Context, material *domain.Material) error
+	CreateMaterial(ctx context.Context, material *domain.Material) error
 	FindMaterials(ctx context.Context, limit, offset uint) ([]domain.Material, error)
+	DeleteMaterial(ctx context.Context, id uint) error
 }

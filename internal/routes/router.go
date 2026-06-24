@@ -2,7 +2,6 @@ package routes
 
 import (
 	"log"
-	"net/http"
 	"projeto/internal/configuretion"
 	"projeto/internal/handler"
 	middleware "projeto/internal/handler/middleware"
@@ -32,31 +31,13 @@ func SetupRouteAuth(e *gin.Engine, userHandler *handler.Handler) {
 		authRoutes.POST("/register", userHandler.Register)
 	}
 
-	protected := e.Group("/api/v1")
-	protected.Use(middleware.AuthMiddleware(configuretion.JWT_KEY))
-	{
-		protected.GET("/profile", func(ctx *gin.Context) {
-			user, existe := ctx.Get("userID")
-			if !existe {
-				ctx.JSON(http.StatusForbidden, "sem autorizacao")
-				return
-			}
-
-			ctx.JSON(200, gin.H{
-				"user":    user,
-				"message": "login successful",
-				"next":    "/",
-			})
-		})
-
-	}
 }
 
-func SetupRouteADM(e *gin.Engine, admHandler *handler.ADMHandler) {
+func SetupRouteProteted(e *gin.Engine, admHandler *handler.ADMHandler, materialHandler *handler.MaterialHandler) {
 	e.Use(middleware.AuthMiddleware(configuretion.JWT_KEY))
-	e.Use(middleware.ADMMiddleware())
-	admRoutes := e.Group("/api/v1/adm")
+	protegidas := e.Group("/api/v1/")
 	{
-		admRoutes.GET("/users", admHandler.FindUsers)
+		protegidas.POST("/material", materialHandler.CreateMaterial)
+		protegidas.GET("/material", materialHandler.FindMaterial)
 	}
 }

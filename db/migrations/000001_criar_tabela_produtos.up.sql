@@ -1,9 +1,0 @@
-CREATE TABLE IF NOT EXISTS users(
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL, 
-    course VARCHAR(50) NOT NULL,
-    year INTEGER NOT NULL,
-    role  VARCHAR(20)
-);

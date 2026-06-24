@@ -3,11 +3,13 @@ package handler
 import (
 	"log"
 	"net/http"
+	"path/filepath"
 	"projeto/internal/domain"
 	"projeto/internal/usecase"
-	"strconv"
+	"projeto/internal/util"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type MaterialHandler struct {
@@ -16,46 +18,68 @@ type MaterialHandler struct {
 
 func (h *MaterialHandler) CreateMaterial(c *gin.Context) {
 	var material domain.MaterialCreated
-	if err := c.ShouldBindJSON(&material); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"errror": "bad request", "ditle": err.Error()})
+
+	if err := c.ShouldBind(&material); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
-	if err := h.Service.Create(&material); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "error internal"})
-		log.Println(err.Error())
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "arquivo obrigatório",
+		})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"mensage": "material created"})
+	filename := uuid.New().String() +
+		filepath.Ext(file.Filename)
+
+	path := "./uploads/pdf/" + filename
+
+	if err := c.SaveUploadedFile(file, path); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "erro ao salvar arquivo",
+		})
+		return
+	}
+
+	userID := c.MustGet(util.ID_USER).(uint)
+
+	err = h.Service.CreateMaterial(
+		&material,
+		userID,
+		path,
+	)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "material criado",
+	})
 }
 
 func (h *MaterialHandler) FindMaterial(c *gin.Context) {
-	var inicio uint
-	var fim uint
-
 	inicioInput := c.Query("inicio")
 	fimInput := c.Query("fim")
 
-	if inicioInput != "" {
-		i, err := strconv.Atoi(inicioInput)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"errror": "bad request"})
-		}
-
-		inicio = uint(i)
+	inicio, err := util.StringToInt(inicioInput)
+	if err != nil {
+		inicio = 1
+	}
+	fim, err := util.StringToInt(fimInput)
+	if err != nil {
+		fim = 10
 	}
 
-	if fimInput != "" {
-		i, err := strconv.Atoi(fimInput)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"errror": "bad request"})
-		}
-
-		fim = uint(i)
-	}
-
-	materials, err := h.Service.FindMaterials(inicio, fim)
+	materials, err := h.Service.FindMaterials(uint(inicio), uint(fim))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "error internal"})
 		log.Println(err.Error())
@@ -63,6 +87,7 @@ func (h *MaterialHandler) FindMaterial(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"materials": materials,
+		"tamanho_lista": len(materials),
+		"materials":     materials,
 	})
 }

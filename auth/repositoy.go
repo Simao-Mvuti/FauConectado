@@ -3,16 +3,33 @@ package auth
 import (
 	"context"
 	"database/sql"
+	"errors"
 )
 
 type repository struct {
 	db *sql.DB
 }
 
-func NewRepository(db *sql.DB) *repository {
+func newRepository(db *sql.DB) *repository {
 	return &repository{
 		db: db,
 	}
+}
+
+func (repository *repository) CriarTabelaUsuario(ctx context.Context) error {
+	query := `
+    CREATE TABLE IF NOT EXISTS usuarios (
+      	id 			UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+        nome        VARCHAR(30) NOT NULL,
+        email       VARCHAR(40) UNIQUE NOT NULL,     
+        papel       VARCHAR(10) DEFAULT 'usuario',
+        senha       TEXT,
+        data_criacao  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        esta_deletado BOOL DEFAULT FALSE
+    )
+    `
+	_, err := repository.db.ExecContext(ctx, query)
+	return err
 }
 
 func (repository *repository) numerosUsuarios(ctx context.Context) (uint, error) {
@@ -24,13 +41,19 @@ func (repository *repository) numerosUsuarios(ctx context.Context) (uint, error)
 }
 
 func (repository *repository) salvarUsuario(ctx context.Context, usuario *usuario) error {
-	query := "INSERT INTO usuarios (id,nome,email,papel,senha) VALUES ($1,$2,$3,%3,%4)"
-	_, err := repository.db.ExecContext(ctx, query, usuario.ID, usuario.Nome, usuario.Email, usuario.Papel, usuario.Senha)
+	query := "INSERT INTO usuarios (nome,email,senha) VALUES ($1,$2,$3)"
+	_, err := repository.db.ExecContext(ctx, query, usuario.Nome, usuario.Email, usuario.Senha)
+	return err
+}
+
+func (repository *repository) deletarUsuarioPermanentemente(ctx context.Context, id string) error {
+	query := "DELETE usuarios WHERE id = $1"
+	_, err := repository.db.ExecContext(ctx, query, id)
 	return err
 }
 
 func (repository *repository) deletarUsuario(ctx context.Context, id string) error {
-	query := "DELETE usuarios WHERE id = $1"
+	query := "UPDATE usuarios SET esta_deletado = true WHERE id = $1"
 	_, err := repository.db.ExecContext(ctx, query, id)
 	return err
 }
@@ -48,29 +71,36 @@ func (repository *repository) atualizarUsuarioSenha(ctx context.Context, id stri
 }
 
 func (repository *repository) buscarUsuarioPorEmail(ctx context.Context, email string) (*usuario, error) {
-	query := "SELECT id,nome,email,papel,senha FROM usuarios WHERE email = $1"
+	query := "SELECT id,nome,email,papel,senha,data_criacao,esta_deletado FROM usuarios WHERE email = $1"
 	usuario := usuario{}
 	row := repository.db.QueryRowContext(ctx, query, email)
-	if err := row.Scan(&usuario.ID, &usuario.Nome, &usuario.Email, &usuario.Papel, &usuario.Senha); err != nil {
-		return &usuario, err
+	if err := row.Scan(&usuario.ID, &usuario.Nome, &usuario.Email, &usuario.Papel, &usuario.Senha, &usuario.DataCriacao, &usuario.EstaDeletado); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
 	}
 
 	return &usuario, nil
 }
 
 func (repository *repository) buscarUsuarioPorID(ctx context.Context, id string) (*usuario, error) {
-	query := "SELECT id,nome,email,papel,senha FROM usuarios WHERE id = $1"
+	query := "SELECT id,nome,email,papel,senha,data_criacao,esta_deletado FROM usuarios WHERE id = $1"
 	usuario := usuario{}
 	row := repository.db.QueryRowContext(ctx, query, id)
-	if err := row.Scan(&usuario.ID, &usuario.Nome, &usuario.Email, &usuario.Papel, &usuario.Senha); err != nil {
-		return &usuario, err
+	if err := row.Scan(&usuario.ID, &usuario.Nome, &usuario.Email, &usuario.Papel, &usuario.Senha, &usuario.DataCriacao, &usuario.EstaDeletado); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+
 	}
 
 	return &usuario, nil
 }
 
 func (repository *repository) buscarUsuarios(ctx context.Context) ([]usuario, error) {
-	query := "SELECT id,nome,email,papel,senha FROM usuarios"
+	query := "SELECT id,nome,email,papel,senha,data_criacao,esta_deletado FROM usuarios  WHERE esta_deletado = false"
 	var usuarios = []usuario{}
 	rows, err := repository.db.QueryContext(ctx, query)
 	if err != nil {
@@ -79,7 +109,27 @@ func (repository *repository) buscarUsuarios(ctx context.Context) ([]usuario, er
 
 	for rows.Next() {
 		u := usuario{}
-		if err := rows.Scan(&u.ID, &u.Nome, &u.Email, &u.Papel, &u.Senha); err != nil {
+		if err := rows.Scan(&u.ID, &u.Nome, &u.Email, &u.Papel, &u.Senha, &u.DataCriacao, &u.EstaDeletado); err != nil {
+			return usuarios, err
+		}
+
+		usuarios = append(usuarios, u)
+	}
+
+	return usuarios, err
+}
+
+func (repository *repository) buscarUsuariosTodos(ctx context.Context) ([]usuario, error) {
+	query := "SELECT id,nome,email,papel,senha,data_criacao,esta_deletado FROM usuarios"
+	var usuarios = []usuario{}
+	rows, err := repository.db.QueryContext(ctx, query)
+	if err != nil {
+		return usuarios, err
+	}
+
+	for rows.Next() {
+		u := usuario{}
+		if err := rows.Scan(&u.ID, &u.Nome, &u.Email, &u.Papel, &u.Senha, &u.DataCriacao, &u.EstaDeletado); err != nil {
 			return usuarios, err
 		}
 

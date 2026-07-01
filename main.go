@@ -4,23 +4,38 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 	"projeto/auth"
+	"time"
 
+	"github.com/go-playground/validator/v10"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	db, err := sql.Open("postgres", "postgres://meu_usuario_seguro:uma_senha_muito_forte_123@localhost:5432/meu_banco_de_producao?sslmode=disable")
+	if err := godotenv.Load(".env"); err != nil {
+		panic(err)
+	}
+
+	dsn := os.Getenv("DATABASE_URL")
+	jwtkey := os.Getenv("JWT_KEY")
+
+	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer db.Close()
-	log.Println("Conectado")
-	authHandler, err := auth.NewHandler(db)
+
+	db.SetMaxOpenConns(100)
+	db.SetMaxIdleConns(10)
+	db.SetConnMaxLifetime(time.Hour)
+	validate := validator.New()
+	authHandler, err := auth.NewHandler(db, jwtkey, validate)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	mux := http.NewServeMux()

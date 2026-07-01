@@ -2,22 +2,97 @@ package auth
 
 import (
 	"context"
+	"time"
 )
 
 type service struct {
-	Re Repository
+	Re        Repository
+	JWTCodigo string
 }
 
-func newService(re Repository) *service {
+func newService(re Repository, jwtCodigo string) *service {
 	return &service{
 		Re: re,
 	}
 }
 
+func (service *service) recuperarSenha(email RecuperarPassword) error {
+	ctx, cancel := context.WithTimeout(context.Background(), TIMEOUT_DB)
+	defer cancel()
+
+	usuario, err := service.Re.buscarUsuarioPorEmail(ctx, email.Email)
+	if err != nil {
+		return err
+	}
+
+	token, err := GerarTokenRecuperacao(usuario.ID)
+	if err != nil {
+		return err
+	}
+
+	if err := service.Re.salvarTokenResetPassword(ctx, token); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (service *service) logout(id string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), TIMEOUT_DB)
+	defer cancel()
+
+	if err := service.Re.deletarRefreshToken(ctx, id); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (service *service) login(input usuarioLogin) (string, string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), TIMEOUT_DB)
+	defer cancel()
+
+	usuarioEcontrado, err := service.Re.buscarUsuarioPorEmail(ctx, input.Email)
+	if err != nil {
+		return "", "", CREDENCIAIS_INVALIDOS
+	}
+
+	if usuarioEcontrado == nil {
+		return "", "", CREDENCIAIS_INVALIDOS
+	}
+
+	if !CompararSenha(input.Senha, usuarioEcontrado.Senha) {
+
+		return "", "", CREDENCIAIS_INVALIDOS
+	}
+
+	token, err := GerarTokenJWT(usuarioEcontrado.ID, usuarioEcontrado.Email, usuarioEcontrado.Papel, service.JWTCodigo, 24*time.Minute)
+	if err != nil {
+		return "", "", err
+	}
+
+	refreshtoken, err := GerarTokenJWT(usuarioEcontrado.ID, usuarioEcontrado.Email, usuarioEcontrado.Papel, service.JWTCodigo, 1*time.Hour)
+	if err != nil {
+		return "", "", err
+	}
+
+	refreshToken := ResfresToken{
+		Token:     refreshtoken,
+		UsuarioID: usuarioEcontrado.ID,
+		ExpiraEm:  time.Now().Add(48 * time.Minute),
+	}
+
+	if err := service.Re.salvarRefreshToken(ctx, refreshToken); err != nil {
+		return "", "", err
+	}
+
+	return token, refreshtoken, nil
+}
+
 func (service *service) CriarTabelaUsuario() error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMEOUT_DB)
 	defer cancel()
-	return service.Re.CriarTabelaUsuario(ctx)
+	return service.Re.CriarTabelaUsuarios(ctx)
 }
 
 func (service *service) atualizarUsuarioNome(id string, nome string) error {
@@ -108,5 +183,8 @@ type Repository interface {
 	buscarUsuarioPorID(ctx context.Context, id string) (*usuario, error)
 	buscarUsuarios(ctx context.Context) ([]usuario, error)
 	buscarUsuariosTodos(ctx context.Context) ([]usuario, error)
-	CriarTabelaUsuario(ctx context.Context) error
+	CriarTabelaUsuarios(ctx context.Context) error
+	salvarRefreshToken(ctx context.Context, refreshToken ResfresToken) error
+	deletarRefreshToken(ctx context.Context, id string) error
+	salvarTokenResetPassword(ctx context.Context, token *PasswordResetToken) error
 }

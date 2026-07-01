@@ -16,19 +16,77 @@ func newRepository(db *sql.DB) *repository {
 	}
 }
 
-func (repository *repository) CriarTabelaUsuario(ctx context.Context) error {
+func (repository *repository) CriarTabelaUsuarios(ctx context.Context) error {
 	query := `
     CREATE TABLE IF NOT EXISTS usuarios (
       	id 			UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-        nome        VARCHAR(30) NOT NULL,
+        nome        VARCHAR(30) NOT NULL,	
         email       VARCHAR(40) UNIQUE NOT NULL,     
         papel       VARCHAR(10) DEFAULT 'usuario',
         senha       TEXT,
         data_criacao  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         esta_deletado BOOL DEFAULT FALSE
+		CONSTRAINT nome_nao_vazio CHECK (TRIM(nome) <> '')
+		CONSTRAINT email_nao_vazio CHECK (TRIM(email) <> '')
     )
     `
-	_, err := repository.db.ExecContext(ctx, query)
+	query2 := `
+  			CREATE TABLE IF NOT EXISTS refresh_tokens (
+    			id    UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    			usuario_id    UUID NOT NULL, 
+    			token_hash    TEXT NOT NULL,
+    			expires_at    TIMESTAMP NOT NULL,
+				created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+			)
+    `
+
+	query3 := `CREATE TABLE IF NOT EXISTS password_resets (
+		user_id    TEXT,
+		token     TEXT,
+		expires_At TIMESTAMP
+	)
+	`
+
+	tx, err := repository.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	defer tx.Rollback()
+
+	_, err = tx.ExecContext(ctx, query)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, query2)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, query3)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}
+
+func (repository *repository) salvarTokenResetPassword(ctx context.Context, token *PasswordResetToken) error {
+	query := "INSERT INTO password_resets (user_id,token,expires) VALUES ($1,$2,$3)"
+	_, err := repository.db.ExecContext(ctx, query, token.UserID, token.Token, token.ExpiresAt)
+	return err
+}
+
+func (repository *repository) salvarRefreshToken(ctx context.Context, refreshToken ResfresToken) error {
+	query := "INSERT INTO refresh_tokens (usuario_id, token_hash,expires_at) VALUES ($1,$2,$3)"
+	_, err := repository.db.ExecContext(ctx, query, refreshToken.UsuarioID, refreshToken.Token, refreshToken.ExpiraEm)
+	return err
+}
+
+func (repository *repository) deletarRefreshToken(ctx context.Context, id string) error {
+	query := "DELETE refresh_tokens WHERE id = $1"
+	_, err := repository.db.ExecContext(ctx, query, id)
 	return err
 }
 
@@ -75,9 +133,6 @@ func (repository *repository) buscarUsuarioPorEmail(ctx context.Context, email s
 	usuario := usuario{}
 	row := repository.db.QueryRowContext(ctx, query, email)
 	if err := row.Scan(&usuario.ID, &usuario.Nome, &usuario.Email, &usuario.Papel, &usuario.Senha, &usuario.DataCriacao, &usuario.EstaDeletado); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
-		}
 		return nil, err
 	}
 

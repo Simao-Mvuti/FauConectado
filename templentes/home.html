@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNINOTIFY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#12131a',
+          ink2: '#191b24',
+          line: '#2b2d3a',
+          paper: '#f6f2e8',
+          gold: '#d9a441',
+          goldim: '#a67c30',
+          red: '#b6402f',
+          muted: '#9498ac',
+        },
+        fontFamily: {
+          serif: ['Fraunces', 'serif'],
+          sans: ['Inter', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace'],
+        },
+      },
+    },
+  }
+</script>
+<style>
+  @keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-ticker { animation: ticker-scroll 32s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ticker { animation: none; }
+  }
+
+  .htmx-indicator { opacity: 0; transition: opacity 150ms ease-in-out; }
+  .htmx-request .htmx-indicator,
+  .htmx-request.htmx-indicator { opacity: 1; }
+  .htmx-request .btn-label { display: none; }
+</style>
+</head>
+<body class="bg-ink text-paper font-sans antialiased">
+
+  <div class="border-b border-line">
+    <div class="max-w-[1120px] mx-auto px-7 py-3 flex justify-between items-center font-mono text-xs tracking-wide text-muted">
+      <span>{{.DataAtual}} · {{.Local}}</span>
+      <span><span class="text-red">●</span> Edição do campus</span>
+    </div>
+  </div>
+
+  <header class="text-center py-11 px-7 border-b-[3px] border-double border-line">
+    <p class="font-mono text-[11px] tracking-[0.22em] uppercase text-gold mb-3.5">Fundado por estudantes, para estudantes</p>
+    <h1 class="font-serif font-black leading-[0.98] tracking-tight text-[40px] sm:text-6xl md:text-7xl lg:text-8xl">O Correio da Faculdade</h1>
+    <p class="font-serif italic text-muted text-base mt-4">Tudo o que acontece no teu campus, escrito por quem o vive.</p>
+  </header>
+
+  <div class="bg-red overflow-hidden whitespace-nowrap border-b border-line">
+    <div class="inline-block py-2.5 animate-ticker">
+      {{/* Bloco repetido duas vezes (0% -> -50%) para o loop contínuo do scroll, sem depender de funções custom no FuncMap */}}
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Inscrições</b> {{.Inscricoes}}</span>
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Desporto</b> — {{.Desporto}}</span>
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Biblioteca</b> {{.Biblioteca}}</span>
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Mentoria</b> — {{.Mentoria}}</span>
+
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Inscrições</b> {{.Inscricoes}}</span>
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Desporto</b> — {{.Desporto}}</span>
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Biblioteca</b> {{.Biblioteca}}</span>
+      <span class="font-mono text-[12.5px] text-[#fbe6df] mr-12"><b class="text-white font-semibold">Mentoria</b> — {{.Mentoria}}</span>
+    </div>
+  </div>
+
+  <div class="max-w-[1120px] mx-auto px-7">
+
+    <section class="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 py-12 lg:py-16 border-b border-line">
+
+      <div>
+        <span class="inline-block font-mono text-[11px] tracking-[0.16em] uppercase text-ink bg-gold px-2.5 py-1 mb-5">Assina já</span>
+        <h2 class="font-serif font-bold leading-[1.08] text-3xl sm:text-4xl lg:text-5xl max-w-lg mb-5">As notícias do campus não esperam pelo próximo intervalo.</h2>
+        <p class="text-base leading-relaxed text-muted max-w-md mb-8">Recebe os avisos de propinas, vagas de estágio, resultados desportivos e eventos da faculdade diretamente no teu email — antes de saberes pelos amigos.</p>
+
+        <div class="relative border-[1.5px] border-dashed border-goldim bg-gold/[0.04] p-6 max-w-md">
+          <span class="hidden lg:block absolute -left-[9px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-ink border-[1.5px] border-dashed border-goldim"></span>
+          <p class="font-mono text-[11px] tracking-[0.14em] uppercase text-gold mb-1.5">Cupão de assinatura</p>
+          <h3 class="font-serif font-semibold text-xl mb-4">Recebe o Correio</h3>
+
+          {{block "form-assinatura" .Form}}
+          <form id="signupForm"
+                class="flex flex-col gap-3"
+                hx-post="/usuarios"
+                hx-target="this"
+                hx-swap="outerHTML"
+                hx-indicator="#assinar-indicator"
+                hx-disabled-elt="find button">
+            {{if .Erro}}
+            <p class="font-mono text-[11.5px] text-red bg-red/10 border border-red/40 rounded-sm px-3 py-2">{{.Erro}}</p>
+            {{end}}
+            <input type="text" name="nome" placeholder="O teu nome" required value="{{.Nome}}"
+              class="w-full bg-ink2 border border-line text-paper text-sm px-3.5 py-3 rounded-sm placeholder:text-[#6c6f83] focus:outline-none focus:border-gold">
+            <input type="email" name="email" placeholder="nome@estudante.ao" required value="{{.Email}}"
+              class="w-full bg-ink2 border border-line text-paper text-sm px-3.5 py-3 rounded-sm placeholder:text-[#6c6f83] focus:outline-none focus:border-gold">
+            <select name="curso" required
+              class="w-full bg-ink2 border border-line text-paper text-sm px-3.5 py-3 rounded-sm focus:outline-none focus:border-gold appearance-none">
+              <option value="" disabled {{if not .Curso}}selected{{end}}>Escolhe o teu curso</option>
+              <option {{if eq .Curso "Informática de Gestão"}}selected{{end}}>Informática de Gestão</option>
+              <option {{if eq .Curso "Engenharia Informática"}}selected{{end}}>Engenharia Informática</option>
+              <option {{if eq .Curso "Engenharia de Telecomunicação"}}selected{{end}}>Engenharia de Telecomunicação</option>
+            </select>
+            <select name="ano" required
+              class="w-full bg-ink2 border border-line text-paper text-sm px-3.5 py-3 rounded-sm focus:outline-none focus:border-gold appearance-none">
+              <option value="" disabled {{if not .Ano}}selected{{end}}>Ano de curso</option>
+              <option value="1" {{if eq .Ano "1"}}selected{{end}}>1º ano</option>
+              <option value="2" {{if eq .Ano "2"}}selected{{end}}>2º ano</option>
+              <option value="3" {{if eq .Ano "3"}}selected{{end}}>3º ano</option>
+              <option value="4" {{if eq .Ano "4"}}selected{{end}}>4º ano</option>
+              <option value="5" {{if eq .Ano "5"}}selected{{end}}>5º ano</option>
+            </select>
+            <button type="submit"
+              class="mt-1.5 bg-gold text-[#241a06] font-mono text-[13px] font-medium tracking-[0.06em] uppercase px-4 py-3.5 rounded-sm hover:bg-[#e7b757] active:scale-[0.99] transition disabled:opacity-60 disabled:cursor-wait">
+              <span id="assinar-indicator" class="htmx-indicator">A enviar…</span>
+              <span class="btn-label">Assinar o Correio</span>
+            </button>
+          </form>
+          {{end}}
+          <p class="text-[11.5px] text-muted leading-relaxed mt-3">Uma edição por semana. Cancelas quando quiseres.</p>
+        </div>
+      </div>
+
+      <div class="lg:border-l lg:border-line lg:pl-10 border-t lg:border-t-0 border-line pt-8 lg:pt-0">
+        <p class="font-mono text-[11px] tracking-[0.16em] uppercase text-muted mb-5">Em destaque</p>
+
+        {{range $index, $noticia := .Destaques}}
+        <div class="{{if $index}}border-t border-line{{end}} py-4{{if not $index}} pb-4{{end}}">
+          <span class="font-mono text-[10.5px] tracking-[0.1em] uppercase text-gold">{{$noticia.Categoria}}</span>
+          <h4 class="font-serif font-semibold text-lg leading-snug mt-2 mb-1.5">{{$noticia.Titulo}}</h4>
+          <p class="text-[13.5px] text-muted leading-relaxed">{{$noticia.Descricao}}</p>
+        </div>
+        {{else}}
+        <p class="text-[13.5px] text-muted leading-relaxed">Ainda não há destaques disponíveis.</p>
+        {{end}}
+      </div>
+    </section>
+  </div>
+
+  <footer class="border-t-[3px] border-double border-line py-8">
+    <div class="max-w-[1120px] mx-auto px-7 flex flex-wrap justify-between items-center gap-4">
+      <span class="font-serif font-bold text-lg">UNINOTIFY</span>
+      <span class="font-mono text-[11px] text-muted">Publicação estudantil independente · Luanda, Angola © 2026</span>
+    </div>
+  </footer>
+
+</body>
+</html>

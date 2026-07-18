@@ -23,6 +23,7 @@ func main() {
 	dsn := os.Getenv("DSN")
 	db := auth.NovoBanco(dsn)
 	defer db.Close(context.Background())
+	auth.InitDB(dsn)
 	tmpl := template.Must(template.ParseGlob("templentes/*.html"))
 
 	mux := http.NewServeMux()
@@ -42,71 +43,3 @@ func main() {
 	mux.HandleFunc("POST /usuarios", authHandler.CriarUsuario)
 	http.ListenAndServe(":8080", mux)
 }
-
-/*
-3. Criar avisos
-
-Admin publica:
-
-título
-mensagem
-público alvo
-4. Notificação
-
-Enviar:
-
-email
-histórico no sistema
-5. Dashboard
-
-Mostrar:
-
-Estudantes cadastrados: 500
-
-Avisos enviados: 35
-
-Emails enviados hoje: 1200
-Tecnologias
-
-Eu manteria:
-
-Backend
-Go
-net/http
-html/template
-Banco
-PostgreSQL
-Cache
-Redis
-Frontend
-
-Nada pesado:
-
-HTML
-Tailwind CSS
-HTMX
-Infraestrutura
-Docker Compose
-Nginx
-
-Linux
-Uma coisa que deixaria o projeto mais impressionante
-
-Adicionar preferências inteligentes.
-
-Exemplo:
-
-Um estudante de Informática de Gestão recebe:
-
-Banco de Dados
-Programação
-Redes
-Estágios
-
-Mas um estudante de Contabilidade recebe:
-
-Contabilidade
-Auditoria
-Finanças
-
-*/

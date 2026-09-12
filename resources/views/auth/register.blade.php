@@ -87,7 +87,7 @@
                     type="password" 
                     id="password"
                     name="password" 
-                    placeholder="Mínimo de 8 caracteres" 
+                    placeholder="Mínimo de 6 caracteres" 
                     required 
                     class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 >

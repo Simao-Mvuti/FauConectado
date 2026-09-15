@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Eventos extends Model
 {
-    //
     protected $fillable = [
         'titulo',
         'descricao',
@@ -16,6 +15,10 @@ class Eventos extends Model
         'categoria',
         'link',
         'user_id',
+    ];
+
+    protected $casts = [
+        'data' => 'date',
     ];
 
     public function user():BelongsTo

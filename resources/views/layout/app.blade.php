@@ -12,13 +12,15 @@
 
 <body class="min-h-screen flex flex-col bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 antialiased">
 
-    @yield('navbar')
+    @auth
+        @include('components.navegacao')
+    @endauth
 
     <main class="flex-1">
         @yield('content')
     </main>
 
-    @include('components.footer')
+    @include('components.rodape')
 
 </body>
 </html>

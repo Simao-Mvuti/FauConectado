@@ -4,12 +4,12 @@
 
 @section('content')
 
-    <x-alert type="success" :message="session('sucesso')" />
-    <x-alert type="error" :message="session('erro')" />
+    <x-alerta type="success" :message="session('sucesso')" />
+    <x-alerta type="error" :message="session('erro')" />
 
     <div class="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-zinc-900 rounded-lg shadow-md">
 
-        @include('components.cabecalho')
+        @include('components.cabecalho-login')
         <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
             @csrf
 

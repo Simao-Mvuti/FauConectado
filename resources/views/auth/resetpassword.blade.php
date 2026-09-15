@@ -1,6 +1,6 @@
 @include('layout.app')
-<x-alert type="success" :message="session('sucesso')" />
-    <x-alert type="error" :message="session('erro')" />
+<x-alerta type="success" :message="session('sucesso')" />
+    <x-alerta type="error" :message="session('erro')" />
     <!-- Container Principal -->
     <div class="w-full max-w-md space-y-6 bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-xl border border-slate-100 dark:border-zinc-800">
         
@@ -53,4 +53,4 @@
         </div>
 
     </div>
- @include('components.footer')
+ @include('components.rodape')

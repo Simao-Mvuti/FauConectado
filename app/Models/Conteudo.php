@@ -16,6 +16,14 @@ class Conteudo extends Model
         'conteudo',
         'categoria',
         'user_id',
+        'status',
+        'moderado_por',
+        'moderado_em',
+        'motivo_rejeicao',
+    ];
+
+    protected $casts = [
+        'moderado_em' => 'datetime',
     ];
 
     public function autor(): BelongsTo

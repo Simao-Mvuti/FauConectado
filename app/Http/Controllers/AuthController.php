@@ -13,7 +13,18 @@ class AuthController extends Controller
     public function showResetPassword() {return view('auth.resetpassword');}
     public function showRegister() {return view('auth.register');}
 
+public function logout(Request $request)
+{
+    Auth::logout();
 
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()
+        ->route('login')
+        ->with('sucesso', 'Logout realizado com sucesso');
+}
+    
     public function login(Request $request){
       $request->validate([
         'email'=>'required|email',
@@ -22,14 +33,15 @@ class AuthController extends Controller
 
       $resultado = Auth::attempt([
         "email"=>$request->email,
-        "passwor"=>$request->passwprd,
+        "password"=>$request->password,
       ]);
 
       if (!$resultado){
         return back()->with('erro','credencias inválidos');
       }
 
-      return redirect('dashboard');
+      $request->session()->regenerate();
+      return redirect('dashboard')->with('sucesso','Login realizado com sucesso');
     }
 
     public function register(Request $request){
@@ -37,7 +49,7 @@ class AuthController extends Controller
             'name'=>'required|min:2|string',
             'email'=>'required|email|unique:users',
             'role'=>'required|string|in:mentee,mentor',
-            'password'=>'required|min:4|max:20'
+            'password'=>'required|min:4|max:20|confirmed'
       ]);
 
       $name = $request->name;
@@ -53,7 +65,8 @@ class AuthController extends Controller
       ]);
       $user->save();
       Auth::login($user);
-      return redirect()->route('dashboard');
+
+      return redirect()->route('dashboard')->with('sucesso','Cadastro realizado com sucesso');
     }
 
     

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Conteudo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['name', 'email', 'password','role'])]
 #[Hidden(['password', 'remember_token'])]
@@ -22,6 +24,11 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    public function conteudos(): HasMany
+{
+    return $this->hasMany(Conteudo::class);
+}
+
     protected function casts(): array
     {
         return [

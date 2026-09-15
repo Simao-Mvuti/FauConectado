@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-      
-    </head>
-    
-  <body class="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 flex min-h-screen flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans antialiased">
-
+@include('layout.app')
+<x-alert type="success" :message="session('sucesso')" />
+    <x-alert type="error" :message="session('erro')" />
     <!-- Container Principal -->
     <div class="w-full max-w-md space-y-6 bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-xl border border-slate-100 dark:border-zinc-800">
         
@@ -63,6 +53,4 @@
         </div>
 
     </div>
-
-</body>
-</html>
+ @include('components.footer')

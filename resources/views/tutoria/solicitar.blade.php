@@ -7,7 +7,11 @@
         <x-formulario-cabecalho titulo="Solicitar tutor" descricao="Conte o que você precisa aprender e encontre apoio." icone="🎓" />
         <x-formulario-erros />
 
-        <form action="{{ route('tutores.solicitacoes.armazenar') }}" method="POST" class="mt-6 space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-sm text-indigo-800">
+            Escolha um mentor específico ou envie para qualquer mentor disponível. Você poderá acompanhar o estado da solicitação no dashboard.
+        </div>
+
+        <form action="{{ route('tutores.solicitacoes.armazenar') }}" method="POST" class="mt-4 space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             @csrf
             <div class="space-y-1">
                 <label for="mentor_id" class="block text-sm font-medium text-slate-700">Tutor de preferência <span class="font-normal text-slate-400">(opcional)</span></label>

@@ -59,35 +59,8 @@
 
         </div>
 
-        {{-- Perfil --}}
-        <div class="space-y-1">
-
-            <label
-                for="role"
-                class="block text-sm font-medium text-slate-700 dark:text-zinc-300"
-            >
-                Eu quero ser
-            </label>
-
-            <select
-                id="role"
-                name="role"
-                required
-                class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-            >
-                <option value="" disabled selected>
-                    Selecione um perfil...
-                </option>
-
-                <option value="mentee">
-                    Mentorando (Aluno em busca de ajuda)
-                </option>
-
-                <option value="mentor">
-                    Mentor (Aluno/Professor orientador)
-                </option>
-            </select>
-
+        <div class="rounded-lg border border-indigo-100 bg-indigo-50 px-4 py-3 text-sm text-indigo-800">
+            Você começará como mentorando. Depois do cadastro, poderá enviar uma candidatura para se tornar mentor.
         </div>
 
         {{-- Senha --}}

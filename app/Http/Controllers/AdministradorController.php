@@ -2,17 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CandidaturaTutor;
 use App\Models\Conteudo;
+use App\Models\Eventos;
 use App\Models\Materias;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdministradorController extends Controller
 {
     public function index()
     {
         return view('administracao.painel', [
-            'conteudosPendentes' => Conteudo::with('autor')->where('status', 'pendente')->latest()->get(),
-            'materiaisPendentes' => Materias::with('autor')->where('status', 'pendente')->latest()->get(),
+            'conteudos' => Conteudo::select(['id', 'titulo', 'conteudo', 'categoria', 'status', 'user_id'])->with('autor:id,name')->latest()->paginate(6, ['*'], 'conteudos_page'),
+            'materiais' => Materias::select(['id', 'titulo', 'descricao', 'arquivo', 'categoria', 'status', 'user_id'])->with('autor:id,name')->latest()->paginate(6, ['*'], 'materiais_page'),
+            'eventos' => Eventos::select(['id', 'titulo', 'descricao', 'data', 'categoria', 'user_id'])->with('user:id,name')->latest()->paginate(6, ['*'], 'eventos_page'),
+            'usuarios' => User::select(['id', 'name', 'email', 'role'])->latest()->paginate(8, ['*'], 'usuarios_page'),
+            'candidaturasPendentes' => CandidaturaTutor::with('candidato:id,name,email')->where('status', 'pendente')->latest()->get(),
+            'totalConteudos' => Conteudo::count(),
+            'totalMateriais' => Materias::count(),
+            'totalEventos' => Eventos::count(),
+            'totalUsuarios' => User::count(),
+            'totalCandidaturasPendentes' => CandidaturaTutor::where('status', 'pendente')->count(),
             'totalPendentes' => Conteudo::where('status', 'pendente')->count() + Materias::where('status', 'pendente')->count(),
         ]);
     }
@@ -71,5 +84,63 @@ class AdministradorController extends Controller
         ]);
 
         return back()->with('sucesso', 'Material rejeitado com justificativa.');
+    }
+
+    public function aprovarCandidatura(CandidaturaTutor $candidatura)
+    {
+        abort_unless($candidatura->status === 'pendente', 422, 'Esta candidatura já foi analisada.');
+        abort_unless($candidatura->candidato, 404);
+
+        DB::transaction(function () use ($candidatura): void {
+            $candidatura->update(['status' => 'aprovada']);
+            $candidatura->candidato->update(['role' => 'mentor']);
+        });
+
+        return back()->with('sucesso', 'Candidatura aprovada. O usuário agora é mentor.');
+    }
+
+    public function rejeitarCandidatura(CandidaturaTutor $candidatura)
+    {
+        abort_unless($candidatura->status === 'pendente', 422, 'Esta candidatura já foi analisada.');
+
+        $candidatura->update(['status' => 'rejeitada']);
+
+        return back()->with('sucesso', 'Candidatura rejeitada.');
+    }
+
+    public function excluirConteudo(Conteudo $conteudo)
+    {
+        $conteudo->delete();
+
+        return back()->with('sucesso', 'Conteúdo excluído.');
+    }
+
+    public function excluirMateria(Materias $materia)
+    {
+        if ($materia->arquivo) {
+            Storage::disk('public')->delete($materia->arquivo);
+        }
+
+        $materia->delete();
+
+        return back()->with('sucesso', 'Material excluído.');
+    }
+
+    public function excluirEvento(Eventos $evento)
+    {
+        $evento->delete();
+
+        return back()->with('sucesso', 'Evento excluído.');
+    }
+
+    public function excluirUsuario(User $usuario)
+    {
+        if (request()->user()->is($usuario)) {
+            return back()->withErrors(['usuario' => 'Você não pode excluir a própria conta durante esta sessão.']);
+        }
+
+        $usuario->delete();
+
+        return back()->with('sucesso', 'Usuário excluído.');
     }
 }

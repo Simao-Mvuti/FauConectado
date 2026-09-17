@@ -1,0 +1,6 @@
+{% extends "core/base.html" %}
+{% block titulo %}Matérias | FauConectado{% endblock %}
+{% block conteudo %}
+{% include "core/components/page-heading.html" with eyebrow="Biblioteca de conhecimento" title="Todas as matérias" description="Consulta os materiais enviados e aprovados pela comunidade, organizados por cadeira." %}
+{% include "core/components/materias-catalogo.html" %}
+{% endblock %}

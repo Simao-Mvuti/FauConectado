@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block titulo %}FauConectado | Aprende em conjunto{% endblock %}
+
+{% block conteudo %}
+<div id="inicio" class="overflow-hidden">
+	{% include "core/components/hero-editorial.html" %}
+	{% include "core/components/biblioteca-materias.html" %}
+	{% include "core/components/mentores.html" %}
+	{% include "core/components/contribuir.html" %}
+	{% include "core/components/contacto.html" %}
+</div>
+{% endblock %}

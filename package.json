@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
@@ -16,4 +17,31 @@
     "optionalDependencies": {
         "@laravel/multiplex": "^0.4.1"
     }
+=======
+  "name": "fauconect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
+  },
+  "scripts": {
+    "build:css": "tailwindcss -i ./core/static/core/css/input.css -o ./core/static/core/css/app.css --minify",
+    "watch:css": "tailwindcss -i ./core/static/core/css/input.css -o ./core/static/core/css/app.css --watch",
+    "dev": "npm run watch:css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Simao-Mvuti/FauConectado.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Simao-Mvuti/FauConectado/issues"
+  },
+  "homepage": "https://github.com/Simao-Mvuti/FauConectado#readme"
+>>>>>>> 233d3cdc5c00f4e49c8913bd37cb7a0f7d2d55bf
 }

@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-3xl mx-auto px-4 py-8">
-        <x-formulario-cabecalho titulo="Publicar conteúdo" descricao="Compartilhe conhecimento com a comunidade acadêmica." icone="📚" />
+        <x-formulario-cabecalho titulo="Publicar conteúdo" descricao="Compartilhe conhecimento com a comunidade acadêmica." />
         <x-formulario-erros />
 
         <form action="{{ route('conteudos.armazenar') }}" method="POST" class="mt-6 space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">

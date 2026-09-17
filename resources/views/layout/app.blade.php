@@ -5,16 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'FauConectado') }}</title>
+    <title>@yield('title', config('app.name', 'FauConectado')) · FauConectado</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen flex flex-col bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 antialiased">
+<body class="min-h-screen flex flex-col bg-paper text-ink antialiased">
 
-    @auth
-        @include('components.navegacao')
-    @endauth
+    @include('components.navegacao')
 
     <main class="flex-1">
         @yield('content')

@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Middleware\AdministradorMiddleware;
+use App\Http\Middleware\VisitanteMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use App\Http\Middleware\AdministradorMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'administrador' => AdministradorMiddleware::class,
+            'visitante' => VisitanteMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

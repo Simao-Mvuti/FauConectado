@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap");
 @import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -5,7 +6,24 @@
 
 @theme {
     --font-sans:
-        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
+        "DM Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-display: "Fraunces", Georgia, serif;
+    --color-coral: #ef765f;
+    --color-forest: #1e4d3a;
+    --color-ink: #19251f;
+    --color-mint: #dff2e7;
+    --color-paper: #f7f5ef;
+}
+
+@layer base {
+    body {
+        background-color: var(--color-paper);
+        color: var(--color-ink);
+    }
+
+    ::selection {
+        background-color: var(--color-coral);
+        color: white;
+    }
 }

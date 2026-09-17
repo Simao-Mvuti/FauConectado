@@ -2,8 +2,8 @@
 
 <x-dashboard.painel class="space-y-4">
     <div class="flex items-center justify-between">
-        <x-dashboard.cabecalho-secao title="Resumo de estudos" icon="📚" :link="null" />
-        <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full">{{ $totalConteudos }} disponíveis</span>
+        <x-dashboard.cabecalho-secao title="Resumo de estudos" :link="null" />
+        <span class="rounded-full bg-mint px-2.5 py-1 text-xs font-semibold text-forest">{{ $totalConteudos }} disponíveis</span>
     </div>
 
     @if ($ultimoConteudo)

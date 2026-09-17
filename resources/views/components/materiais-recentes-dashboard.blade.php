@@ -1,5 +1,5 @@
 <x-dashboard.painel class="space-y-5">
-    <x-dashboard.cabecalho-secao title="Materiais recentes" icon="📄" />
+    <x-dashboard.cabecalho-secao title="Materiais recentes" />
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         @forelse ($materias as $materia)

@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-3xl mx-auto px-4 py-8">
-        <x-formulario-cabecalho titulo="Criar evento" descricao="Divulgue uma atividade acadêmica para a comunidade." icone="📢" />
+        <x-formulario-cabecalho titulo="Criar evento" descricao="Divulgue uma atividade acadêmica para a comunidade." />
         <x-formulario-erros />
 
         <form action="{{ route('eventos.armazenar') }}" method="POST" class="mt-6 space-y-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">

@@ -1,6 +1,6 @@
 <section>
     <div class="mb-4">
-        <x-dashboard.cabecalho-secao title="Novidades" icon="🔥" :link="null" />
+        <x-dashboard.cabecalho-secao title="Visão geral" :link="null" />
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">

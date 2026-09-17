@@ -1,5 +1,5 @@
 <x-dashboard.painel class="space-y-5">
-    <x-dashboard.cabecalho-secao title="Próximos eventos" icon="📢" />
+    <x-dashboard.cabecalho-secao title="Próximos eventos" />
 
     <div class="space-y-4">
         @forelse ($eventos as $evento)

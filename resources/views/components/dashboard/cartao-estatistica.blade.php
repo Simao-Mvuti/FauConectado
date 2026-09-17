@@ -7,12 +7,12 @@
     'url' => '#',
 ])
 
-<a href="{{ $url }}" class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm {{ $cardClass }} hover:shadow-md transition-all group">
+<a href="{{ $url }}" class="rounded-2xl border border-forest/10 bg-white p-5 shadow-sm {{ $cardClass }} group transition hover:-translate-y-0.5 hover:shadow-soft">
     <div class="flex items-center gap-3">
-        <span class="p-3 {{ $iconClass }} rounded-xl text-xl group-hover:scale-110 transition-transform" aria-hidden="true">{{ $icon }}</span>
+        <span class="h-10 w-1 rounded-full {{ $iconClass }}" aria-hidden="true"></span>
         <div>
-            <span class="block text-xl font-bold text-slate-800">{{ $value }}</span>
-            <span class="text-xs md:text-sm text-slate-500 font-medium">{{ $label }}</span>
+            <span class="block text-xl font-bold text-ink">{{ $value }}</span>
+            <span class="text-xs font-medium text-ink/55 md:text-sm">{{ $label }}</span>
         </div>
     </div>
 </a>

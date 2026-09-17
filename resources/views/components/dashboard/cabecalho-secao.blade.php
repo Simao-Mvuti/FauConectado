@@ -6,15 +6,13 @@
 ])
 
 <div class="flex items-center justify-between">
-    <div class="flex items-center gap-2">
-        @if ($icon)
-            <span class="text-xl" aria-hidden="true">{{ $icon }}</span>
-        @endif
-        <h2 class="text-lg font-bold text-slate-800">{{ $title }}</h2>
+    <div class="flex items-center gap-3">
+        <span class="h-6 w-1 rounded-full bg-coral" aria-hidden="true"></span>
+        <h2 class="font-display text-lg font-bold text-ink">{{ $title }}</h2>
     </div>
 
     @if ($link)
-        <a href="{{ $link }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+        <a href="{{ $link }}" class="text-sm font-semibold text-coral hover:text-forest">
             {{ $linkLabel }}
         </a>
     @endif

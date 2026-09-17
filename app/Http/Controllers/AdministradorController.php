@@ -2,18 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Avaliacao;
+use App\Models\AvaliacaoMaterial;
 use App\Models\CandidaturaTutor;
 use App\Models\Conteudo;
 use App\Models\Eventos;
 use App\Models\Materias;
+use App\Models\SolicitacaoTutoria;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class AdministradorController extends Controller
 {
-    public function index()
+    public function acesso(): View
+    {
+        return view('administracao.acesso');
+    }
+
+    public function autenticarAcesso(Request $request)
+    {
+        $request->validate([
+            'chave' => ['required', 'string'],
+        ]);
+
+        $chaveConfigurada = (string) config('app.admin_access_key');
+
+        abort_if($chaveConfigurada === '', 503, 'O acesso administrativo não está configurado.');
+
+        if (! hash_equals($chaveConfigurada, (string) $request->input('chave'))) {
+            return back()->withInput()->withErrors(['chave' => 'Chave administrativa inválida.']);
+        }
+
+        $administrador = User::query()
+            ->where('role', 'admin')
+            ->first();
+
+        if (! $administrador) {
+            return back()->withErrors(['chave' => 'Nenhum administrador foi configurado. Execute o seeder antes de acessar esta área.']);
+        }
+
+        Auth::login($administrador);
+        $request->session()->regenerate();
+
+        return redirect()->route('administracao.painel');
+    }
+
+    public function index(): View
     {
         return view('administracao.painel', [
             'conteudos' => Conteudo::select(['id', 'titulo', 'conteudo', 'categoria', 'status', 'user_id'])->with('autor:id,name')->latest()->paginate(6, ['*'], 'conteudos_page'),
@@ -21,12 +60,17 @@ class AdministradorController extends Controller
             'eventos' => Eventos::select(['id', 'titulo', 'descricao', 'data', 'categoria', 'user_id'])->with('user:id,name')->latest()->paginate(6, ['*'], 'eventos_page'),
             'usuarios' => User::select(['id', 'name', 'email', 'role'])->latest()->paginate(8, ['*'], 'usuarios_page'),
             'candidaturasPendentes' => CandidaturaTutor::with('candidato:id,name,email')->where('status', 'pendente')->latest()->get(),
+            'solicitacoes' => SolicitacaoTutoria::with(['solicitante:id,name', 'mentor:id,name'])->latest()->paginate(6, ['*'], 'solicitacoes_page'),
+            'avaliacoes' => Avaliacao::with(['avaliador:id,name', 'avaliado:id,name'])->latest()->paginate(6, ['*'], 'avaliacoes_page'),
+            'avaliacoesMateriais' => AvaliacaoMaterial::with(['avaliador:id,name', 'material:id,titulo'])->latest()->paginate(6, ['*'], 'avaliacoes_materiais_page'),
             'totalConteudos' => Conteudo::count(),
             'totalMateriais' => Materias::count(),
             'totalEventos' => Eventos::count(),
             'totalUsuarios' => User::count(),
             'totalCandidaturasPendentes' => CandidaturaTutor::where('status', 'pendente')->count(),
             'totalPendentes' => Conteudo::where('status', 'pendente')->count() + Materias::where('status', 'pendente')->count(),
+            'totalSolicitacoes' => SolicitacaoTutoria::count(),
+            'totalAvaliacoes' => Avaliacao::count() + AvaliacaoMaterial::count(),
         ]);
     }
 
@@ -142,5 +186,39 @@ class AdministradorController extends Controller
         $usuario->delete();
 
         return back()->with('sucesso', 'Usuário excluído.');
+    }
+
+    public function atualizarPapel(Request $request, User $usuario)
+    {
+        abort_if($request->user()->is($usuario), 422, 'Você não pode alterar o próprio papel durante esta sessão.');
+
+        $dados = $request->validate([
+            'role' => ['required', Rule::in(['mentee', 'mentor'])],
+        ]);
+
+        $usuario->update(['role' => $dados['role']]);
+
+        return back()->with('sucesso', 'Papel do usuário atualizado.');
+    }
+
+    public function excluirSolicitacao(SolicitacaoTutoria $solicitacao)
+    {
+        $solicitacao->delete();
+
+        return back()->with('sucesso', 'Solicitação de tutoria excluída.');
+    }
+
+    public function excluirAvaliacao(Avaliacao $avaliacao)
+    {
+        $avaliacao->delete();
+
+        return back()->with('sucesso', 'Avaliação de tutor excluída.');
+    }
+
+    public function excluirAvaliacaoMaterial(AvaliacaoMaterial $avaliacao)
+    {
+        $avaliacao->delete();
+
+        return back()->with('sucesso', 'Avaliação de material excluída.');
     }
 }

@@ -3,41 +3,40 @@
 @section('title', 'Administração')
 
 @section('content')
-    <div class="min-h-screen bg-slate-50">
+    <div class="min-h-screen bg-paper">
         <div class="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
-            <header class="rounded-3xl bg-slate-900 px-6 py-7 text-white shadow-xl shadow-slate-200 sm:px-8">
+            <header class="rounded-3xl bg-forest px-6 py-7 text-white shadow-soft sm:px-8">
                 <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
                     <div class="max-w-2xl space-y-3">
-                        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-indigo-300">Área restrita</p>
-                        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Central de administração</h1>
-                        <p class="text-sm leading-6 text-slate-300 sm:text-base">Modere publicações e mantenha os registros da comunidade organizados em um só lugar.</p>
+                        <p class="text-sm font-semibold uppercase tracking-wider text-white/60">Área restrita</p>
+                        <h1 class="font-display text-3xl font-bold tracking-tight sm:text-4xl">Central de administração</h1>
+                        <p class="text-sm leading-6 text-white/65 sm:text-base">Modere publicações e mantenha os registros da comunidade organizados em um só lugar.</p>
                     </div>
-                    <span class="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-slate-200">
-                        <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                    <span class="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white/75">
+                        <span class="h-2 w-2 rounded-full bg-coral"></span>
                         {{ auth()->user()->name }}
                     </span>
                 </div>
             </header>
 
             @if (session('sucesso'))
-                <div role="status" class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">{{ session('sucesso') }}</div>
+                <div role="status" class="rounded-xl border border-forest/15 bg-mint px-4 py-3 text-sm font-medium text-forest">{{ session('sucesso') }}</div>
             @endif
             @if ($errors->any())
-                <div role="alert" class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">{{ $errors->first() }}</div>
+                <div role="alert" class="rounded-xl border border-coral/20 bg-coral/10 px-4 py-3 text-sm font-medium text-ink">{{ $errors->first() }}</div>
             @endif
 
             <section aria-label="Resumo da administração" class="grid grid-cols-2 gap-3 lg:grid-cols-6">
-                @foreach ([['#pendencias', '⏳', $totalPendentes, 'pendentes', 'border-amber-200 bg-amber-50 text-amber-900'], ['#candidaturas', '🎓', $totalCandidaturasPendentes, 'candidaturas', 'border-emerald-200 bg-emerald-50 text-emerald-900'], ['#conteudos', '📚', $totalConteudos, 'conteúdos', 'border-indigo-100 bg-white text-slate-900'], ['#materiais', '📄', $totalMateriais, 'materiais', 'border-indigo-100 bg-white text-slate-900'], ['#eventos', '📅', $totalEventos, 'eventos', 'border-indigo-100 bg-white text-slate-900'], ['#usuarios', '👥', $totalUsuarios, 'usuários', 'border-indigo-100 bg-white text-slate-900']] as [$url, $icon, $value, $label, $classes])
+                @foreach ([['#pendencias', $totalPendentes, 'pendentes', 'border-forest/15 bg-mint text-forest'], ['#candidaturas', $totalCandidaturasPendentes, 'candidaturas', 'border-forest/15 bg-mint text-forest'], ['#conteudos', $totalConteudos, 'conteúdos', 'border-forest/10 bg-white text-ink'], ['#materiais', $totalMateriais, 'materiais', 'border-forest/10 bg-white text-ink'], ['#eventos', $totalEventos, 'eventos', 'border-forest/10 bg-white text-ink'], ['#usuarios', $totalUsuarios, 'usuários', 'border-forest/10 bg-white text-ink']] as [$url, $value, $label, $classes])
                     <a href="{{ $url }}" class="rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:shadow-md {{ $classes }}">
-                        <span class="text-2xl" aria-hidden="true">{{ $icon }}</span>
                         <strong class="mt-3 block text-2xl">{{ $value }}</strong>
                         <span class="text-xs font-semibold opacity-75">{{ $label }}</span>
                     </a>
                 @endforeach
             </section>
 
-            <nav class="flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm" aria-label="Navegação rápida">
-                @foreach (['pendencias' => 'Pendências', 'candidaturas' => 'Candidaturas', 'conteudos' => 'Conteúdos', 'materiais' => 'Materiais', 'eventos' => 'Eventos', 'usuarios' => 'Usuários'] as $anchor => $label)
+            <nav class="flex flex-wrap gap-2 rounded-2xl border border-forest/10 bg-white p-2 shadow-sm" aria-label="Navegação rápida">
+                @foreach (['pendencias' => 'Pendências', 'candidaturas' => 'Candidaturas', 'solicitacoes' => 'Solicitações', 'avaliacoes' => 'Avaliações', 'conteudos' => 'Conteúdos', 'materiais' => 'Materiais', 'eventos' => 'Eventos', 'usuarios' => 'Usuários'] as $anchor => $label)
                     <a href="#{{ $anchor }}" class="rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900">{{ $label }}</a>
                 @endforeach
             </nav>
@@ -59,7 +58,7 @@
                 @forelse ($candidaturasPendentes as $candidatura)
                     <article class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm">
                         <div class="flex items-start justify-between gap-4">
-                            <div><h3 class="font-bold text-slate-900">{{ $candidatura->candidato->name ?? 'Usuário removido' }}</h3><p class="text-sm text-slate-500">{{ $candidatura->candidato->email ?? '' }} · {{ $candidatura->area }}</p></div>
+                            <div><h3 class="font-bold text-ink">{{ $candidatura->candidato->name ?? 'Usuário removido' }}</h3><p class="text-sm text-ink/55">{{ $candidatura->area }}</p></div>
                             <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">Pendente</span>
                         </div>
                         <p class="mt-4 text-sm leading-6 text-slate-600">{{ $candidatura->experiencia }}</p>
@@ -73,6 +72,57 @@
                     <div class="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-8 text-sm text-slate-500">Nenhuma candidatura aguardando análise.</div>
                 @endforelse
             </div>
+        </section>
+
+        <section id="solicitacoes" class="scroll-mt-24 space-y-4">
+            <div class="flex items-end justify-between gap-4">
+                <div><p class="text-sm font-semibold text-forest">Tutoria</p><h2 class="font-display text-xl font-bold text-ink">Solicitações de tutoria</h2></div>
+                <span class="rounded-full bg-mint px-3 py-1 text-sm font-bold text-forest">{{ $totalSolicitacoes }} registros</span>
+            </div>
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                @forelse ($solicitacoes as $solicitacao)
+                    <article class="flex items-start justify-between gap-4 rounded-2xl border border-forest/10 bg-white p-5 shadow-sm">
+                        <div>
+                            <h3 class="font-bold text-ink">{{ $solicitacao->assunto }}</h3>
+                            <p class="mt-1 text-xs text-ink/55">{{ $solicitacao->solicitante->name ?? 'Usuário removido' }} · {{ $solicitacao->mentor->name ?? 'Qualquer mentor' }}</p>
+                            <p class="mt-3 line-clamp-3 text-sm leading-6 text-ink/65">{{ $solicitacao->descricao }}</p>
+                            <span class="mt-3 inline-flex rounded-full bg-mint px-2.5 py-1 text-xs font-semibold text-forest">{{ ucfirst($solicitacao->status) }}</span>
+                        </div>
+                        <form method="POST" action="{{ route('administracao.solicitacoes.excluir', $solicitacao) }}" onsubmit="return confirm('Excluir esta solicitação?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="rounded-lg border border-coral/30 px-3 py-2 text-xs font-bold text-coral hover:bg-coral/10">Excluir</button>
+                        </form>
+                    </article>
+                @empty
+                    <x-dashboard.estado-vazio message="Nenhuma solicitação de tutoria cadastrada." />
+                @endforelse
+            </div>
+            {{ $solicitacoes->fragment('solicitacoes')->links() }}
+        </section>
+
+        <section id="avaliacoes" class="scroll-mt-24 space-y-4">
+            <div class="flex items-end justify-between gap-4">
+                <div><p class="text-sm font-semibold text-forest">Qualidade</p><h2 class="font-display text-xl font-bold text-ink">Avaliações recentes</h2></div>
+                <span class="rounded-full bg-mint px-3 py-1 text-sm font-bold text-forest">{{ $totalAvaliacoes }} registros</span>
+            </div>
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                @forelse ($avaliacoes as $avaliacao)
+                    <article class="flex items-start justify-between gap-4 rounded-2xl border border-forest/10 bg-white p-5 shadow-sm">
+                        <div><h3 class="font-bold text-ink">Tutor: {{ $avaliacao->avaliado->name ?? 'Usuário removido' }}</h3><p class="mt-1 text-xs text-ink/55">Por {{ $avaliacao->avaliador->name ?? 'Usuário removido' }} · Nota {{ $avaliacao->nota }}</p><p class="mt-3 text-sm text-ink/65">{{ $avaliacao->comentario ?: 'Sem comentário.' }}</p></div>
+                        <form method="POST" action="{{ route('administracao.avaliacoes.excluir', $avaliacao) }}" onsubmit="return confirm('Excluir esta avaliação?')">@csrf @method('DELETE')<button type="submit" class="rounded-lg border border-coral/30 px-3 py-2 text-xs font-bold text-coral hover:bg-coral/10">Excluir</button></form>
+                    </article>
+                @empty
+                    <x-dashboard.estado-vazio message="Nenhuma avaliação de tutor cadastrada." />
+                @endforelse
+                @foreach ($avaliacoesMateriais as $avaliacao)
+                    <article class="flex items-start justify-between gap-4 rounded-2xl border border-forest/10 bg-white p-5 shadow-sm">
+                        <div><h3 class="font-bold text-ink">Material: {{ $avaliacao->material->titulo ?? 'Material removido' }}</h3><p class="mt-1 text-xs text-ink/55">Por {{ $avaliacao->avaliador->name ?? 'Usuário removido' }} · Nota {{ $avaliacao->nota }}</p><p class="mt-3 text-sm text-ink/65">{{ $avaliacao->comentario ?: 'Sem comentário.' }}</p></div>
+                        <form method="POST" action="{{ route('administracao.avaliacoes_materiais.excluir', $avaliacao) }}" onsubmit="return confirm('Excluir esta avaliação?')">@csrf @method('DELETE')<button type="submit" class="rounded-lg border border-coral/30 px-3 py-2 text-xs font-bold text-coral hover:bg-coral/10">Excluir</button></form>
+                    </article>
+                @endforeach
+            </div>
+            {{ $avaliacoes->fragment('avaliacoes')->links() }}
         </section>
 
         <section id="conteudos" class="scroll-mt-24 space-y-4">
@@ -184,14 +234,25 @@
                     <article class="flex items-center justify-between gap-4 border-b border-slate-100 bg-white p-4 first:rounded-t-2xl last:rounded-b-2xl last:border-b-0">
                         <div>
                             <h2 class="font-bold text-slate-800">{{ $usuario->name }}</h2>
-                            <p class="text-sm text-slate-500">{{ $usuario->email }} · {{ $usuario->role === 'admin' ? 'Administrador' : 'Usuário' }}</p>
+                            <p class="text-sm text-ink/55">{{ $usuario->role === 'admin' ? 'Administrador' : 'Usuário' }}</p>
                         </div>
-                        @if (!auth()->user()->is($usuario))
-                            <form method="POST" action="{{ route('administracao.usuarios.excluir', $usuario) }}" onsubmit="return confirm('Excluir este usuário e os dados associados?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-bold text-rose-700 hover:bg-rose-50">Excluir usuário</button>
-                            </form>
+                        @if (!auth()->user()->is($usuario) && $usuario->role !== 'admin')
+                            <div class="flex flex-wrap justify-end gap-2">
+                                <form method="POST" action="{{ route('administracao.usuarios.papel', $usuario) }}" class="flex items-center gap-2">
+                                    @csrf
+                                    <label for="papel-{{ $usuario->id }}" class="sr-only">Papel de {{ $usuario->name }}</label>
+                                    <select id="papel-{{ $usuario->id }}" name="role" class="rounded-lg border border-forest/20 bg-white px-2 py-2 text-xs text-ink">
+                                        <option value="mentee" @selected($usuario->role === 'mentee')>Usuário</option>
+                                        <option value="mentor" @selected($usuario->role === 'mentor')>Mentor</option>
+                                    </select>
+                                    <button type="submit" class="rounded-lg bg-forest px-3 py-2 text-xs font-bold text-white hover:bg-ink">Atualizar</button>
+                                </form>
+                                <form method="POST" action="{{ route('administracao.usuarios.excluir', $usuario) }}" onsubmit="return confirm('Excluir este usuário e os dados associados?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="rounded-lg border border-coral/30 px-3 py-2 text-xs font-bold text-coral hover:bg-coral/10">Excluir</button>
+                                </form>
+                            </div>
                         @endif
                     </article>
                 @empty

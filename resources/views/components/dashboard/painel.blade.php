@@ -1,5 +1,5 @@
 @props(['class' => ''])
 
-<section {{ $attributes->merge(['class' => "bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm $class"]) }}>
+<section {{ $attributes->merge(['class' => "rounded-2xl border border-forest/10 bg-white p-6 shadow-soft $class"]) }}>
     {{ $slot }}
 </section>

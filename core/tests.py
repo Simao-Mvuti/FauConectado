@@ -1,4 +1,5 @@
 from datetime import date, time
+import re
 
 from django.core.exceptions import ValidationError
 from django.urls import reverse
@@ -188,3 +189,20 @@ class PublicPageTests(TestCase):
 			self.client.get(reverse("mentores")),
 			"Ainda não existem mentores disponíveis",
 		)
+
+	def test_post_forms_include_csrf_token(self):
+		protected_client = self.client_class(enforce_csrf_checks=True)
+		response = protected_client.get(reverse("home"))
+
+		self.assertContains(response, 'name="csrfmiddlewaretoken"', count=4)
+
+		token = re.search(
+			rb'name="csrfmiddlewaretoken" value="([^"]+)"', response.content
+		).group(1).decode()
+		post_response = protected_client.post(
+			reverse("home"),
+			{},
+			HTTP_X_CSRFTOKEN=token,
+		)
+
+		self.assertNotEqual(post_response.status_code, 403)

@@ -12,6 +12,7 @@
 			<p class="mt-8 text-sm text-white/70">✉ <span class="ml-2">hello@fauconectado.pt</span></p>
 		</div>
 		<form class="space-y-4" action="#" method="post">
+			{% csrf_token %}
 			<label class="block text-sm font-semibold" for="nome">Nome<input id="nome" name="nome" type="text" placeholder="O teu nome" class="mt-2 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-normal text-white outline-none placeholder:text-white/35 focus:border-coral"></label>
 			<label class="block text-sm font-semibold" for="email">Email<input id="email" name="email" type="email" placeholder="nome@email.com" class="mt-2 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-normal text-white outline-none placeholder:text-white/35 focus:border-coral"></label>
 			<label class="block text-sm font-semibold" for="mensagem">Mensagem<textarea id="mensagem" name="mensagem" rows="5" placeholder="Como podemos ajudar?" class="mt-2 w-full resize-none rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-normal text-white outline-none placeholder:text-white/35 focus:border-coral"></textarea></label>

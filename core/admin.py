@@ -1,0 +1,40 @@
+from django.contrib import admin
+
+from .models import Avaliacao, Cadeira, Evento, Material, Mentor
+
+
+@admin.register(Cadeira)
+class CadeiraAdmin(admin.ModelAdmin):
+	list_display = ("nome", "ano", "semestre", "ativo", "updated_at")
+	list_filter = ("ano", "semestre", "ativo")
+	search_fields = ("nome",)
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+	list_display = ("titulo", "cadeira", "estado", "avaliacao_media", "created_at")
+	list_filter = ("estado", "tipo", "cadeira__ano", "cadeira__semestre")
+	search_fields = ("titulo", "autor_nome", "autor_email", "cadeira__nome")
+	list_select_related = ("cadeira",)
+
+
+@admin.register(Mentor)
+class MentorAdmin(admin.ModelAdmin):
+	list_display = ("nome", "area", "curso", "ano", "estado", "avaliacao_media")
+	list_filter = ("estado", "area", "ano")
+	search_fields = ("nome", "email", "curso", "contacto_publico")
+
+
+@admin.register(Evento)
+class EventoAdmin(admin.ModelAdmin):
+	list_display = ("titulo", "tipo", "data", "hora", "estado", "organizador_nome")
+	list_filter = ("estado", "tipo", "data")
+	search_fields = ("titulo", "descricao", "organizador_nome", "organizador_email")
+	date_hierarchy = "data"
+
+
+@admin.register(Avaliacao)
+class AvaliacaoAdmin(admin.ModelAdmin):
+	list_display = ("alvo_tipo", "alvo_id", "nota", "autor_nome", "created_at")
+	list_filter = ("alvo_tipo", "nota", "created_at")
+	search_fields = ("autor_nome", "autor_email", "comentario")

@@ -1,0 +1,64 @@
+<div>
+  <!-- Card Principal de Boas-Vindas -->
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        <div class="card rounded-3 shadow-sm p-4 border-0">
+          <div class="card-body text-center">
+            <div class="badge bg-primary-subtle text-primary mb-3 px-3 py-2 rounded-pill">
+              Plataforma Académica
+            </div>
+            <h1 class="card-title h3 fw-bold text-dark mb-3">
+              Bem-vindo à nossa comunidade
+            </h1>
+            <p class="card-text text-muted mb-4">
+              Conecta-te com mentores, explora matérias e fortalece o teu aprendizado num só lugar.
+            </p>
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+              <a href="{% url 'mentores' %}" class="btn btn-primary px-4 fw-semibold">Explorar Mentores</a>
+              <a href="{% url 'materias' %}" class="btn btn-outline-secondary px-4">Ver Matérias</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grelha de Destaques / Funcionalidades -->
+  <section class="container my-5">
+    <div class="row g-4 text-center">
+      <!-- Item 1 -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-3 rounded-3">
+          <div class="card-body">
+            <div class="fs-1 text-primary mb-2">📚</div>
+            <h3 class="h5 card-title fw-bold">Matérias Organizadas</h3>
+            <p class="card-text text-muted">Acede a materiais de estudo e resumos estruturados para o teu curso.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-3 rounded-3">
+          <div class="card-body">
+            <div class="fs-1 text-primary mb-2">👨‍🏫</div>
+            <h3 class="h5 card-title fw-bold">Mentoria Especializada</h3>
+            <p class="card-text text-muted">Conecta-te diretamente com estudantes de anos avançados e mentores.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-3 rounded-3">
+          <div class="card-body">
+            <div class="fs-1 text-primary mb-2">🤝</div>
+            <h3 class="h5 card-title fw-bold">Comunidade Ativa</h3>
+            <p class="card-text text-muted">Participa de grupos de discussão e resolve dúvidas em tempo real.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

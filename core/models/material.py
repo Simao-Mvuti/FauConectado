@@ -15,7 +15,7 @@ class Material(models.Model):
         related_name="materiais"
     )
 
-    titulo = models.CharField()
+    titulo = models.CharField(max_length=200)
     ficheiro = models.FileField(upload_to="materiais/",blank=True,null=True,)
     descricao = models.TextField(blank=True)
     estado = models.CharField(

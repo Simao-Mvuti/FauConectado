@@ -13,7 +13,7 @@ class CadeiraAdmin(admin.ModelAdmin):
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
 	list_display = ("titulo", "cadeira", "estado", "avaliacao_media", "created_at")
-	list_filter = ("estado", "tipo", "cadeira__ano", "cadeira__semestre")
+	list_filter = ("estado", "cadeira__ano", "cadeira__semestre")
 	search_fields = ("titulo", "autor_nome", "autor_email", "cadeira__nome")
 	list_select_related = ("cadeira",)
 

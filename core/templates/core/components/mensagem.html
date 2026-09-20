@@ -1,0 +1,48 @@
+<!-- BANNER DE MENSAGENS E NOTIFICAÇÕES -->
+{% if messages %}
+<div
+  class="fixed top-5 right-5 z-50 flex w-full max-w-md flex-col gap-3 px-4 sm:px-0"
+>
+  {% for message in messages %}
+  <div
+    class="flex items-center justify-between rounded-2xl border p-4 shadow-lg transition-all duration-300 {% if message.tags == 'success' %} border-emerald-200 bg-emerald-50 text-emerald-900 {% elif message.tags == 'error' or message.tags == 'danger' %} border-rose-200 bg-rose-50 text-rose-900 {% elif message.tags == 'warning' %} border-amber-200 bg-amber-50 text-amber-900 {% else %} border-sky-200 bg-sky-50 text-sky-900 {% endif %}"
+  >
+    <div class="flex items-center gap-3">
+      <!-- Ícones de acordo com o tipo de mensagem -->
+      {% if message.tags == 'success' %}
+      <span
+        class="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 font-bold"
+        >✓</span
+      >
+      {% elif message.tags == 'error' or message.tags == 'danger' %}
+      <span
+        class="flex h-8 w-8 items-center justify-center rounded-xl bg-rose-100 text-rose-600 font-bold"
+        >✕</span
+      >
+      {% elif message.tags == 'warning' %}
+      <span
+        class="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-amber-600 font-bold"
+        >!</span
+      >
+      {% else %}
+      <span
+        class="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-100 text-sky-600 font-bold"
+        >i</span
+      >
+      {% endif %}
+
+      <p class="text-sm font-semibold">{{ message }}</p>
+    </div>
+
+    <!-- Botão para Fechar Notificação -->
+    <button
+      type="button"
+      onclick="this.parentElement.remove()"
+      class="ml-4 text-xs font-bold opacity-40 hover:opacity-100"
+    >
+      ✕
+    </button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

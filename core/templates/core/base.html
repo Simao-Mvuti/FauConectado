@@ -16,6 +16,7 @@
     </title>
   </head>
   <body class="bg-paper text-ink font-sans antialiased">
+    {% include "core/components/mensagem.html" %} 
     {% include "core/components/navbar.html" %}
     <main>{% block conteudo %}{% endblock %}</main>
     {% include "core/components/rodape.html" %}

@@ -1,0 +1,44 @@
+<form class="rounded-2xl bg-ink p-5 text-white sm:p-7" method="get">
+  <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <p class="text-sm font-bold">Encontrar um material</p>
+      <p class="mt-1 text-xs text-white/55">
+        Pesquisa pelo título ou filtra por cadeira, ano e semestre.
+      </p>
+    </div>
+
+    <label class="block w-full lg:max-w-md">
+      <span class="sr-only">Pesquisar material</span>
+      <input
+        name="q"
+        value="{{ request.GET.q }}"
+        type="search"
+        placeholder="Ex.: Programação, Matemática..."
+        class="w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white outline-none placeholder:text-white/35 focus:border-coral"
+      >
+    </label>
+  </div>
+
+  <div class="mt-6 flex flex-wrap gap-2">
+    <!-- Filtro por Ano -->
+    <select name="ano" class="rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs text-white outline-none">
+      <option value="">Todos os anos</option>
+      {% for ano in anos_disponiveis %}
+        <option value="{{ ano }}" {% if request.GET.ano == ano|stringformat:'s' %}selected{% endif %}>
+          {{ ano }}.º ano
+        </option>
+      {% endfor %}
+    </select>
+
+    <!-- Filtro por Semestre -->
+    <select name="semestre" class="rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs text-white outline-none">
+      <option value="">Todos os semestres</option>
+      <option value="1" {% if request.GET.semestre == '1' %}selected{% endif %}>I semestre</option>
+      <option value="2" {% if request.GET.semestre == '2' %}selected{% endif %}>II semestre</option>
+    </select>
+
+    <button type="submit" class="rounded-xl bg-coral px-5 py-2 text-xs font-bold transition hover:opacity-90">
+      Pesquisar
+    </button>
+  </div>
+</form>

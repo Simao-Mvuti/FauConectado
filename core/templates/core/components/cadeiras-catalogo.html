@@ -1,11 +1,55 @@
 <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
-  <div class="mb-8 flex flex-wrap gap-2"><a href="?ano=" class="rounded-full bg-ink px-4 py-2 text-xs font-bold text-white">Todos os anos</a>{% for ano in anos_disponiveis %}<a href="?ano={{ ano }}" class="rounded-full border border-ink/10 px-4 py-2 text-xs font-bold text-ink/60 hover:border-forest">{{ ano }}.º ano</a>{% endfor %}</div>
+  <!-- Filtro por Anos -->
+  <div class="mb-8 flex flex-wrap gap-2">
+    <a href="?ano=" class="rounded-full bg-ink px-4 py-2 text-xs font-bold text-white">
+      Todos os anos
+    </a>
+    
+    {% for ano in anos_disponiveis %}
+      <a href="?ano={{ ano }}" class="rounded-full border border-ink/10 px-4 py-2 text-xs font-bold text-ink/60 hover:border-forest">
+        {{ ano }}.º ano
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Agrupamento de Cadeiras por Ano -->
   {% regroup cadeiras by ano as cadeiras_por_ano %}
+
   <div class="space-y-6">
     {% for grupo in cadeiras_por_ano %}
-    <article class="rounded-2xl bg-white p-6 shadow-soft"><div class="flex items-center justify-between"><h2 class="font-display text-3xl">{{ grupo.grouper }}.º Ano</h2><span class="rounded-full bg-mint px-3 py-1 text-xs font-bold text-forest">{{ grupo.list|length }} cadeiras</span></div><div class="mt-6 grid gap-3 md:grid-cols-2">{% regroup grupo.list by semestre as cadeiras_por_semestre %}{% for semestre in cadeiras_por_semestre %}<div class="rounded-xl bg-paper p-4"><p class="mb-3 text-xs font-bold uppercase tracking-wider text-coral">{% if semestre.grouper == 1 %}I{% else %}II{% endif %} Semestre</p><ul class="grid gap-2 text-sm text-ink/70">{% for cadeira in semestre.list %}<li><a href="{% url 'materias' %}?cadeira={{ cadeira.id }}" class="hover:text-forest">{{ cadeira.nome }}</a></li>{% endfor %}</ul></div>{% endfor %}</div></article>
+      <article class="rounded-2xl bg-white p-6 shadow-soft">
+        <div class="flex items-center justify-between">
+          <h2 class="font-display text-3xl">{{ grupo.grouper }}.º Ano</h2>
+          <span class="rounded-full bg-mint px-3 py-1 text-xs font-bold text-forest">
+            {{ grupo.list|length }} cadeiras
+          </span>
+        </div>
+
+        <div class="mt-6 grid gap-3 md:grid-cols-2">
+          {% regroup grupo.list by semestre as cadeiras_por_semestre %}
+          
+          {% for semestre in cadeiras_por_semestre %}
+            <div class="rounded-xl bg-paper p-4">
+              <p class="mb-3 text-xs font-bold uppercase tracking-wider text-coral">
+                {% if semestre.grouper == 1 %}I{% else %}II{% endif %} Semestre
+              </p>
+              <ul class="grid gap-2 text-sm text-ink/70">
+                {% for cadeira in semestre.list %}
+                  <li>
+                    <a href="{% url 'materias' %}?cadeira={{ cadeira.id }}" class="hover:text-forest">
+                      {{ cadeira.nome }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+        </div>
+      </article>
     {% empty %}
-    <div class="rounded-2xl border border-dashed border-ink/20 bg-white p-10 text-center text-sm text-ink/55">Ainda não existem cadeiras disponíveis.</div>
+      <div class="rounded-2xl border border-dashed border-ink/20 bg-white p-10 text-center text-sm text-ink/55">
+        Ainda não existem cadeiras disponíveis.
+      </div>
     {% endfor %}
   </div>
 </section>

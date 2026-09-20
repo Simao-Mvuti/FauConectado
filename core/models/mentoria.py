@@ -3,14 +3,7 @@ from django.db import models
 from .managers import ApprovedManager
 
 
-class Mentor(models.Model):
-    AREA_CHOICES = [
-        ("PROGRAMACAO", "Programação"),
-        ("MATEMATICA", "Matemática"),
-        ("REDES", "Redes"),
-        ("SISTEMAS", "Sistemas"),
-        ("OUTRA", "Outra"),
-    ]
+class Mentoria(models.Model):
     ESTADO_CHOICES = [
         ("PENDENTE", "Pendente"),
         ("APROVADO", "Aprovado"),
@@ -18,14 +11,9 @@ class Mentor(models.Model):
     ]
 
     nome = models.CharField(max_length=100)
-    email = models.EmailField()
     curso = models.CharField(max_length=100)
     ano = models.IntegerField()
-    area = models.CharField(max_length=20, choices=AREA_CHOICES)
     descricao = models.TextField()
-    requisitos = models.TextField()
-    dias_disponiveis = models.CharField(max_length=100)
-    horario_disponivel = models.CharField(max_length=100, blank=True, null=True)
     contacto_publico = models.CharField(max_length=50)
     estado = models.CharField(
         max_length=10, choices=ESTADO_CHOICES, default="PENDENTE"

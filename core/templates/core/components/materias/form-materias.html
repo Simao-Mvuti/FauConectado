@@ -1,0 +1,67 @@
+<div id="container-form-materias" class="mt-6 hidden w-full">
+  <form
+    id="form-materias"
+    class="w-full rounded-2xl border border-ink/10 bg-white p-6 shadow-sm sm:p-8"
+    action="{% url 'materias' %}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+
+    <!-- Cabeçalho do Formulário com Botão Fechar -->
+    <div class="flex items-center justify-between">
+      <span
+        class="grid h-11 w-11 place-items-center rounded-xl bg-[#e7edff] text-xl"
+        >↑</span
+      >
+      <button
+        type="button"
+        onclick="toggleFormulario()"
+        class="text-xs font-bold text-ink/40 hover:text-ink"
+      >
+        ✕ Fechar
+      </button>
+    </div>
+
+    <h3 class="mt-5 font-bold text-lg">Enviar material</h3>
+    <p class="mt-1 text-sm leading-6 text-ink/55">
+      Partilha um resumo, apontamento ou ficheiro de uma cadeira.
+    </p>
+
+    <!-- Campos em Grelha (1 coluna em mobile, 2 em desktop) -->
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
+      <label class="block text-xs font-bold" for="cadeira">
+        Cadeira
+        <select
+          id="cadeira"
+          name="cadeira"
+          required
+          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-3 py-3 font-normal outline-none focus:border-forest"
+        >
+          <option value="">Selecionar cadeira</option>
+          {% for cadeira in cadeiras %}
+          <option value="{{ cadeira.id }}">{{ cadeira.nome }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label class="block text-xs font-bold" for="ficheiro">
+        Ficheiro
+        <input
+          id="ficheiro"
+          name="ficheiro"
+          type="file"
+          required
+          class="mt-2 block w-full rounded-xl border border-dashed border-ink/20 bg-paper px-3 py-3 text-xs font-normal"
+        />
+      </label>
+    </div>
+
+    <button
+      type="submit"
+      class="mt-6 w-full rounded-xl bg-forest py-3 text-sm font-bold text-white transition hover:bg-ink"
+    >
+      Submeter material
+    </button>
+  </form>
+</div>

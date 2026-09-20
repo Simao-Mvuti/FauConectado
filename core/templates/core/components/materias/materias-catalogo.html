@@ -1,0 +1,30 @@
+<section class="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
+  <!-- Componente de Filtro -->
+  {% include "core/components/materias/materias-filtro.html" %}
+
+  <!-- Cabeçalho com Contador e CTA -->
+  <div
+    class="mt-8 flex items-center justify-between border-b border-ink/10 pb-4"
+  >
+    <p class="text-sm text-ink/55">
+      <strong class="text-ink">{{ materiais|length }}</strong> materiais
+      encontrados
+    </p>
+
+    <!-- Botão que navega para a página do formulário -->
+    <a
+      href="{% url 'enviar_material' %}"
+      class="rounded-full bg-coral px-4 py-2 text-xs font-bold text-white transition hover:bg-ink"
+    >
+      Enviar material +
+    </a>
+  </div>
+
+  <!-- Grelha de Materiais -->
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {% for material in materiais %} {% include
+    "core/components/materias/material-card.html" with material=material %} {%
+    empty %} {% include "core/components/materias/materias-empty-state.html" %}
+    {% endfor %}
+  </div>
+</section>

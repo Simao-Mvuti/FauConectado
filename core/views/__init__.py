@@ -1,15 +1,18 @@
 from .cadeiras import cadeiras
 from .contacto import contacto
-from .eventos import eventos
 from .home import home
-from .materias import materias
-from .mentores import mentores
+from .materias import MateriasView, EnviarMaterialView
+from .mentorias import MentoriasView,EnviarMentoriasView
+from .eventos import EventosView,EnviarEventosView
 
 __all__ = [
     "cadeiras",
     "contacto",
-    "eventos",
     "home",
-    "materias",
-    "mentores",
+    "EventosView",
+    "EnviarEventosView",
+    "MentoriasView",
+    "EnviarMentoriasView",
+    "MateriasView",
+    "EnviarMaterialView",
 ]

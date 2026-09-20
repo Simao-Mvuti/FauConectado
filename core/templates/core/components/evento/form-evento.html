@@ -1,0 +1,109 @@
+<div class="mx-auto max-w-xl px-4 py-8">
+  <form
+    class="rounded-2xl border border-ink/10 bg-white p-6 shadow-sm sm:p-8"
+    action="{% url 'enviar_evento' %}"
+    method="post"
+  >
+    {% csrf_token %}
+
+    <!-- Ícone e Cabeçalho -->
+    <span
+      class="grid h-11 w-11 place-items-center rounded-xl bg-[#fce7d9] text-xl"
+      >◷</span
+    >
+    <h3 class="mt-5 font-bold text-lg text-ink">Submeter evento</h3>
+    <p class="mt-1 text-sm leading-6 text-ink/55">
+      Sugere uma palestra, workshop ou atividade académica para a comunidade.
+    </p>
+
+    <div class="mt-6 space-y-4">
+      <!-- Nome do Evento (Título) -->
+      <label class="block text-xs font-bold text-ink" for="titulo">
+        Nome do evento *
+        <input
+          id="titulo"
+          name="titulo"
+          type="text"
+          required
+          placeholder="Ex.: Workshop de Maquetes e Modelação"
+          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+        />
+      </label>
+
+      <!-- Tipo e Local (Lado a Lado) -->
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block text-xs font-bold text-ink" for="tipo">
+          Tipo de Evento *
+          <select
+            id="tipo"
+            name="tipo"
+            required
+            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+          >
+            <option value="workshop">Workshop</option>
+            <option value="palestra">Palestra</option>
+            <option value="atividade">Atividade Académica</option>
+          </select>
+        </label>
+
+        <label class="block text-xs font-bold text-ink" for="local">
+          Local *
+          <input
+            id="local"
+            name="local"
+            type="text"
+            required
+            placeholder="Ex.: Auditório A / Online"
+            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+          />
+        </label>
+      </div>
+
+      <!-- Data e Hora (Lado a Lado) -->
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block text-xs font-bold text-ink" for="data">
+          Data *
+          <input
+            id="data"
+            name="data"
+            type="date"
+            required
+            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+          />
+        </label>
+
+        <label class="block text-xs font-bold text-ink" for="hora">
+          Hora *
+          <input
+            id="hora"
+            name="hora"
+            type="time"
+            required
+            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+          />
+        </label>
+      </div>
+
+      <!-- Descrição do Evento -->
+      <label class="block text-xs font-bold text-ink" for="descricao">
+        Descrição do evento *
+        <textarea
+          id="descricao"
+          name="descricao"
+          rows="3"
+          required
+          placeholder="Descreve o objetivo do evento e o público-alvo..."
+          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+        ></textarea>
+      </label>
+    </div>
+
+    <!-- Botão de Submissão -->
+    <button
+      type="submit"
+      class="mt-6 w-full cursor-pointer rounded-xl bg-forest py-3.5 text-sm font-bold text-white transition hover:bg-ink"
+    >
+      Enviar proposta
+    </button>
+  </form>
+</div>

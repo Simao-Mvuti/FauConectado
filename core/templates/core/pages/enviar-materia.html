@@ -1,0 +1,77 @@
+{% extends "core/base.html" %} {% block titulo %}Enviar Material |
+FauConectado{% endblock %} {% block conteudo %}
+<section class="mx-auto max-w-2xl px-5 py-10 lg:py-16">
+  <!-- Botão Voltar -->
+  <a
+    href="{% url 'materias' %}"
+    class="inline-flex items-center gap-2 text-xs font-bold text-ink/60 hover:text-forest mb-6"
+  >
+    ← Voltar à biblioteca
+  </a>
+
+  <div class="rounded-2xl border border-ink/10 bg-white p-6 shadow-sm sm:p-10">
+    <span
+      class="grid h-12 w-12 place-items-center rounded-xl bg-[#e7edff] text-2xl"
+      >↑</span
+    >
+
+    <h1 class="mt-6 font-display text-2xl sm:text-3xl font-bold">
+      Enviar material de estudo
+    </h1>
+    <p class="mt-2 text-sm leading-6 text-ink/55">
+      Partilha resumos, testes resolvidos ou apontamentos com a comunidade
+      acadêmica.
+    </p>
+
+    <form
+      action="{% url 'enviar_material' %}"
+      method="post"
+      enctype="multipart/form-data"
+      class="mt-8 space-y-5"
+    >
+      {% csrf_token %}
+
+      <div>
+        <label class="block text-xs font-bold mb-2" for="cadeira">
+          Selecione a Cadeira *
+        </label>
+        <select
+          id="cadeira"
+          name="cadeira"
+          required
+          class="w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm outline-none focus:border-forest"
+        >
+          <option value="">-- Selecionar Cadeira --</option>
+          {% for cadeira in cadeiras %}
+          <option value="{{ cadeira.id }}">
+            {{ cadeira.nome }} ({{ cadeira.ano }}º ano)
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold mb-2" for="ficheiro">
+          Ficheiro (PDF, ZIP, DOCX) *
+        </label>
+        <input
+          id="ficheiro"
+          name="ficheiro"
+          type="file"
+          required
+          class="block w-full rounded-xl border border-dashed border-ink/20 bg-paper px-4 py-4 text-xs font-normal"
+        />
+      </div>
+
+      <div class="pt-4">
+        <button
+          type="submit"
+          class="w-full rounded-xl bg-forest py-4 text-sm font-bold text-white transition hover:bg-ink cursor-pointer"
+        >
+          Submeter Material
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

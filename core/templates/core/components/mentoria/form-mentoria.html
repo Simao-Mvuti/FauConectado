@@ -1,0 +1,84 @@
+<div class="mx-auto max-w-xl px-4 py-8">
+  <form
+    class="rounded-2xl border border-ink/10 bg-white p-6 shadow-sm sm:p-8"
+    action="{% url 'enviar_mentoria' %}"
+    method="post"
+  >
+    {% csrf_token %}
+
+    <!-- Ícone e Título -->
+    <span
+      class="grid h-11 w-11 place-items-center rounded-xl bg-[#e2f3e9] text-xl"
+      >✦</span
+    >
+    <h3 class="mt-5 font-bold text-lg text-ink">Ser mentor</h3>
+    <p class="mt-1 text-sm leading-6 text-ink/55">
+      Apresenta a tua experiência para fazer parte da rede de mentores.
+    </p>
+
+    <div class="mt-6 space-y-4">
+      <!-- Nome -->
+      <label class="block text-xs font-bold text-ink" for="mentor-nome">
+        Nome *
+        <input
+          id="mentor-nome"
+          name="nome"
+          type="text"
+          required
+          placeholder="O teu nome completo"
+          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+        />
+      </label>
+
+      <!-- Curso e Ano (Lado a Lado em ecrãs > sm) -->
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block text-xs font-bold text-ink" for="mentor-curso">
+          Curso *
+          <input
+            id="mentor-curso"
+            name="curso"
+            type="text"
+            required
+            placeholder="Ex.: Engenharia Informática"
+            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+          />
+        </label>
+
+        <label class="block text-xs font-bold text-ink" for="mentor-ano">
+          Ano *
+          <input
+            id="mentor-ano"
+            name="ano"
+            type="number"
+            min="1"
+            max="6"
+            required
+            placeholder="Ex.: 3"
+            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+          />
+        </label>
+      </div>
+
+      <!-- Contacto -->
+      <label class="block text-xs font-bold text-ink" for="mentor-contacto">
+        Contacto Público / WhatsApp *
+        <input
+          id="mentor-contacto"
+          name="contacto_publico"
+          type="text"
+          required
+          placeholder="Ex.: +244 9XX XXX XXX"
+          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
+        />
+      </label>
+    </div>
+
+    <!-- Botão de Submissão -->
+    <button
+      type="submit"
+      class="mt-6 w-full cursor-pointer rounded-xl bg-forest py-3.5 text-sm font-bold text-white transition hover:bg-ink"
+    >
+      Candidatar-me
+    </button>
+  </form>
+</div>

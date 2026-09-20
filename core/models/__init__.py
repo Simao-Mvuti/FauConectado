@@ -3,7 +3,7 @@ from .cadeira import Cadeira
 from .evento import Evento
 from .managers import ApprovedManager
 from .material import Material
-from .mentor import Mentor
+from .mentoria import Mentoria
 
 __all__ = [
     "ApprovedManager",
@@ -11,5 +11,5 @@ __all__ = [
     "Cadeira",
     "Evento",
     "Material",
-    "Mentor",
+    "Mentoria",
 ]

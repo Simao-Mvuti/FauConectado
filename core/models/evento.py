@@ -4,11 +4,6 @@ from .managers import ApprovedManager
 
 
 class Evento(models.Model):
-    TIPO_CHOICES = [
-        ("PALESTRA", "Palestra"),
-        ("WORKSHOP", "Workshop"),
-        ("ENCONTRO", "Encontro"),
-    ]
     ESTADO_CHOICES = [
         ("PENDENTE", "Pendente"),
         ("APROVADO", "Aprovado"),
@@ -16,14 +11,9 @@ class Evento(models.Model):
     ]
 
     titulo = models.CharField(max_length=100)
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
     descricao = models.TextField()
-    data = models.DateField()
-    hora = models.TimeField()
+    data = models.DateTimeField()
     local = models.CharField(max_length=150)
-    link_externo = models.URLField(blank=True, null=True)
-    organizador_nome = models.CharField(max_length=100)
-    organizador_email = models.EmailField()
     estado = models.CharField(
         max_length=10, choices=ESTADO_CHOICES, default="PENDENTE"
     )

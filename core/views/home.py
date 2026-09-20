@@ -1,12 +1,12 @@
 from django.db.models import Count
 from django.shortcuts import render
 
-from ..models import Cadeira, Material, Mentor
+from ..models import Cadeira, Material, Mentoria
 
 
 def home(request):
     materiais = Material.publicos.select_related("cadeira").order_by("-created_at")
-    mentores = Mentor.publicos.order_by("-avaliacao_media", "nome")
+    mentores = Mentoria.publicos.order_by("-avaliacao_media", "nome")
     cadeiras = Cadeira.objects.filter(ativo=True).annotate(total_materiais=Count("materiais"))
 
     return render(

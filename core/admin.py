@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Avaliacao, Cadeira, Evento, Material, Mentor
+from .models import Avaliacao, Cadeira, Evento, Material, Mentoria
 
 
 @admin.register(Cadeira)
@@ -18,18 +18,18 @@ class MaterialAdmin(admin.ModelAdmin):
 	list_select_related = ("cadeira",)
 
 
-@admin.register(Mentor)
+@admin.register(Mentoria)
 class MentorAdmin(admin.ModelAdmin):
-	list_display = ("nome", "area", "curso", "ano", "estado", "avaliacao_media")
-	list_filter = ("estado", "area", "ano")
-	search_fields = ("nome", "email", "curso", "contacto_publico")
+	list_display = ("nome", "curso", "ano", "estado", "avaliacao_media")
+	list_filter = ("estado",  "ano")
+	search_fields = ("nome", "curso", "contacto_publico")
 
 
 @admin.register(Evento)
 class EventoAdmin(admin.ModelAdmin):
-	list_display = ("titulo", "tipo", "data", "hora", "estado", "organizador_nome")
-	list_filter = ("estado", "tipo", "data")
-	search_fields = ("titulo", "descricao", "organizador_nome", "organizador_email")
+	list_display = ("titulo", "data",  "estado")
+	list_filter = ("estado",  "data")
+	search_fields = ("titulo", "descricao")
 	date_hierarchy = "data"
 
 

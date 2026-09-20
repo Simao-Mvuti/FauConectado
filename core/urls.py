@@ -1,11 +1,14 @@
 from django.urls import path
-from .views import cadeiras, contacto, eventos, home, materias, mentores
+from .views import cadeiras, contacto, home, MateriasView,EnviarMaterialView,MentoriasView,EnviarMentoriasView,EventosView,EnviarEventosView
 
 urlpatterns = [
     path("", home, name="home"),
-    path("materias/", materias, name="materias"),
-    path("mentores/", mentores, name="mentores"),
     path("cadeiras/", cadeiras, name="cadeiras"),
-    path("eventos/",    eventos, name="eventos"),
     path("contribuir/", contacto, name="contribuir"),
+    path("materias/", MateriasView.as_view(), name="materias"),
+    path("mentorias/", MentoriasView.as_view(), name="mentorias"),
+    path("eventos/",EventosView.as_view(),name="eventos"),
+    path("materias/enviar/", EnviarMaterialView.as_view(), name="enviar_material"),
+    path("mentorias/enviar",EnviarMentoriasView.as_view(),name="enviar_mentoria"),
+    path("eventos/enviar",EnviarEventosView.as_view(),name="enviar_evento")
 ]

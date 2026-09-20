@@ -2,9 +2,6 @@
   class="rounded-2xl border border-ink/10 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-soft"
 >
   <div class="flex items-center justify-between">
-    <span class="rounded-lg bg-mint px-3 py-2 text-xs font-bold text-forest">
-      {{ material.extensao|upper }} · {{ material.tipo|upper }}
-    </span>
     <span class="text-xs text-ink/40">Aprovado</span>
   </div>
 
@@ -19,15 +16,20 @@
     <span class="text-xs text-ink/40">avaliação</span>
   </div>
 
-  <div
+ <div
     class="mt-6 flex items-center justify-between border-t border-ink/10 pt-4 text-xs text-ink/45"
   >
     <span>{{ material.cadeira.nome }} · {{ material.cadeira.ano }}.º ano</span>
-    <a
-      href="{{ material.ficheiro.url|default:'#' }}"
-      class="font-bold text-forest hover:underline"
-    >
-      Abrir →
-    </a>
+    
+    {% if material.ficheiro %}
+      <a
+        href="{{ material.ficheiro.url }}"
+        class="font-bold text-forest hover:underline"
+      >
+        Abrir →
+      </a>
+    {% else %}
+      <span class="text-xs text-ink/30 italic">Sem ficheiro</span>
+    {% endif %}
   </div>
 </article>

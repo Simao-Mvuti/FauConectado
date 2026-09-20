@@ -32,3 +32,11 @@ class Material(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    @property
+    def extensao(self):
+        """Retorna automaticamente a extensão do ficheiro (ex: PDF, DOCX)"""
+        if self.ficheiro and hasattr(self.ficheiro, 'name'):
+            name, extension = os.path.splitext(self.ficheiro.name)
+            return extension.replace('.', '').upper()
+        return "ARQUIVO"

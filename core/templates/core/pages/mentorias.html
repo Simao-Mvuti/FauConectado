@@ -2,5 +2,5 @@
 {% block titulo %}Mentores | FauConectado{% endblock %}
 {% block conteudo %}
 {% include "core/components/page-heading.html" with eyebrow="Rede de orientação" title="Todos os mentores" description="Conhece os mentores aprovados, as suas áreas, requisitos, disponibilidade e contactos." %}
-{% include "core/components/mentoria/mentores-catalogo.html" %}
+{% include "core/components/mentoria/mentores-catalogo.html" with mentores=mentorias areas_mentorias=areas_mentorias %}
 {% endblock %}

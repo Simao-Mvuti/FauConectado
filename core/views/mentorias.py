@@ -13,18 +13,31 @@ class MentoriasView(ListView):
     context_object_name = "mentorias"
 
     def get_queryset(self):
-        mentores_publicos = Mentoria.publicos
-        area = self.request.GET.get("area")
-        ordenar = self.request.GET.get("ordenar","avaliacao")
-        if area:
-            mentores_publicos = mentores_publicos.filter(area=area)
+        queryset = Mentoria.objects.filter(estado__iexact="APROVADO") 
+        
+        curso = self.request.GET.get("area")
+        if curso:
+            queryset = queryset.filter(curso__iexact=curso)
+
+        # Ordenação
+        ordenar = self.request.GET.get("ordenar")
         if ordenar == "nome":
-            mentores_publicos = mentores_publicos.order_by("nome")
-        else:
-            mentores_publicos = mentores_publicos.order_by("-avaliacao_media", "nome")
+            queryset = queryset.order_by("nome")
+        elif ordenar == "avaliacao":
+            queryset = queryset.order_by("-avaliacao_media")
 
-        return mentores_publicos
+        return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cursos_aprovados = (
+            Mentoria.objects.filter(estado__iexact="APROVADO")
+            .values_list("curso", flat=True)
+            .distinct()
+            .order_by("curso")
+        )
+        context["areas_mentorias"] = [(curso, curso) for curso in cursos_aprovados if curso]
+        return context
 class EnviarMentoriasView(CreateView):
     template_name = "core/pages/enviar-mentoria.html"
     form_class = MentoriaForm

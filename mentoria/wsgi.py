@@ -1,13 +1,12 @@
 import os
 import sys
 
-# Caminho para o diretório raiz onde está o manage.py
-path = '/home/simaomvuti/fauconect'
-if path not in sys.path:
-    sys.path.append(path)
+# Adiciona a pasta do projeto ao caminho do Python
+sys.path.insert(0, os.path.dirname(__file__))
 
-# Aponta para as configurações do app 'core'
-os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
+# Aponta para a tua pasta 'mentoria'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mentoria.settings'
 
+# Carrega a aplicação Django de forma segura
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

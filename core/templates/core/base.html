@@ -1,24 +1,23 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-PT">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'core/css/app.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'core/css/app.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <title>
-        {% block titulo %}
-            FauConectado | Aprender em conjunto
-        {% endblock %}
+      {% block titulo %} FauConectado | Aprender em conjunto {% endblock %}
     </title>
-</head>
-<body class="bg-paper text-ink font-sans antialiased">
+  </head>
+  <body class="bg-paper text-ink font-sans antialiased">
     {% include "core/components/navbar.html" %}
-    <main>
-        {% block conteudo %}{% endblock %}
-    </main>
+    <main>{% block conteudo %}{% endblock %}</main>
     {% include "core/components/rodape.html" %}
-</body>
+  </body>
 </html>

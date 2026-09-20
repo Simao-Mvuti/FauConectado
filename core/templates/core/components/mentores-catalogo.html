@@ -1,6 +1,57 @@
 <section class="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
-  <form class="flex flex-wrap gap-2" method="get"><select name="area" class="rounded-full border border-ink/10 bg-white px-4 py-2 text-xs font-bold text-ink/60"><option value="">Todas as áreas</option>{% for value, label in areas_mentor %}<option value="{{ value }}" {% if request.GET.area == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select><select name="ordenar" class="rounded-full border border-ink/10 bg-white px-4 py-2 text-xs font-bold text-ink/60"><option value="avaliacao">Mais bem avaliados</option><option value="nome">Nome</option></select><button type="submit" class="rounded-full bg-ink px-4 py-2 text-xs font-bold text-white">Filtrar</button><a href="{% url 'home' %}#contribuir" class="ml-auto rounded-full bg-coral px-4 py-2 text-xs font-bold text-white">Quero ser mentor +</a></form>
+  <form class="flex flex-wrap gap-2" method="get">
+    <select
+      name="area"
+      class="rounded-full border border-ink/10 bg-white px-4 py-2 text-xs font-bold text-ink/60"
+    >
+      <option value="">Todas as áreas</option>
+      {% for value, label in areas_mentor %}
+      <option
+        value="{{ value }}"
+        {%
+        if
+        request.GET.area=""
+        ="value"
+        %}selected{%
+        endif
+        %}
+      >
+        {{ label }}
+      </option>
+      {% endfor %}</select
+    ><select
+      name="ordenar"
+      class="rounded-full border border-ink/10 bg-white px-4 py-2 text-xs font-bold text-ink/60"
+    >
+      <option value="avaliacao">Mais bem avaliados</option>
+      <option value="nome">Nome</option></select
+    ><button
+      type="submit"
+      class="rounded-full bg-ink px-4 py-2 text-xs font-bold text-white"
+    >
+      Filtrar</button
+    ><a
+      href="{% url 'home' %}#contribuir"
+      class="ml-auto rounded-full bg-coral px-4 py-2 text-xs font-bold text-white"
+      >Quero ser mentor +</a
+    >
+  </form>
   <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-    {% for mentor in mentores %}{% include "core/components/mentor-card.html" with mentor=mentor %}{% empty %}<div class="rounded-2xl border border-dashed border-ink/20 bg-white p-10 text-center md:col-span-2 lg:col-span-3"><h2 class="font-bold">Ainda não existem mentores disponíveis</h2><p class="mt-2 text-sm text-ink/55">As candidaturas aprovadas aparecerão nesta página.</p><a href="{% url 'home' %}#contribuir" class="mt-5 inline-block rounded-xl bg-forest px-5 py-3 text-sm font-bold text-white">Candidatar-me</a></div>{% endfor %}
+    {% for mentor in mentores %} {% include "core/components/mentor-card.html"
+    with mentor=mentor %} {% empty %}
+    <div
+      class="rounded-2xl border border-dashed border-ink/20 bg-white p-10 text-center md:col-span-2 lg:col-span-3"
+    >
+      <h2 class="font-bold">Ainda não existem mentores disponíveis</h2>
+      <p class="mt-2 text-sm text-ink/55">
+        As candidaturas aprovadas aparecerão nesta página.
+      </p>
+      <a
+        href="{% url 'contribuir' %}#contribuir"
+        class="mt-5 inline-block rounded-xl bg-forest px-5 py-3 text-sm font-bold text-white"
+        >Candidatar-me</a
+      >
+    </div>
+    {% endfor %}
   </div>
 </section>

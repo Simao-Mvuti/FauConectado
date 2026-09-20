@@ -15,6 +15,8 @@ class CadeiraModelTests(TestCase):
 		self.assertEqual(str(cadeira), "Programação I")
 
 
+
+
 class ApprovedManagerTests(TestCase):
 	def setUp(self):
 		self.cadeira = Cadeira.objects.create(

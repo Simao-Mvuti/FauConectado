@@ -1,7 +1,8 @@
-<header class="border-b border-ink/10 bg-paper/90 backdrop-blur-md">
+<header class="border-b border-ink/10 bg-paper/90 backdrop-blur-md relative z-50">
   <div
     class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8"
   >
+    <!-- Logo -->
     <a
       href="{% url 'home' %}#inicio"
       class="flex items-center gap-3"
@@ -15,6 +16,8 @@
         >Fau<span class="text-coral">Conectado</span></span
       >
     </a>
+
+    <!-- Navegação Desktop -->
     <nav
       class="hidden items-center gap-7 text-sm font-semibold text-ink/65 md:flex"
       aria-label="Navegação principal"
@@ -34,25 +37,35 @@
         >Contribuir</a
       >
     </nav>
+
+    <!-- Botão de Partilha Desktop -->
     <a
       href="{% url 'contribuir' %}"
       class="hidden rounded-full bg-forest px-5 py-3 text-sm font-bold text-white shadow-lg shadow-forest/20 transition hover:-translate-y-0.5 hover:bg-ink sm:inline-flex"
       >Partilhar conteúdo</a
     >
-    <details class="relative md:hidden">
-      <summary
-        class="grid h-10 w-10 cursor-pointer list-none place-items-center rounded-xl border border-ink/10 text-xl"
+
+    <!-- Menu Mobile (Substituído <details> por botão interativo via JS) -->
+    <div class="relative md:hidden">
+      <button
+        id="btn-menu-mobile"
+        type="button"
+        onclick="toggleMenuMobile()"
+        class="grid h-10 w-10 cursor-pointer list-none place-items-center rounded-xl border border-ink/10 text-xl bg-white"
         aria-label="Abrir menu"
       >
         ☰
-      </summary>
+      </button>
+
+      <!-- Dropdown Mobile (Inicialmente escondido com a classe 'hidden') -->
       <nav
-        class="absolute right-0 top-14 z-20 grid min-w-52 gap-1 rounded-2xl border border-ink/10 bg-white p-3 text-sm font-semibold text-ink shadow-soft"
+        id="menu-mobile"
+        class="hidden absolute right-0 top-14 z-30 grid min-w-52 gap-1 rounded-2xl border border-ink/10 bg-white p-3 text-sm font-semibold text-ink shadow-soft"
         aria-label="Navegação mobile"
       >
         <a
           class="rounded-xl px-3 py-2 hover:bg-mint"
-          href="{% url 'home' %}inicio"
+          href="{% url 'home' %}#inicio"
           >Início</a
         >
         <a
@@ -69,14 +82,41 @@
           >Cadeiras</a
         >
         <a class="rounded-xl px-3 py-2 hover:bg-mint" href="/eventos/"
-          >Eventos</a
-        >
+          >Eventos</a>
         <a
           class="rounded-xl px-3 py-2 hover:bg-mint"
           href="{% url 'home' %}contribuir"
           >Contribuir</a
         >
       </nav>
-    </details>
+    </div>
   </div>
 </header>
+
+<!-- Script simples para controlar a abertura/fecho do menu mobile -->
+<script>
+  function toggleMenuMobile() {
+    const menu = document.getElementById('menu-mobile');
+    const btn = document.getElementById('btn-menu-mobile');
+    
+    menu.classList.toggle('hidden');
+    
+    // Altera o ícone de ☰ para ✕ quando aberto
+    if (menu.classList.contains('hidden')) {
+      btn.textContent = '☰';
+    } else {
+      btn.textContent = '✕';
+    }
+  }
+
+  // Opcional: Fecha o menu se o utilizador clicar fora dele
+  window.addEventListener('click', function(e) {
+    const menu = document.getElementById('menu-mobile');
+    const btn = document.getElementById('btn-menu-mobile');
+    
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.add('hidden');
+      btn.textContent = '☰';
+    }
+  });
+</script>

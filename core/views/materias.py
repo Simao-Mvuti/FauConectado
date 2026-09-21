@@ -12,7 +12,7 @@ class MateriasView(ListView):
     context_object_name = "materiais"
 
     def get_queryset(self):
-        materiais = Material.publicos.select_related("cadeira")
+        materiais = Material.objects.select_related("cadeira")
 
         query = self.request.GET.get("q", "").strip()
         ano = self.request.GET.get("ano", "")
@@ -47,7 +47,7 @@ class EnviarMaterialView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cadeiras = Cadeira.objects.filter(ativo=True).order_by("nome")
+        cadeiras = Cadeira.objects.order_by("nome")
         context["cadeiras"] = cadeiras
         return context
    

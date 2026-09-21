@@ -16,85 +16,48 @@
       Sugere uma palestra, workshop ou atividade académica para a comunidade.
     </p>
 
+    <!-- Erros globais -->
+    {% if form.non_field_errors %}
+      <div class="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-600">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
     <div class="mt-6 space-y-4">
       <!-- Nome do Evento (Título) -->
-      <label class="block text-xs font-bold text-ink" for="titulo">
+      <label class="block text-xs font-bold text-ink" for="{{ form.titulo.id_for_label }}">
         Nome do evento *
-        <input
-          id="titulo"
-          name="titulo"
-          type="text"
-          required
-          placeholder="Ex.: Workshop de Maquetes e Modelação"
-          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-        />
+        {{ form.titulo }}
+        {% if form.titulo.errors %}
+          <span class="text-xs text-red-500">{{ form.titulo.errors.0 }}</span>
+        {% endif %}
       </label>
 
-      <!-- Tipo e Local (Lado a Lado) -->
-      <div class="grid gap-4 sm:grid-cols-2">
-        <label class="block text-xs font-bold text-ink" for="tipo">
-          Tipo de Evento *
-          <select
-            id="tipo"
-            name="tipo"
-            required
-            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-          >
-            <option value="workshop">Workshop</option>
-            <option value="palestra">Palestra</option>
-            <option value="atividade">Atividade Académica</option>
-          </select>
-        </label>
+      <!-- Local -->
+      <label class="block text-xs font-bold text-ink" for="{{ form.local.id_for_label }}">
+        Local *
+        {{ form.local }}
+        {% if form.local.errors %}
+          <span class="text-xs text-red-500">{{ form.local.errors.0 }}</span>
+        {% endif %}
+      </label>
 
-        <label class="block text-xs font-bold text-ink" for="local">
-          Local *
-          <input
-            id="local"
-            name="local"
-            type="text"
-            required
-            placeholder="Ex.: Auditório A / Online"
-            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-          />
-        </label>
-      </div>
-
-      <!-- Data e Hora (Lado a Lado) -->
-      <div class="grid gap-4 sm:grid-cols-2">
-        <label class="block text-xs font-bold text-ink" for="data">
-          Data *
-          <input
-            id="data"
-            name="data"
-            type="date"
-            required
-            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-          />
-        </label>
-
-        <label class="block text-xs font-bold text-ink" for="hora">
-          Hora *
-          <input
-            id="hora"
-            name="hora"
-            type="time"
-            required
-            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-          />
-        </label>
-      </div>
+      <!-- Data -->
+      <label class="block text-xs font-bold text-ink" for="{{ form.data.id_for_label }}">
+        Data *
+        {{ form.data }}
+        {% if form.data.errors %}
+          <span class="text-xs text-red-500">{{ form.data.errors.0 }}</span>
+        {% endif %}
+      </label>
 
       <!-- Descrição do Evento -->
-      <label class="block text-xs font-bold text-ink" for="descricao">
+      <label class="block text-xs font-bold text-ink" for="{{ form.descricao.id_for_label }}">
         Descrição do evento *
-        <textarea
-          id="descricao"
-          name="descricao"
-          rows="3"
-          required
-          placeholder="Descreve o objetivo do evento e o público-alvo..."
-          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-        ></textarea>
+        {{ form.descricao }}
+        {% if form.descricao.errors %}
+          <span class="text-xs text-red-500">{{ form.descricao.errors.0 }}</span>
+        {% endif %}
       </label>
     </div>
 

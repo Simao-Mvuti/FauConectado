@@ -4,11 +4,11 @@ from ..models import Cadeira
 
 
 def cadeiras(request):
-    cadeiras_publicas = Cadeira.objects.filter(ativo=True)
+    cadeiras_publicas = Cadeira.objects.all()
     ano = request.GET.get("ano", "")
 
     if ano.isdigit():
-        cadeiras_publicas = cadeiras_publicas.filter(ano=int(ano))
+        cadeiras_publicas = cadeiras_publicas.all()
 
     return render(
         request,

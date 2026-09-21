@@ -16,60 +16,49 @@
       Apresenta a tua experiência para fazer parte da rede de mentores.
     </p>
 
+    <!-- Exibir erros gerais do formulário, se houver -->
+    {% if form.non_field_errors %}
+      <div class="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-600">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
     <div class="mt-6 space-y-4">
       <!-- Nome -->
-      <label class="block text-xs font-bold text-ink" for="mentor-nome">
+      <label class="block text-xs font-bold text-ink" for="{{ form.nome.id_for_label }}">
         Nome *
-        <input
-          id="mentor-nome"
-          name="nome"
-          type="text"
-          required
-          placeholder="O teu nome completo"
-          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-        />
+        {{ form.nome }}
+        {% if form.nome.errors %}
+          <span class="text-xs text-red-500">{{ form.nome.errors.0 }}</span>
+        {% endif %}
       </label>
 
-      <!-- Curso e Ano (Lado a Lado em ecrãs > sm) -->
+      <!-- Curso e Ano (Lado a Lado) -->
       <div class="grid gap-4 sm:grid-cols-2">
-        <label class="block text-xs font-bold text-ink" for="mentor-curso">
+        <label class="block text-xs font-bold text-ink" for="{{ form.curso.id_for_label }}">
           Curso *
-          <input
-            id="mentor-curso"
-            name="curso"
-            type="text"
-            required
-            placeholder="Ex.: Engenharia Informática"
-            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-          />
+          {{ form.curso }}
+          {% if form.curso.errors %}
+            <span class="text-xs text-red-500">{{ form.curso.errors.0 }}</span>
+          {% endif %}
         </label>
 
-        <label class="block text-xs font-bold text-ink" for="mentor-ano">
+        <label class="block text-xs font-bold text-ink" for="{{ form.ano.id_for_label }}">
           Ano *
-          <input
-            id="mentor-ano"
-            name="ano"
-            type="number"
-            min="1"
-            max="6"
-            required
-            placeholder="Ex.: 3"
-            class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-          />
+          {{ form.ano }}
+          {% if form.ano.errors %}
+            <span class="text-xs text-red-500">{{ form.ano.errors.0 }}</span>
+          {% endif %}
         </label>
       </div>
 
       <!-- Contacto -->
-      <label class="block text-xs font-bold text-ink" for="mentor-contacto">
+      <label class="block text-xs font-bold text-ink" for="{{ form.contacto_publico.id_for_label }}">
         Contacto Público / WhatsApp *
-        <input
-          id="mentor-contacto"
-          name="contacto_publico"
-          type="text"
-          required
-          placeholder="Ex.: +244 9XX XXX XXX"
-          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-4 py-3 text-sm font-normal text-ink outline-none transition focus:border-forest"
-        />
+        {{ form.contacto_publico }}
+        {% if form.contacto_publico.errors %}
+          <span class="text-xs text-red-500">{{ form.contacto_publico.errors.0 }}</span>
+        {% endif %}
       </label>
     </div>
 

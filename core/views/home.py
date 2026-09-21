@@ -5,9 +5,9 @@ from ..models import Cadeira, Material, Mentoria
 
 
 def home(request):
-    materiais = Material.publicos.select_related("cadeira").order_by("-created_at")
-    mentores = Mentoria.publicos.order_by("-avaliacao_media", "nome")
-    cadeiras = Cadeira.objects.filter(ativo=True).annotate(total_materiais=Count("materiais"))
+    materiais = Material.objects.select_related("cadeira").order_by("-created_at")
+    mentores = Mentoria.objects.order_by("-avaliacao_media", "nome")
+    cadeiras = Cadeira.objects.annotate(total_materiais=Count("materiais"))
 
     return render(
         request,

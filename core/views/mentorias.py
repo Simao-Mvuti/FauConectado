@@ -13,7 +13,7 @@ class MentoriasView(ListView):
     context_object_name = "mentorias"
 
     def get_queryset(self):
-        queryset = Mentoria.objects.filter(estado__iexact="APROVADO") 
+        queryset = Mentoria.objects.all()
         
         curso = self.request.GET.get("area")
         if curso:
@@ -31,13 +31,14 @@ class MentoriasView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cursos_aprovados = (
-            Mentoria.objects.filter(estado__iexact="APROVADO")
+            Mentoria.objects.all()
             .values_list("curso", flat=True)
             .distinct()
             .order_by("curso")
         )
         context["areas_mentorias"] = [(curso, curso) for curso in cursos_aprovados if curso]
         return context
+    
 class EnviarMentoriasView(CreateView):
     template_name = "core/pages/enviar-mentoria.html"
     form_class = MentoriaForm

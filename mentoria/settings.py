@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 load_dotenv(BASE_DIR / ".env")
 
 
@@ -21,10 +23,10 @@ if not database_name.is_absolute():
     database_name = BASE_DIR / database_name
 
 
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-only-change-me")
+SECRET_KEY = os.getenv("SECRET_KEY","j92j9d29d92n9d")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env_bool("DEBUG", True)
+DEBUG = env_bool("DEBUG", False)
 
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "")
 CSRF_TRUSTED_ORIGINS = env_list(

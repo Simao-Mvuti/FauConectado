@@ -28,32 +28,31 @@
       Partilha um resumo, apontamento ou ficheiro de uma cadeira.
     </p>
 
+    <!-- Exibir erros gerais do formulário (ex: validação do PDF) -->
+    {% if form.non_field_errors %}
+      <div class="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-600">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
     <!-- Campos em Grelha (1 coluna em mobile, 2 em desktop) -->
     <div class="mt-6 grid gap-4 md:grid-cols-2">
-      <label class="block text-xs font-bold" for="cadeira">
-        Cadeira
-        <select
-          id="cadeira"
-          name="cadeira"
-          required
-          class="mt-2 w-full rounded-xl border border-ink/10 bg-paper px-3 py-3 font-normal outline-none focus:border-forest"
-        >
-          <option value="">Selecionar cadeira</option>
-          {% for cadeira in cadeiras %}
-          <option value="{{ cadeira.id }}">{{ cadeira.nome }}</option>
-          {% endfor %}
-        </select>
+      <!-- Cadeira -->
+      <label class="block text-xs font-bold text-ink" for="{{ form.cadeira.id_for_label }}">
+        Cadeira *
+        {{ form.cadeira }}
+        {% if form.cadeira.errors %}
+          <span class="text-xs text-red-500">{{ form.cadeira.errors.0 }}</span>
+        {% endif %}
       </label>
 
-      <label class="block text-xs font-bold" for="ficheiro">
-        Ficheiro
-        <input
-          id="ficheiro"
-          name="ficheiro"
-          type="file"
-          required
-          class="mt-2 block w-full rounded-xl border border-dashed border-ink/20 bg-paper px-3 py-3 text-xs font-normal"
-        />
+      <!-- Ficheiro -->
+      <label class="block text-xs font-bold text-ink" for="{{ form.ficheiro.id_for_label }}">
+        Ficheiro *
+        {{ form.ficheiro }}
+        {% if form.ficheiro.errors %}
+          <span class="text-xs text-red-500">{{ form.ficheiro.errors.0 }}</span>
+        {% endif %}
       </label>
     </div>
 

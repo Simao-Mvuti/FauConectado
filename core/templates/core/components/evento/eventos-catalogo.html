@@ -47,10 +47,6 @@
         >
       </div>
       <div>
-        <span class="text-xs font-bold uppercase tracking-wider text-coral"
-          >{{ evento.get_tipo_display|default:evento.tipo }} · {{
-          evento.hora|time:'H:i' }}</span
-        >
         <h2 class="mt-2 text-lg font-bold">{{ evento.titulo }}</h2>
         <p class="mt-2 text-sm leading-6 text-ink/55">{{ evento.descricao }}</p>
         <p class="mt-4 text-xs font-bold text-ink/45">{{ evento.local }}</p>

@@ -11,11 +11,8 @@ class EventosView(ListView):
     template_name = "core/pages/eventos.html"
 
     def get_queryset(self):
-        eventos_publicos = Evento.publicos.all()
-        tipo = self.request.GET.get("tipo","")
+        eventos_publicos = Evento.objects.all()
         data_de = self.request.GET.get("data_de","")
-        if tipo:
-            eventos_publicos = eventos_publicos.filter(tipo=tipo)
         if data_de:
             eventos_publicos = eventos_publicos.filter(data__gte=data_de)
         return eventos_publicos

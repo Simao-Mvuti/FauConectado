@@ -16,17 +16,20 @@
     <span class="text-xs text-ink/40">avaliação</span>
   </div>
 
- <div
+  <div
     class="mt-6 flex items-center justify-between border-t border-ink/10 pt-4 text-xs text-ink/45"
   >
     <span>{{ material.cadeira.nome }} · {{ material.cadeira.ano }}.º ano</span>
     
     {% if material.ficheiro %}
+      <!-- target="_blank" abre num novo separador, rel="noopener noreferrer" é uma boa prática de segurança -->
       <a
         href="{{ material.ficheiro.url }}"
+        target="_blank"
+        rel="noopener noreferrer"
         class="font-bold text-forest hover:underline"
       >
-        Abrir →
+        Abrir PDF →
       </a>
     {% else %}
       <span class="text-xs text-ink/30 italic">Sem ficheiro</span>

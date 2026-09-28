@@ -10,29 +10,31 @@
 
 <div class="bg-white rounded-2xl p-5 border border-[#dcdfd9] shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
     <div>
-        <!-- Etiqueta do Código e Semestre -->
+        <!-- Etiqueta do Código/ID e Semestre -->
         <div class="flex items-center justify-between text-xs font-semibold mb-2.5">
-            <span class="bg-fcGreenDark/10 text-fcGreenDark px-2.5 py-1 rounded-md uppercase tracking-wider font-bold">
-                {{ $code }}
-            </span>
+            @if($code)
+                <span class="bg-fcGreenDark/10 text-fcGreenDark px-2.5 py-1 rounded-md uppercase tracking-wider font-bold">
+                    {{ $code }}
+                </span>
+            @endif
             <span class="text-fcTextMuted">
                 {{ $year }}º Ano • {{ $semester }}º Sem.
             </span>
         </div>
 
-        <!-- Título da Cadeira -->
+        <!-- Título do Material/Cadeira -->
         <h3 class="text-base sm:text-lg font-bold text-fcGreenDark leading-snug hover:text-fcCoral transition">
             <a href="{{ $href }}">{{ $title }}</a>
         </h3>
     </div>
 
-    <!-- Indicadores de Recursos e Tutores -->
+    <!-- Indicadores de Recursos e Tutores/Pontuação -->
     <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-fcTextMuted">
         <div class="flex items-center gap-3">
-            <span title="Materiais disponíveis" class="flex items-center gap-1 font-medium text-fcTextDark">
+            <span title="Ficheiros / Votos" class="flex items-center gap-1 font-medium text-fcTextDark">
                 📚 <strong>{{ $materialsCount }}</strong> <span class="hidden sm:inline text-fcTextMuted">ficheiros</span>
             </span>
-            <span title="Tutores disponíveis" class="flex items-center gap-1 font-medium text-fcTextDark">
+            <span title="Tutores / Avaliação" class="flex items-center gap-1 font-medium text-fcTextDark">
                 🎓 <strong>{{ $tutorsCount }}</strong> <span class="hidden sm:inline text-fcTextMuted">tutores</span>
             </span>
         </div>

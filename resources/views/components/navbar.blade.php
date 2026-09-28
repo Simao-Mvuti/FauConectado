@@ -10,7 +10,6 @@
         <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-fcTextDark">
             <a href="/materias" class="hover:text-fcCoral transition">Materiais</a>
             <a href="/tutores" class="hover:text-fcCoral transition">Tutores</a>
-            <a href="/como-funciona" class="hover:text-fcCoral transition">Como Funciona</a>
             <a href="/apoiar" class="hover:text-fcCoral transition">Apoiar</a>
         </nav>
 

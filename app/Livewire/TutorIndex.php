@@ -10,4 +10,9 @@ class TutorIndex extends Component
     {
         return view('livewire.tutor-index');
     }
+
+    public function inscrever()
+    {
+        return redirect()->route('tutor.inscricao');
+    }
 }

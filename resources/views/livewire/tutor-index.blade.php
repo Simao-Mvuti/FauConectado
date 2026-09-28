@@ -62,12 +62,18 @@
                         </p>
                     </div>
 
-                    <div class="pt-2 border-t border-gray-100 flex items-center justify-between">
-                        <span class="text-xs text-fcTextMuted">✉️ Resposta em ~2h</span>
-                        <x-button variant="primary" href="mailto:{{ $tutor->email }}" class="px-4 py-2 text-xs">
-                            Contactar Mentor
-                        </x-button>
-                    </div>
+                 <div class="pt-2 border-t border-gray-100 flex items-center justify-between">
+    <span class="text-xs text-fcTextMuted">💬 Resposta em ~2h</span>
+    
+    <x-button 
+        variant="primary" 
+        href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $tutor->telefone) }}?text={{ urlencode('Olá ' . $tutor->nome . ', encontrei o teu perfil no FauConectado e gostaria de saber mais sobre as mentorias.') }}" 
+        target="_blank"
+        class="px-4 py-2 text-xs"
+    >
+        Contactar Mentor
+    </x-button>
+</div>
                 </div>
             @empty
                 <!-- Card de Demonstração / Placeholder caso a BD esteja vazia -->
@@ -105,7 +111,7 @@
                 <h3 class="text-xl font-serif font-bold">Domina uma cadeira e queres ajudar outros alunos?</h3>
                 <p class="text-xs sm:text-sm text-white/80">Regista-te como mentor na plataforma e define as tuas próprias regras de tutoria.</p>
             </div>
-            <x-button variant="primary" href="#" class="px-6 py-3 text-sm shrink-0 bg-fcCoral text-white hover:bg-fcCoral/90">
+            <x-button variant="primary" href="/login" class="px-6 py-3 text-sm shrink-0 bg-fcCoral text-white hover:bg-fcCoral/90">
                 Tornar-me Mentor
             </x-button>
         </div>

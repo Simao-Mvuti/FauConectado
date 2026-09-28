@@ -9,10 +9,10 @@
             </div>
             
             <h1 class="text-2xl sm:text-4xl font-serif font-bold text-fcGreenDark">
-                Cadeiras & Disciplinas
+                Ficheiros & Materiais de Estudo
             </h1>
             <p class="text-xs sm:text-sm text-fcTextMuted max-w-2xl leading-relaxed">
-                Escolha uma cadeira para ver os apontamentos partilhados ou entrar em contacto direto com os tutores inscritos.
+                Aceda a exames resolvidos, sebentas e resumos em PDF ou imagem partilhados pela comunidade.
             </p>
         </div>
 
@@ -24,7 +24,7 @@
                 <input 
                     wire:model.live="search"
                     type="text" 
-                    placeholder="Pesquisar cadeira (ex: Algoritmos, Gestão, Estatística)..." 
+                    placeholder="Pesquisar por título ou categoria (ex: Algoritmos, Exame, Informática)..." 
                     class="w-full bg-fcBgLight border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-fcGreenDark focus:ring-1 focus:ring-fcGreenDark transition"
                 >
             </div>
@@ -51,18 +51,18 @@
         <!-- Grelha Dinâmica de Cartões -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             @forelse($materias as $materia)
-                <x-subject-card 
-                    :code="$materia->codigo"
-                    :title="$materia->nome"
-                    :year="$materia->ano"
-                    :semester="$materia->semestre"
-                    :materialsCount="$materia->materiais_count ?? 0"
-                    :tutorsCount="$materia->tutores_count ?? 0"
-                    :href="route('materia.show', $materia->id)"
-                />
+               <x-subject-card 
+    :code="$materia->categoria ?? '#' . $materia->id"
+    :title="$materia->titulo"
+    :year="$materia->ano"
+    :semester="$materia->semestre"
+    :materialsCount="$materia->votos"
+    :tutorsCount="(int)$materia->pontuacao"
+    :href="route('materias.show', $materia->id)" 
+/>
             @empty
                 <div class="col-span-full text-center py-8 text-fcTextMuted text-sm">
-                    Nenhuma cadeira encontrada com os filtros selecionados.
+                    Nenhum material encontrado com os filtros selecionados.
                 </div>
             @endforelse
         </div>

@@ -196,10 +196,10 @@
                 Explora os conteúdos já partilhados pela comunidade ou entra em contacto com os tutores da tua faculdade.
             </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center items-center pt-2">
-                <x-button variant="primary" href="#" class="px-6 py-3 text-sm">
+                <x-button variant="primary" href="/materias" class="px-6 py-3 text-sm">
                     Explorar Materiais
                 </x-button>
-                <x-button variant="outline" href="#" class="px-6 py-3 text-sm">
+                <x-button variant="outline" href="/tutores" class="px-6 py-3 text-sm">
                     Ver Tutores
                 </x-button>
             </div>

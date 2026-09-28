@@ -42,7 +42,7 @@
                     <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </x-button>
                 
-                <x-button variant="outline" href="#apoiar" class="px-6 py-3 text-sm text-center">
+                <x-button variant="outline" href="/apoiar" class="px-6 py-3 text-sm text-center">
                     Apoiar o Projeto
                 </x-button>
             </div>
@@ -83,13 +83,13 @@
                 <div id="apoiar" class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-center scroll-mt-6">
                     <div class="bg-fcGreenBox rounded-xl p-3 flex flex-col justify-center items-center">
                         <span class="text-xs text-white/60 mb-0.5">Apoio aos servidores</span>
-                        <a href="#" class="text-xs text-fcCoral font-bold hover:underline inline-flex items-center gap-1">
+                        <a href="/apoiar" class="text-xs text-fcCoral font-bold hover:underline inline-flex items-center gap-1">
                             Contribuir com o projeto <span aria-hidden="true">→</span>
                         </a>
                     </div>
                     <div class="bg-fcGreenBox rounded-xl p-3 flex flex-col justify-center items-center">
                         <span class="text-xs text-white/60 mb-0.5">Queres ser tutor?</span>
-                        <a href="#" class="text-xs text-white font-bold hover:underline inline-flex items-center gap-1">
+                        <a href="/tutor-inscricao" class="text-xs text-white font-bold hover:underline inline-flex items-center gap-1">
                             Define o teu perfil <span aria-hidden="true">→</span>
                         </a>
                     </div>

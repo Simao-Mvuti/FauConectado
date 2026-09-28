@@ -18,6 +18,8 @@ return new class extends Migration
             $table->float('pontuacao');
             $table->integer('votos');
             $table->string('categoria');
+            $table->integer('ano');
+            $table->integer('semestre');
             $table->string('file');
             $table->timestamps();
         });

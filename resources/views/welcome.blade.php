@@ -89,7 +89,7 @@
                     </div>
                     <div class="bg-fcGreenBox rounded-xl p-3 flex flex-col justify-center items-center">
                         <span class="text-xs text-white/60 mb-0.5">Queres ser tutor?</span>
-                        <a href="/tutor-inscricao" class="text-xs text-white font-bold hover:underline inline-flex items-center gap-1">
+                        <a href="{{ route('tutores.inscricao') }}" class="text-xs text-white font-bold hover:underline inline-flex items-center gap-1">
                             Define o teu perfil <span aria-hidden="true">→</span>
                         </a>
                     </div>

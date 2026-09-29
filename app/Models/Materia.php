@@ -27,7 +27,10 @@ class Materia extends Model
         'pontuacao',
         'votos',
         'categoria',
+        'ano',
+        'semestre',
         'file',
+        'aprovado',
     ];
 
     /**
@@ -38,6 +41,7 @@ class Materia extends Model
     protected $attributes = [
         'pontuacao' => 0.0,
         'votos' => 0,
+        'aprovado' => false,
     ];
 
     /**
@@ -48,5 +52,8 @@ class Materia extends Model
     protected $casts = [
         'pontuacao' => 'float',
         'votos' => 'integer',
+        'ano' => 'integer',
+        'semestre' => 'integer',
+        'aprovado' => 'boolean',
     ];
 }

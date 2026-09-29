@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\Actions\Logout;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
@@ -27,9 +27,12 @@ new #[Layout('layouts.guest')] class extends Component
     /**
      * Log the current user out of the application.
      */
-    public function logout(Logout $logout): void
+    public function logout(): void
     {
-        $logout();
+        Auth::guard('web')->logout();
+
+        Session::invalidate();
+        Session::regenerateToken();
 
         $this->redirect('/', navigate: true);
     }
@@ -37,22 +40,24 @@ new #[Layout('layouts.guest')] class extends Component
 
 <div>
     <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+        Obrigado pelo registo! Confirma o teu endereço de e-mail através do link que te enviámos. Se não o recebeste, podes pedir um novo.
     </div>
 
     @if (session('status') == 'verification-link-sent')
         <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+            Enviámos um novo link de verificação para o teu endereço de e-mail.
         </div>
     @endif
 
     <div class="mt-4 flex items-center justify-between">
-        <x-primary-button wire:click="sendVerification">
-            {{ __('Resend Verification Email') }}
-        </x-primary-button>
+        <form wire:submit="sendVerification">
+            <x-primary-button>
+                Reenviar e-mail de verificação
+            </x-primary-button>
+        </form>
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {{ __('Log Out') }}
+        <button wire:click="logout" type="button" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Terminar sessão
         </button>
     </div>
 </div>

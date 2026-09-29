@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/materiais', [AdminDashboardController::class, 'materiais'])->name('admin.materiais');
+    Route::post('/admin/materiais/{materia}/aprovar', [AdminDashboardController::class, 'aprovarMateria'])->name('admin.materiais.aprovar');
     Route::get('/admin/tutores', [AdminDashboardController::class, 'tutores'])->name('admin.tutores');
 });
 

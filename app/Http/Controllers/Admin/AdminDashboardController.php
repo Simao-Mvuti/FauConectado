@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Materia;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
@@ -37,6 +38,15 @@ class AdminDashboardController extends Controller
         $materiais = Materia::latest()->get();
 
         return view('admin.materiais', compact('materiais'));
+    }
+
+    public function aprovarMateria(Materia $materia): RedirectResponse
+    {
+        $this->authorizeAdmin();
+
+        $materia->update(['aprovado' => true]);
+
+        return redirect()->route('admin.materiais')->with('success', 'Material aprovado com sucesso.');
     }
 
     public function tutores()

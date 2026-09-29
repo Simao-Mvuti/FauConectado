@@ -2,25 +2,30 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
+use App\Models\Materia;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use App\Models\Materia;
+use Livewire\Component;
 
 #[Layout('components.layouts.app')]
 #[Title('Materiais & Ficheiros | FauConectado')]
 class MateriaIndex extends Component
 {
     public $search = '';
+
     public $ano = '';
+
     public $semestre = '';
 
     public function render()
     {
         $materias = Materia::query()
+            ->where('aprovado', true)
             ->when($this->search, function ($query) {
-                $query->where('titulo', 'like', '%' . $this->search . '%')
-                      ->orWhere('categoria', 'like', '%' . $this->search . '%');
+                $query->where(function ($query) {
+                    $query->where('titulo', 'like', '%'.$this->search.'%')
+                        ->orWhere('categoria', 'like', '%'.$this->search.'%');
+                });
             })
             ->when($this->ano, function ($query) {
                 $query->where('ano', $this->ano);
@@ -32,7 +37,7 @@ class MateriaIndex extends Component
             ->get();
 
         return view('livewire.materia-index', [
-            'materias' => $materias
+            'materias' => $materias,
         ]);
     }
 }

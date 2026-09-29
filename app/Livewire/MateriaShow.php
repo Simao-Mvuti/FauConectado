@@ -10,9 +10,11 @@ class MateriaShow extends Component
 {
     public Materia $materia;
 
-    public function mount($id)
+    public function mount(int $id): void
     {
-        $this->materia = Materia::findOrFail($id);
+        $this->materia = Materia::query()
+            ->where('aprovado', true)
+            ->findOrFail($id);
     }
 
     public function download()

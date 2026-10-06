@@ -7,3 +7,4 @@ media/
 staticfiles/
 .env
 .DS_Store
+/materias

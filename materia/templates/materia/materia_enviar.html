@@ -1,0 +1,130 @@
+{% extends "materia/base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto my-4 sm:my-10 px-2 sm:px-4">
+    <!-- Card Principal: Flex vertical no mobile, horizontal no desktop -->
+    <div class="flex flex-col md:flex-row bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        
+        <!-- Coluna Esquerda: Informações / Regras (Fundo Verde Escuro) -->
+        <div class="w-full md:w-5/12 bg-[#173121] text-white p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+                <span class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-emerald-300">
+                    Envio para aprovação
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-serif font-semibold mt-2 mb-3 leading-tight">
+                    Partilha um material de estudo
+                </h2>
+                <p class="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+                    Envia resumos, exames, apontamentos ou fichas e aguarda a revisão da comunidade antes de ficarem visíveis no repositório.
+                </p>
+            </div>
+
+            <!-- Caixinha de Regras -->
+            <div class="mt-6 p-4 bg-[#1e3c29] rounded-xl border border-emerald-800/40 text-xs text-emerald-100/90 space-y-2">
+                <div class="font-bold flex items-center gap-1.5 text-white">
+                    Regras
+                </div>
+                <ul class="space-y-1.5 list-disc list-inside text-emerald-200/80">
+                    <li>Apenas ficheiros válidos em PDF, imagens ou documentos.</li>
+                    <li>Inclui categoria, ano e semestre.</li>
+                    <li>O material fica pendente até aprovação.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Coluna Direita: Formulário -->
+        <div class="w-full md:w-7/12 p-6 sm:p-8 bg-white">
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+
+                <!-- Título -->
+                <div class="flex flex-col gap-1">
+                    <label for="titulo" class="text-xs font-semibold text-gray-700">Título</label>
+                    <input 
+                        type="text" 
+                        id="titulo" 
+                        name="titulo" 
+                        placeholder="Ex.: Resumo de Álgebra Linear" 
+                        required
+                        class="w-full px-3.5 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all placeholder-gray-400"
+                    >
+                </div>
+
+                <!-- Categoria -->
+                <div class="flex flex-col gap-1">
+                    <label for="cadeira" class="text-xs font-semibold text-gray-700">Categoria / Cadeira</label>
+                    <input 
+                        type="text" 
+                        id="cadeira" 
+                        name="cadeira" 
+                        placeholder="Ex.: Matemática" 
+                        required
+                        class="w-full px-3.5 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all placeholder-gray-400"
+                    >
+                </div>
+
+                <!-- Ano e Semestre (1 coluna no mobile / 2 colunas a partir do sm) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label for="ano" class="text-xs font-semibold text-gray-700">Ano</label>
+                        <select 
+                            id="ano" 
+                            name="ano" 
+                            class="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all"
+                        >
+                            <option value="">Seleciona</option>
+                            <option value="1">1º Ano</option>
+                            <option value="2">2º Ano</option>
+                            <option value="3">3º Ano</option>
+                            <option value="4">4º Ano</option>
+                            <option value="5">5º Ano</option>
+                        </select>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label for="semestre" class="text-xs font-semibold text-gray-700">Semestre</label>
+                        <select 
+                            id="semestre" 
+                            name="semestre" 
+                            class="w-full px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all"
+                        >
+                            <option value="">Seleciona</option>
+                            <option value="1">1º Semestre</option>
+                            <option value="2">2º Semestre</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Ficheiro -->
+                <div class="flex flex-col gap-1">
+                    <label for="ficheiro" class="text-xs font-semibold text-gray-700">Ficheiro</label>
+                    <input 
+                        type="file" 
+                        id="ficheiro" 
+                        name="ficheiro" 
+                        required
+                        class="w-full px-3 py-2 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-[#173121] file:text-white hover:file:bg-[#13281b] file:cursor-pointer cursor-pointer focus:outline-none"
+                    >
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-3">
+                    <a 
+                        href="javascript:history.back()" 
+                        class="w-full sm:w-auto px-5 py-2.5 text-center border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-full transition-colors"
+                    >
+                        Voltar
+                    </a>
+                    <button 
+                        type="submit" 
+                        class="w-full sm:w-auto px-6 py-2.5 bg-[#173121] hover:bg-[#13281b] text-white text-xs font-semibold rounded-full shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-[#173121] focus:ring-offset-1"
+                    >
+                        Enviar para aprovação
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

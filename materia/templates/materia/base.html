@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="h-full bg-[#f7f7f4]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FauConectado{% endblock %}</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-full font-sans antialiased text-[#2b372a] bg-[#f7f7f4]">
+
+    <!-- Barra Topo Informativa -->
+    <div class="bg-[#173121] text-[#a3b899] text-[11px] sm:text-xs py-1.5 px-4 text-center">
+         Projeto independente mantido por estudantes. 
+        <a href="#" class="underline font-medium hover:text-white transition-colors">Sabe como nos ajudar a manter o servidor →</a>
+    </div>
+
+    <!-- Navegação / Header -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <a href="{% url 'listar_materia' %}" class="flex items-center gap-2 group">
+                        <span class="bg-[#173121] text-white font-bold text-xs px-2 py-1 rounded-md tracking-wider">
+                            FC
+                        </span>
+                        <span class="text-lg font-bold text-[#173121] group-hover:text-[#284431] transition-colors tracking-tight">
+                            FauConectado
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Menus de Navegação Centrais -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="{% url 'listar_materia' %}" class="text-gray-700 hover:text-[#173121] transition-colors">
+                        Materiais
+                    </a>
+                    <a href="#" class="text-gray-700 hover:text-[#173121] transition-colors">
+                        Tutores
+                    </a>
+                    <a href="#" class="text-gray-700 hover:text-[#173121] transition-colors">
+                        Apoiar
+                    </a>
+                </nav>
+
+                <!-- Ações / Autenticação -->
+                <div class="flex items-center gap-3 text-sm">
+                    <a href="#" class="text-gray-700 hover:text-[#173121] font-medium px-3 py-1.5 transition-colors">
+                        Entrar
+                    </a>
+                    <a href="#" class="bg-[#173121] hover:bg-[#13281b] text-white text-xs font-semibold px-4 py-2 rounded-full transition-colors">
+                        Registar
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        {% block content %}
+        <!-- Os formulários e listas serão renderizados aqui -->
+        {% endblock %}
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-gray-100 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500">
+            &copy; {% now "Y" %} FauConectado. Plataforma colaborativa mantida pela comunidade.
+        </div>
+    </footer>
+
+</body>
+</html>

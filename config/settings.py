@@ -5,7 +5,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 env = environ.Env(
-    DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, ["127.0.0.1", "localhost"]),
     LANGUAGE_CODE = (str,"pt-pt"),
     TIME_ZONE = (str,"UTC"),
@@ -14,6 +13,7 @@ env = environ.Env(
     STATIC_URL = (str,"static/")
 )
 
+environ.Env.read_env(BASE_DIR / '.env')
 
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
@@ -28,8 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
     'materia',
 ]
+
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = ["127.0.0.1"]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -39,6 +45,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -93,11 +100,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = env("LANGUAGE_CODE")
-TIME_ZONE = env("TIME_ZONE","UTC")
-USE_I18N = env("USE_I18N",True)
-USE_TZ = env("USE_TZ",True)
-STATIC_URL = env("STATIC","static/")
-
+TIME_ZONE = env("TIME_ZONE", default="UTC")
+USE_I18N = env("USE_I18N", default=True)
+USE_TZ = env("USE_TZ", default=True)
+STATIC_URL = env("STATIC_URL", default="static/")
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration

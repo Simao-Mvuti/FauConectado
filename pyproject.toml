@@ -7,7 +7,9 @@ authors = [
     { name = "simao-mvuti", email = "simaolusimbadiolutondamvuti@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "django-tailwind[reload]>=4.5.0",
+]
 
 [project.scripts]
 fauconectado = "fauconectado:main"

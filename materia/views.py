@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.db.models import Q
+from django.contrib import messages
 from .form import MateriaForm
 from .models import Materia
 
@@ -38,8 +39,12 @@ def enviar_materia(request):
 
         if form.is_valid():
             form.save()
+            messages.success(request,"Matéria envia com sucesso")
             return redirect("listar_materia")
+        else:
+            messages.error(request, "Ocorreu um erro ao enviar. Verifique os campos abaixo.")
     else:
+
         form = MateriaForm()
 
     return render(request, "materia/materia_enviar.html", {"form": form})

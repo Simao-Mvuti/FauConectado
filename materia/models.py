@@ -8,9 +8,9 @@ class Materia(models.Model):
         ]
 
     TIPOS = [
-        {"EXAME","Exame"},
-        {"RESUMO","Resumo"},
-        {"TESTE","Teste"}
+        ("EXAME","Exame"),
+        ("RESUMO","Resumo"),
+        ("TESTE","Teste")
     ]
 
     ANOS = [(i, f"{i}º Ano") for i in range(1, 6)]

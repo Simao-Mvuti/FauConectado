@@ -6,7 +6,7 @@ from .models import Materia
 class MateriaForm(forms.ModelForm):
     class Meta:
         model = Materia
-        fields = ["titulo","ano","semestre","ficheiro"]
+        fields = ["titulo","descricao","ano","semestre","ficheiro"]
 
     def clean_ficheiro(self):
         ficheiro = self.cleaned_data.get("ficheiro")

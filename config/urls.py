@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('materia.urls')),
+    path('mentor/',include('mentor.urls')),
+    path('apoiar/',include('apoiar.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 

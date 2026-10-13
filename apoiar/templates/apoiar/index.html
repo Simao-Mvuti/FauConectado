@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Apoiar o Servidor | FauConectado{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-8 py-4">
+
+    <!-- Cabeçalho Principal -->
+    <div class="text-center space-y-3">
+        <div class="inline-flex items-center gap-2 bg-emerald-100 text-[#173121] text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
+            Projeto Independente &amp; Colaborativo
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-[#173121] tracking-tight">
+            Ajude-nos a Manter o FauConectado No Ar 🚀
+        </h1>
+        <p class="text-gray-600 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+            O FauConectado é mantido por estudantes para estudantes. Não temos fins lucrativos. O seu apoio ajuda diretamente a pagar o servidor e garantir que todos continuam a ter acesso gratuito a exames e resumos antes das provas.
+        </p>
+    </div>
+
+    <!-- Cards de Formas de Apoiar -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        
+        <!-- Opção 1: Apoio Financeiro / Servidor -->
+        <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs flex flex-col justify-between space-y-4">
+            <div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#173121] flex items-center justify-center font-bold text-lg mb-3 border border-emerald-200">
+                    💸
+                </div>
+                <h3 class="text-lg font-bold text-[#173121] mb-1">Apoio Financeiro (Servidor)</h3>
+                <p class="text-gray-600 text-xs leading-relaxed">
+                    Pode contribuir com qualquer valor para a manutenção mensal do alojamento web e domínio.
+                </p>
+            </div>
+
+            <!-- Dados de Pagamento (Exemplo prático) -->
+            <div class="bg-[#f8f9f6] p-4 rounded-xl border border-gray-100 space-y-2 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500 font-medium">Multicaixa Express / Tel:</span>
+                    <strong class="text-[#173121]">+244 926 387 504</strong>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500 font-medium">Titular:</span>
+                    <strong class="text-[#173121]">Equipa FauConectado</strong>
+                </div>
+            </div>
+
+            <p class="text-[11px] text-gray-400 italic">
+                * Envie o comprovativo via WhatsApp para validarmos e destacarmos o seu apoio na plataforma se desejar.
+            </p>
+        </div>
+
+        <!-- Opção 2: Apoio com Conteúdos (Grátis) -->
+        <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-xs flex flex-col justify-between space-y-4">
+            <div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#173121] flex items-center justify-center font-bold text-lg mb-3 border border-emerald-200">
+                    📚
+                </div>
+                <h3 class="text-lg font-bold text-[#173121] mb-1">Partilhar Resumos &amp; Exames</h3>
+                <p class="text-gray-600 text-xs leading-relaxed">
+                    Não pode ajudar financeiramente? Sem problema! O melhor contributo é partilhar os exames e testes que tem guardados no telemóvel.
+                </p>
+            </div>
+
+            <div class="pt-2">
+                <a href="{% url 'enviar_materia' %}" class="w-full inline-flex items-center justify-center gap-2 bg-[#173121] hover:bg-[#234730] text-white font-bold text-xs py-3 rounded-xl transition-all shadow-xs">
+                    + Enviar Material Agora
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Secção de Transparência / Mensagem Final -->
+    <div class="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-5 text-center space-y-2">
+        <h4 class="text-sm font-bold text-[#173121]">Onde vai o dinheiro angariado?</h4>
+        <p class="text-xs text-gray-600 max-w-lg mx-auto">
+            100% dos fundos recolhidos são aplicados exclusivamente no pagamento da mensalidade do servidor cloud e renovação do domínio para garantir estabilidade na época de exames.
+        </p>
+    </div>
+
+</div>
+{% endblock %}

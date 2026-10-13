@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Tutores & Mentores | FauConectado{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Cabeçalho Principal -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200/80 pb-6">
+        <div>
+            <div class="inline-flex items-center gap-2 bg-emerald-100/80 text-[#173121] text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                Apoio Académico Directo
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#173121] tracking-tight">
+                Tutores &amp; Explicadores
+            </h1>
+            <p class="text-gray-600 text-xs sm:text-sm mt-1 max-w-xl">
+                Encontre estudantes experientes prontos para ajudar nas matérias mais difíceis e garantir a sua aprovação.
+            </p>
+        </div>
+
+        <a href="{% url 'criar_mentor' %}" class="inline-flex items-center justify-center gap-2 bg-[#173121] hover:bg-[#234730] text-white font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-sm hover:shadow-md shrink-0">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Tornar-se Explicador
+        </a>
+    </div>
+
+    <!-- Barra de Pesquisa de Mentores -->
+    <div class="bg-white p-3.5 sm:p-4 rounded-2xl shadow-xs border border-gray-200/80">
+        <form method="GET" action="" class="flex items-center gap-2">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input 
+                    type="text" 
+                    name="q" 
+                    value="{{ busca|default:'' }}" 
+                    placeholder="Pesquisar mentor por nome ou cadeira..."
+                    class="w-full bg-[#f8f9f6] border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs sm:text-sm text-gray-800 rounded-xl pl-10 pr-4 py-2.5 outline-none transition-all placeholder-gray-400 font-medium"
+                >
+            </div>
+            <button type="submit" class="bg-[#173121] hover:bg-[#234730] text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all">
+                Buscar
+            </button>
+        </form>
+    </div>
+
+    <!-- Grelha de Mentores -->
+    {% if mentores %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {% for mentor in mentores %}
+                <div class="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md hover:border-emerald-300 transition-all flex flex-col justify-between group">
+                    <div>
+                        <!-- Header do Card: Avatar e Avaliação -->
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="w-12 h-12 bg-emerald-100 text-[#173121] rounded-2xl flex items-center justify-center font-extrabold text-base shadow-xs border border-emerald-200/60">
+                                {{ mentor.nome|slice:":2"|upper }}
+                            </div>
+                            <div class="flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200/60 px-2.5 py-1 rounded-lg text-xs font-bold">
+                                <span class="text-amber-500">★</span>
+                                <span>{{ mentor.votos|floatformat:1 }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Nome e Gênero -->
+                        <h3 class="text-base font-bold text-[#173121] group-hover:text-emerald-700 transition-colors">
+                            {{ mentor.nome }}
+                        </h3>
+                        <p class="text-xs text-gray-400 font-medium mt-0.5">
+                            Explicador(a) • {{ mentor.get_sexo_display }}
+                        </p>
+                    </div>
+
+                    <!-- Rodapé: Contacto Directo no WhatsApp -->
+                    <div class="pt-4 mt-4 border-t border-gray-100">
+                        {% if mentor.whatsapp %}
+                            <a href="https://wa.me/{{ mentor.whatsapp }}" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-50 hover:bg-[#173121] text-[#173121] hover:text-white font-bold text-xs py-2.5 rounded-xl transition-all border border-emerald-200">
+                                💬 Contactar no WhatsApp
+                            </a>
+                        {% else %}
+                            <span class="block text-center text-xs font-semibold text-gray-400 bg-gray-100 py-2 rounded-lg">Sem contacto</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Estado Vazio -->
+        <div class="bg-white rounded-2xl border border-dashed border-gray-300 p-8 text-center space-y-3 max-w-md mx-auto my-6">
+            <div class="w-12 h-12 bg-emerald-50 text-[#173121] rounded-2xl flex items-center justify-center mx-auto">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            </div>
+            <div>
+                <h3 class="text-sm font-bold text-[#173121]">Nenhum explicador encontrado</h3>
+                <p class="text-gray-500 text-xs mt-1">
+                    Ainda não existem tutores registados para esta pesquisa.
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

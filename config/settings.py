@@ -106,6 +106,8 @@ TIME_ZONE = env("TIME_ZONE", default="UTC")
 USE_I18N = env("USE_I18N", default=True)
 USE_TZ = env("USE_TZ", default=True)
 STATIC_URL = env("STATIC_URL", default="static/")
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration

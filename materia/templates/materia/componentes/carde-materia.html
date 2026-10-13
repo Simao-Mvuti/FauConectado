@@ -1,0 +1,73 @@
+<div class="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md hover:border-emerald-400/80 transition-all duration-200 flex flex-col justify-between group relative overflow-hidden">
+    
+    <!-- Linha de Destaque Superior por Tipo (Opcional: Exame vs Resumo) -->
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-[#173121] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+    <div>
+        <!-- Header do Card: Categoria, Tipo e Data -->
+        <div class="flex items-center justify-between gap-2 mb-3">
+            <div class="flex flex-wrap items-center gap-1.5">
+                <!-- Tipo de Conteúdo -->
+                <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-lg border border-emerald-200/60">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                    {{ materia.get_tipo_display|default:"Material de Estudo" }}
+                </span>
+
+                <!-- Ano & Semestre -->
+                <span class="bg-[#f8f9f6] border border-gray-200 text-gray-700 text-[11px] font-bold px-2 py-0.5 rounded-lg">
+                    {{ materia.get_ano_display|default:materia.ano }}
+                </span>
+                <span class="bg-[#f8f9f6] border border-gray-200 text-gray-700 text-[11px] font-bold px-2 py-0.5 rounded-lg">
+                    {{ materia.get_semestre_display|default:materia.semestre }}
+                </span>
+            </div>
+
+            <!-- Data de Envio -->
+            <span class="text-[11px] text-gray-400 font-semibold shrink-0">
+                {{ materia.criado_em|date:"d/m/Y" }}
+            </span>
+        </div>
+
+        <!-- Título do Material -->
+        <h3 class="text-base sm:text-lg font-extrabold text-[#173121] group-hover:text-emerald-700 transition-colors line-clamp-1 mb-1.5 tracking-tight">
+            {{ materia.titulo }}
+        </h3>
+
+        <!-- Descrição -->
+        {% if materia.descricao %}
+            <p class="text-gray-600 text-xs leading-relaxed line-clamp-2 mb-4 font-normal">
+                {{ materia.descricao }}
+            </p>
+        {% else %}
+            <p class="text-gray-400 italic text-xs mb-4">Sem descrição detalhada fornecida.</p>
+        {% endif %}
+    </div>
+
+    <!-- Rodapé do Card -->
+    <div class="pt-3.5 border-t border-gray-100 flex items-center justify-between gap-3">
+        
+        <!-- Indicador de Utilidade / Votos de Aprovação -->
+        <button type="button" class="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-emerald-700 bg-gray-50 hover:bg-emerald-50/80 px-2.5 py-1.5 rounded-lg transition-all border border-gray-100 hover:border-emerald-200" title="Marque se este material ajudou a estudar">
+            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 9.2a2 2 0 00-.8 1.133z"/>
+            </svg>
+            <span class="font-bold text-[11px]">Útil</span>
+            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.2 rounded-md">
+                {{ materia.votos|default:"1" }}
+            </span>
+        </button>
+
+        <!-- Botão de Acesso / Download -->
+        {% if materia.ficheiro %}
+            <a href="{{ materia.ficheiro.url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-[#173121] hover:bg-[#234730] text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-xs hover:shadow-md">
+                <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+                <span>Abrir</span>
+            </a>
+        {% else %}
+            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg">Sem Ficheiro</span>
+        {% endif %}
+    </div>
+</div>

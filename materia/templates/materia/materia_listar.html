@@ -1,114 +1,135 @@
 {% extends "base.html" %}
 
-{% block content %}
-<div class="bg-[#f7f7f4] min-h-screen font-sans py-10 px-4 sm:px-6 lg:px-8 text-[#2b372a]">
-    <div class="max-w-5xl mx-auto">
+{% block title %}Materiais & Resumos | FauConectado{% endblock %}
 
-        <!-- Tag Superior -->
-        <div class="inline-flex items-center gap-2 bg-[#e8eae3] text-[#4a5848] text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#1b3022]"></span>
-            EXPLORAR REPOSITÓRIO ACADÉMICO
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Cabeçalho Principal -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200/80 pb-6">
+        <div>
+            <div class="inline-flex items-center gap-2 bg-emerald-100/80 text-[#173121] text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                Repositório Académico de Aprovação
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#173121] tracking-tight">
+                Materiais &amp; Provas Anteriores
+            </h1>
+            <p class="text-gray-600 text-xs sm:text-sm mt-1 max-w-xl">
+                Aceda a exames resolvidos, sebentas e resumos em PDF partilhados pela comunidade para garantir notas positivas.
+            </p>
         </div>
 
-        <!-- Título e Subtítulo -->
-        <h1 class="text-3xl sm:text-4xl font-serif font-bold text-[#1b3022] mb-3">
-            Ficheiros &amp; Materiais de Estudo
-        </h1>
-        <p class="text-gray-600 text-sm sm:text-base max-w-2xl mb-8">
-            Aceda a exames resolvidos, sebentas e resumos em PDF ou imagem partilhados pela comunidade.
-        </p>
+        <a href="{% url 'enviar_materia' %}" class="inline-flex items-center justify-center gap-2 bg-[#173121] hover:bg-[#234730] text-white font-bold text-xs px-5 py-3 rounded-xl transition-all shadow-sm hover:shadow-md shrink-0">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Partilhar Material
+        </a>
+    </div>
 
-        <!-- Barra de Filtros e Pesquisa -->
-        <form method="GET" action="" class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-gray-200/80 flex flex-col md:flex-row items-center gap-3 mb-10">
+    <!-- Barra de Filtros e Pesquisa (Mobile-First) -->
+    <div class="bg-white p-3.5 sm:p-5 rounded-2xl shadow-xs border border-gray-200/80 space-y-3">
+        <form method="GET" action="" class="space-y-2.5 md:space-y-0 md:grid md:grid-cols-12 md:gap-3">
             
             <!-- Campo de Busca por Texto -->
-            <div class="relative flex-1 w-full">
+            <div class="relative md:col-span-6">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
                 <input 
                     type="text" 
                     name="q" 
-                    value="{{ busca }}" 
-                    placeholder="Pesquisar por título ou categoria (ex: Algoritmos, Exame, Informática)..."
-                    class="w-full bg-[#f4f4f0] border-0 text-sm text-gray-800 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#1b3022] outline-none placeholder-gray-400"
+                    value="{{ busca|default:'' }}" 
+                    placeholder="Pesquisar disciplina, exame, professor..."
+                    class="w-full bg-[#f8f9f6] border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs sm:text-sm text-gray-800 rounded-xl pl-10 pr-10 py-3 md:py-2.5 focus:ring-2 focus:ring-emerald-200/60 outline-none transition-all placeholder-gray-400 font-medium"
                 >
+                {% if busca %}
+                    <a href="{% url 'listar_materia' %}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-red-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </a>
+                {% endif %}
             </div>
 
-            <!-- Filtro: Anos -->
-            <div class="w-full md:w-auto">
-                <select name="ano" onchange="this.form.submit()" class="w-full bg-[#f4f4f0] border-0 text-sm text-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#1b3022] outline-none cursor-pointer">
-                    <option value="">Todos os Anos</option>
-                    {% for valor, rotulo in anos %}
-                        <option value="{{ valor }}" {% if ano_selecionado == valor|stringformat:"s" %}selected{% endif %}>
-                            {{ rotulo }}
-                        </option>
-                    {% endfor %}
-                </select>
+            <!-- Grid de Filtros: 2 colunas no Mobile / 6 colunas no Desktop -->
+            <div class="grid grid-cols-2 gap-2.5 md:col-span-6 md:grid-cols-2">
+                <!-- Filtro: Anos -->
+                <div>
+                    <select name="ano" onchange="this.form.submit()" class="w-full bg-[#f8f9f6] border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs sm:text-sm text-gray-700 font-semibold rounded-xl px-2.5 sm:px-3 py-3 md:py-2.5 focus:ring-2 focus:ring-emerald-200/60 outline-none cursor-pointer transition-all truncate">
+                        <option value="">📅 Ano</option>
+                        {% for valor, rotulo in anos %}
+                            <option value="{{ valor }}" {% if ano_selecionado == valor|stringformat:"s" %}selected{% endif %}>
+                                {{ rotulo }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Filtro: Semestres -->
+                <div>
+                    <select name="semestre" onchange="this.form.submit()" class="w-full bg-[#f8f9f6] border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs sm:text-sm text-gray-700 font-semibold rounded-xl px-2.5 sm:px-3 py-3 md:py-2.5 focus:ring-2 focus:ring-emerald-200/60 outline-none cursor-pointer transition-all truncate">
+                        <option value="">🎓 Semestre</option>
+                        {% for valor, rotulo in semestres %}
+                            <option value="{{ valor }}" {% if semestre_selecionado == valor|stringformat:"s" %}selected{% endif %}>
+                                {{ rotulo }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
-            <!-- Filtro: Semestres -->
-            <div class="w-full md:w-auto">
-                <select name="semestre" onchange="this.form.submit()" class="w-full bg-[#f4f4f0] border-0 text-sm text-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#1b3022] outline-none cursor-pointer">
-                    <option value="">Semestre</option>
-                    {% for valor, rotulo in semestres %}
-                        <option value="{{ valor }}" {% if semestre_selecionado == valor|stringformat:"s" %}selected{% endif %}>
-                            {{ rotulo }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Botão Submeter Material -->
-            <a href="{% url 'enviar_materia' %}" class="w-full md:w-auto bg-[#1b3022] hover:bg-[#284431] text-white font-medium text-sm px-6 py-3 rounded-xl transition-all text-center whitespace-nowrap shadow-sm">
-                Submeter material
-            </a>
+            <!-- Botão de submeter rápido (Apenas Mobile) -->
+            <button type="submit" class="w-full md:hidden bg-[#173121] text-white font-bold text-xs py-2.5 rounded-xl shadow-xs active:scale-[0.98] transition-transform">
+                🔍 Buscar Materiais
+            </button>
         </form>
 
-        <!-- Lista de Materiais ou Estado Vazio -->
-        {% if materias %}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {% for materia in materias %}
-                    <div class="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="bg-[#f4f4f0] text-[#1b3022] text-xs font-semibold px-3 py-1 rounded-full">
-                                    {{ materia.get_ano_display }} • {{ materia.get_semestre_display }}
-                                </span>
-                                <span class="text-xs text-gray-400">
-                                    {{ materia.criado_em|date:"d/m/Y" }}
-                                </span>
-                            </div>
+        <!-- Filtros Rápidos / Atalhos -->
+        <div class="pt-2.5 border-t border-gray-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth -mx-1 px-1">
+            <span class="text-gray-400 uppercase text-[10px] tracking-wider shrink-0 font-bold mr-1 hidden sm:inline">Atalhos:</span>
+            
+            <a href="?q=Exame" class="inline-flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-700 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-red-100">
+                📝 Exames
+            </a>
+            <a href="?q=Resumo" class="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-emerald-100">
+                ⚡ Resumos
+            </a>
+            <a href="?q=Teste" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-800 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-amber-100">
+                🎯 Testes
+            </a>
 
-                            <h3 class="text-lg font-bold text-[#1b3022] mb-1">
-                                {{ materia.titulo }}
-                            </h3>
+            {% if busca or ano_selecionado or semestre_selecionado %}
+                <a href="{% url 'listar_materia' %}" class="text-xs font-bold text-red-600 hover:underline ml-auto shrink-0 pl-2">
+                    ✕ Limpar
+                </a>
+            {% endif %}
+        </div>
+    </div>
 
-                            {% if materia.descricao %}
-                                <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                                    {{ materia.descricao }}
-                                </p>
-                            {% endif %}
-                        </div>
-
-                        <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            {% if materia.ficheiro %}
-                                <a href="{{ materia.ficheiro.url }}" target="_blank" rel="noopener noreferrer" class="...">
-                                    Visualizar Ficheiro
-                                </a>
-                            {% else %}
-                                <span class="text-xs text-gray-400">Sem ficheiro</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endfor %}
+    <!-- Lista de Cards -->
+    {% if materias %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for materia in materias %}
+                {% include 'materia/componentes/carde-materia.html' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Estado Vazio -->
+        <div class="bg-white rounded-2xl border border-dashed border-gray-300 p-8 text-center space-y-3 max-w-md mx-auto my-6">
+            <div class="w-12 h-12 bg-emerald-50 text-[#173121] rounded-2xl flex items-center justify-center mx-auto">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
-        {% else %}
-            <!-- Estado Vazio (Visual do Print) -->
-            <div class="text-center py-20">
-                <p class="text-gray-500 text-sm">
-                    Nenhum material encontrado com os filtros selecionados.
+            <div>
+                <h3 class="text-sm font-bold text-[#173121]">Nenhum material encontrado</h3>
+                <p class="text-gray-500 text-xs mt-1">
+                    Não existem resumos para a pesquisa efetuada. Seja o primeiro a ajudar a comunidade!
                 </p>
             </div>
-        {% endif %}
+            <a href="{% url 'enviar_materia' %}" class="inline-block bg-[#173121] hover:bg-[#234730] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-xs">
+                + Enviar Primeiro Material
+            </a>
+        </div>
+    {% endif %}
 
-    </div>
 </div>
 {% endblock %}

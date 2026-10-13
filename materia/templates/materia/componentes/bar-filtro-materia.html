@@ -1,0 +1,79 @@
+<!-- Barra de Filtros e Pesquisa (Mobile-First) -->
+<div class="bg-white p-3.5 sm:p-5 rounded-2xl shadow-xs border border-gray-200/80 space-y-3">
+    <form method="GET" action="" class="space-y-2.5 md:space-y-0 md:grid md:grid-cols-12 md:gap-3">
+        
+        <!-- Campo de Busca por Texto -->
+        <div class="relative md:col-span-6">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <input 
+                type="text" 
+                name="q" 
+                value="{{ busca|default:'' }}" 
+                placeholder="Pesquisar disciplina, exame, professor..."
+                class="w-full bg-[#f8f9f6] border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs sm:text-sm text-gray-800 rounded-xl pl-10 pr-10 py-3 md:py-2.5 focus:ring-2 focus:ring-emerald-200/60 outline-none transition-all placeholder-gray-400 font-medium"
+            >
+            {% if busca %}
+                <a href="{% url 'listar_materia' %}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-red-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Grid de Filtros: 2 colunas no Mobile / 6 colunas no Desktop -->
+        <div class="grid grid-cols-2 gap-2.5 md:col-span-6 md:grid-cols-2">
+            <!-- Filtro: Anos -->
+            <div>
+                <select name="ano" onchange="this.form.submit()" class="w-full bg-[#f8f9f6] border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs sm:text-sm text-gray-700 font-semibold rounded-xl px-2.5 sm:px-3 py-3 md:py-2.5 focus:ring-2 focus:ring-emerald-200/60 outline-none cursor-pointer transition-all truncate">
+                    <option value="">📅 Ano</option>
+                    {% for valor, rotulo in anos %}
+                        <option value="{{ valor }}" {% if ano_selecionado == valor|stringformat:"s" %}selected{% endif %}>
+                            {{ rotulo }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Filtro: Semestres -->
+            <div>
+                <select name="semestre" onchange="this.form.submit()" class="w-full bg-[#f8f9f6] border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs sm:text-sm text-gray-700 font-semibold rounded-xl px-2.5 sm:px-3 py-3 md:py-2.5 focus:ring-2 focus:ring-emerald-200/60 outline-none cursor-pointer transition-all truncate">
+                    <option value="">🎓 Semestre</option>
+                    {% for valor, rotulo in semestres %}
+                        <option value="{{ valor }}" {% if semestre_selecionado == valor|stringformat:"s" %}selected{% endif %}>
+                            {{ rotulo }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Botão Submeter Visível Apenas no Telemóvel para facilitar o envio -->
+        <button type="submit" class="w-full md:hidden bg-[#173121] text-white font-bold text-xs py-2.5 rounded-xl shadow-xs active:scale-[0.98] transition-transform">
+            🔍 Buscar Materiais
+        </button>
+    </form>
+
+    <!-- Filtros Rápidos (Atalhos Horizontais para Mobile) -->
+    <div class="pt-2.5 border-t border-gray-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth -mx-1 px-1">
+        <span class="text-gray-400 uppercase text-[10px] tracking-wider shrink-0 font-bold mr-1 hidden sm:inline">Atalhos:</span>
+        
+        <a href="?q=Exame" class="inline-flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-700 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-red-100">
+            📝 Exames
+        </a>
+        <a href="?q=Resumo" class="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-emerald-100">
+            ⚡ Resumos
+        </a>
+        <a href="?q=Teste" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-800 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-amber-100">
+            🎯 Testes
+        </a>
+
+        {% if busca or ano_selecionado or semestre_selecionado %}
+            <a href="{% url 'listar_materia' %}" class="text-xs font-bold text-red-600 hover:underline ml-auto shrink-0 pl-2">
+                ✕ Limpar
+            </a>
+        {% endif %}
+    </div>
+</div>

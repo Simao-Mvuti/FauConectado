@@ -7,6 +7,12 @@ class Materia(models.Model):
         ("REJEITADO","Rejeitado")
         ]
 
+    TIPOS = [
+        {"EXAME","Exame"},
+        {"RESUMO","Resumo"},
+        {"TESTE","Teste"}
+    ]
+
     ANOS = [(i, f"{i}º Ano") for i in range(1, 6)]
     SEMESTRES = [(1, "1º Semestre"),(2, "2º Semestre"),]
 
@@ -16,6 +22,8 @@ class Materia(models.Model):
     ano = models.PositiveSmallIntegerField(choices=ANOS)
     semestre = models.PositiveSmallIntegerField(choices=SEMESTRES)
     estado = models.CharField(max_length=10,choices=ESTADOS,default="APROVADO")
+    tipo = models.CharField(max_length=10,choices=TIPOS,default="EXAME")
     ficheiro = models.FileField(upload_to="materias/")
+    votos = models.FloatField(default=0.0)
     criado_em = models.DateTimeField(auto_now_add=True)
 

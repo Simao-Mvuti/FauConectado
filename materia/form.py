@@ -6,7 +6,7 @@ from .models import Materia
 class MateriaForm(forms.ModelForm):
     class Meta:
         model = Materia
-        fields = ["titulo","descricao","ano","semestre","ficheiro"]
+        fields = ["titulo","ano","semestre","ficheiro"]
 
     def clean_ficheiro(self):
         ficheiro = self.cleaned_data.get("ficheiro")
@@ -17,7 +17,7 @@ class MateriaForm(forms.ModelForm):
 
     
             extensao = Path(ficheiro.name).suffix.lower()
-            extensoes_permitidas = {".pdf", ".docx", ".txt", ".png", ".jpeg"}
+            extensoes_permitidas = {".pdf", ".docx", ".txt", ".png", ".jpeg",".jpg"}
 
             if extensao not in extensoes_permitidas:
                 raise ValidationError(f"Extensão de ficheiro não suportada. As extensões permitidas são: {', '.join(extensoes_permitidas)}")

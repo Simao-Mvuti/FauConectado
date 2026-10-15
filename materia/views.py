@@ -3,48 +3,53 @@ from django.db.models import Q
 from django.contrib import messages
 from .form import MateriaForm
 from .models import Materia
+from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from .form import MateriaForm
 
-def listar_materia(request):
-    materias = Materia.objects.filter(estado="APROVADO")
 
-    busca = request.GET.get("q", "").strip()
-    ano = request.GET.get("ano", "")
-    semestre = request.GET.get("semestre", "")
+class MateriaListView(ListView):
+    model = Materia
+    template_name = "materia/materia_listar.html"
+    context_object_name = "materias"
 
-    if busca:
-        materias = materias.filter(
-            Q(titulo__icontains=busca) | Q(descricao__icontains=busca)
-        )
+    def get_queryset(self):
+        qs = Materia.objects.filter(estado="APROVADO")
 
-    if ano:
-        materias = materias.filter(ano=ano)
+        busca = self.request.GET.get("q", "").strip()
+        ano = self.request.GET.get("ano", "")
+        semestre = self.request.GET.get("semestre", "")
 
-    if semestre:
-        materias = materias.filter(semestre=semestre)
+        if busca:
+            qs = qs.filter(Q(titulo__icontains=busca) | Q(descricao__icontains=busca))
+        if ano:
+            qs = qs.filter(ano=ano)
+        if semestre:
+            qs = qs.filter(semestre=semestre)
+        return qs
 
-    context = {
-        "materias": materias,
-        "busca": busca,
-        "ano_selecionado": ano,
-        "semestre_selecionado": semestre,
-        "anos": Materia.ANOS,
-        "semestres": Materia.SEMESTRES,
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "busca": self.request.GET.get("q", "").strip(),
+            "ano_selecionado": self.request.GET.get("ano", ""),
+            "semestre_selecionado": self.request.GET.get("semestre", ""),
+            "anos": [(i, f"{i}º Ano") for i in range(1, 6)],
+            "semestres": [(1, "1º Semestre"), (2, "2º Semestre")],
+        })
+        return context
 
-    return render(request, "materia/materia_listar.html", context)
 
-def enviar_materia(request):
-    if request.method == "POST":
-        form = MateriaForm(request.POST, request.FILES)
+class MateriaCreateView(CreateView):
+    form_class = MateriaForm
+    template_name = "materia/materia_enviar.html"
+    success_url = reverse_lazy("listar_materia")
 
-        if form.is_valid():
-            form.save()
-            messages.success(request,"Matéria envia com sucesso")
-            return redirect("listar_materia")
-        else:
-            messages.error(request, "Ocorreu um erro ao enviar. Verifique os campos abaixo.")
-    else:
+    def form_valid(self, form):
+        messages.success(self.request, "Matéria enviada com sucesso")
+        return super().form_valid(form) 
 
-        form = MateriaForm()
-
-    return render(request, "materia/materia_enviar.html", {"form": form})
+    def form_invalid(self, form):
+        messages.error(self.request, "Ocorreu um erro ao enviar. Verifique os campos abaixo.")
+        return super().form_invalid(form)

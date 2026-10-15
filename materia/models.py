@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator,MaxValueValidator,MinValueValidator
 
 class Materia(models.Model):
     ESTADOS = [
@@ -13,17 +14,13 @@ class Materia(models.Model):
         ("TESTE","Teste")
     ]
 
-    ANOS = [(i, f"{i}º Ano") for i in range(1, 6)]
-    SEMESTRES = [(1, "1º Semestre"),(2, "2º Semestre"),]
-
-
     titulo = models.CharField(max_length=30)
     descricao = models.TextField(blank=True)
-    ano = models.PositiveSmallIntegerField(choices=ANOS)
-    semestre = models.PositiveSmallIntegerField(choices=SEMESTRES)
+    ano = models.PositiveSmallIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+    semestre = models.PositiveSmallIntegerField(validators=[MinValueValidator(1),MaxValueValidator(2)])
     estado = models.CharField(max_length=10,choices=ESTADOS,default="APROVADO")
     tipo = models.CharField(max_length=10,choices=TIPOS,default="EXAME")
-    ficheiro = models.FileField(upload_to="materias/")
+    ficheiro = models.FileField(upload_to="materias/",validators=[FileExtensionValidator(["pdf", "docx", "txt", "png", "jpeg","jpg"])])
     votos = models.FloatField(default=0.0)
     criado_em = models.DateTimeField(auto_now_add=True)
 

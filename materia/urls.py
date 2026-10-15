@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import enviar_materia,listar_materia
+from .views import MateriaCreateView,MateriaListView
 
 urlpatterns = [
-    path('enviar',enviar_materia,name="enviar_materia"),
-    path('',listar_materia,name="listar_materia")
+    path('enviar',MateriaCreateView.as_view(),name="enviar_materia"),
+    path('',MateriaListView.as_view(),name="listar_materia")
 ]
 

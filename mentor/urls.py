@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import listar_mentores, criar_mentor
+from .views import MentorCreateView,MentorListView
 
 urlpatterns = [
-    path('',listar_mentores,name="mentoria"),
-    path('novo',criar_mentor,name="criar_mentor")
+    path('',MentorListView.as_view(),name="mentoria"),
+    path('novo',MentorCreateView.as_view(),name="criar_mentor")
 ]

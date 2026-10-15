@@ -1,52 +1,35 @@
-from django.shortcuts import render
-from .models import Mentor
-
-from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView
 from .models import Mentor
+from .forms import MentorForm
 
-def criar_mentor(request):
-    if request.method == 'POST':
-        nome = request.POST.get('nome', '').strip()
-        whatsapp = request.POST.get('whatsapp', '').strip()
-        sexo = request.POST.get('sexo', '').strip()
+class MentorCreateView(CreateView):
+    form_class = MentorForm
+    template_name = "mentor/criar_mentor.html"
+    success_url = reverse_lazy("mentoria")
 
-        # Validação simples no backend
-        if not nome or not whatsapp or not sexo:
-            messages.error(request, 'Por favor, preencha todos os campos obrigatórios.')
-            return render(request, 'mentor/criar_mentor.html', {
-                'nome': nome,
-                'whatsapp': whatsapp,
-                'sexo': sexo,
-                'sexos': Mentor.SEXO_CHOICES
-            })
+    def form_valid(self, form):
+        messages.success(self.request, "Cadastro realizado com sucesso! Agora é um explicador ativo.")
+        return super().form_valid(form)
 
-        # Criar o mentor no banco de dados
-        Mentor.objects.create(
-            nome=nome,
-            whatsapp=whatsapp,
-            sexo=sexo
-        )
+    def form_invalid(self, form):
+        messages.error(self.request, "Por favor, preencha todos os campos obrigatórios.")
+        return super().form_invalid(form)
 
-        messages.success(request, 'Cadastro realizado com sucesso! Agora é um explicador ativo.')
-        return redirect('listar_mentores') # Redireciona para a lista de mentores
 
-    # Método GET: Renderiza o formulário
-    context = {
-        'sexos': Mentor.SEXO_CHOICES
-    }
-    return render(request, 'mentor/criar_mentor.html', context)
+class MentorListView(ListView):
+    template_name = "mentor/listar_mentores.html"
+    context_object_name = "mentores"
 
-def listar_mentores(request):
-    busca = request.GET.get('q', '')
-    mentores = Mentor.objects.all().order_by('-votos')
+    def get_queryset(self):
+        qs = Mentor.objects.order_by("-votos")
+        busca = self.request.GET.get("q", "").strip()
+        if busca:
+            qs = qs.filter(nome__icontains=busca)
+        return qs
 
-    if busca:
-        mentores = mentores.filter(nome__icontains=busca)
-
-    context = {
-        'mentores': mentores,
-        'busca': busca,
-    }
-
-    return render(request, 'mentor/listar_mentores.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["busca"] = self.request.GET.get("q", "").strip()
+        return context

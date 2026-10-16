@@ -76,10 +76,10 @@
                             {{ user.first_name|default:user.username }}
                         </a>
                     {% else %}
-                        <a href="#" class="text-xs font-bold text-gray-600 hover:text-[#173121] px-3 py-2 rounded-xl hover:bg-gray-100 transition-all">
+                        <a href="{% url 'login' %}" class="text-xs font-bold text-gray-600 hover:text-[#173121] px-3 py-2 rounded-xl hover:bg-gray-100 transition-all">
                             Entrar
                         </a>
-                        <a href="#" class="text-xs font-bold bg-[#173121] hover:bg-[#234730] text-white px-4 py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md">
+                        <a href="{% url 'registro' %}" class="text-xs font-bold bg-[#173121] hover:bg-[#234730] text-white px-4 py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md">
                             Criar Conta
                         </a>
                     {% endif %}

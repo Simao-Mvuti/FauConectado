@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'materia',
     'mentor',
     'apoiar',
+    'conta',
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -117,3 +118,8 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+AUTH_USER_MODEL = "conta.Utilizador"
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "listar_materia"
+LOGIN_URL = "login"

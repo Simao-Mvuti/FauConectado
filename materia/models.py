@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.core.validators import FileExtensionValidator,MaxValueValidator,MinValueValidator
 
 class Materia(models.Model):
@@ -14,6 +15,7 @@ class Materia(models.Model):
         ("TESTE","Teste")
     ]
 
+    autor = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True,related_name="materiais")
     titulo = models.CharField(max_length=30)
     descricao = models.TextField(blank=True)
     ano = models.PositiveSmallIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])

@@ -1,106 +1,76 @@
 {% extends "base.html" %}
 
+{% block title %}Registo | FauConectado{% endblock %}
+
 {% block content %}
-<div class="max-w-4xl mx-auto my-4 sm:my-10 px-2 sm:px-4">
-    <!-- Card Principal: Flex vertical no mobile, horizontal no desktop -->
-    <div class="flex flex-col md:flex-row bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+<div class="max-w-md mx-auto my-4 sm:my-10 px-2 sm:px-0">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
         
-        <!-- Coluna Esquerda: Informações / Boas-vindas (Fundo Verde Escuro) -->
-        <div class="w-full md:w-5/12 bg-[#173121] text-white p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-                <span class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-emerald-300">
-                    Comunidade FauConectado
-                </span>
-                <h2 class="text-2xl sm:text-3xl font-serif font-semibold mt-2 mb-3 leading-tight">
-                    Cria a tua conta
-                </h2>
-                <p class="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
-                    Junta-te aos estudantes da faculdade, acede ao repositório académico e partilha materiais de estudo.
+        <!-- Cabeçalho Direto e Limpo -->
+        <div class="mb-6 text-center sm:text-left">
+            <h1 class="text-xl sm:text-2xl font-bold text-[#173121]">Criar Conta</h1>
+            <p class="text-xs text-gray-500 mt-1">Preencha os dados abaixo para aceder ao portal.</p>
+        </div>
+
+        <form method="post" class="space-y-4" novalidate>
+            {% csrf_token %}
+
+            <!-- Erros Gerais -->
+            {% if form.non_field_errors %}
+                <div class="p-3 rounded-xl bg-red-50 text-xs font-medium text-red-700">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Campos do Formulário -->
+            {% for field in form %}
+                <div class="flex flex-col gap-1">
+                    <label for="{{ field.id_for_label }}" class="text-xs font-semibold text-gray-700">
+                        {{ field.label }}
+                    </label>
+
+                    <input 
+                        type="{{ field.field.widget.input_type|default:'text' }}" 
+                        name="{{ field.html_name }}" 
+                        id="{{ field.id_for_label }}" 
+                        value="{{ field.value|default:'' }}"
+                        {% if field.field.required %}required{% endif %}
+                        class="w-full px-3.5 py-2.5 text-sm bg-gray-50/50 border {% if field.errors %}border-red-400{% else %}border-gray-200{% endif %} rounded-xl focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all text-gray-800 placeholder-gray-400"
+                        placeholder="{% if 'username' in field.name %}Nome de utilizador{% elif 'email' in field.name %}exemplo@email.com{% else %}••••••••{% endif %}"
+                    >
+
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="text-xs text-red-600 mt-0.5">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <!-- Botão Único Principal -->
+            <div class="pt-2">
+                <button 
+                    type="submit" 
+                    class="w-full py-3 bg-[#173121] hover:bg-[#234730] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all active:scale-[0.99]"
+                >
+                    Registar
+                </button>
+            </div>
+
+            <!-- Rodapé com Link Secundário -->
+            <div class="pt-4 border-t border-gray-100 text-center">
+                <p class="text-xs text-gray-500">
+                    Já tem uma conta? 
+                    <a href="{% url 'login' %}" class="font-bold text-[#173121] hover:underline ml-1">
+                        Entrar
+                    </a>
                 </p>
             </div>
-
-            <!-- Caixinha de Vantagens -->
-            <div class="mt-6 p-4 bg-[#1e3c29] rounded-xl border border-emerald-800/40 text-xs text-emerald-100/90 space-y-2">
-                <div class="font-bold flex items-center gap-1.5 text-white">
-                    Benefícios
-                </div>
-                <ul class="space-y-1.5 list-disc list-inside text-emerald-200/80">
-                    <li>Acesso a exames, resumos e fichas.</li>
-                    <li>Envio e publicação de conteúdos.</li>
-                    <li>Conexão com colegas do teu curso.</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Coluna Direita: Formulário de Registo -->
-        <div class="w-full md:w-7/12 p-6 sm:p-8 bg-white">
-            <form method="post" class="space-y-4" novalidate>
-                {% csrf_token %}
-
-                <!-- Mensagens de erro gerais do formulário -->
-                {% if form.non_field_errors %}
-                    <div class="p-3 text-xs text-red-700 bg-red-50 rounded-lg border border-red-200 space-y-1">
-                        {% for error in form.non_field_errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                <!-- Renderização dos campos do formulário Django -->
-                {% for field in form %}
-                    <div class="flex flex-col gap-1">
-                        <label for="{{ field.id_for_label }}" class="text-xs font-semibold text-gray-700">
-                            {{ field.label }}
-                        </label>
-
-                        <input 
-                            type="{{ field.field.widget.input_type|default:'text' }}" 
-                            name="{{ field.html_name }}" 
-                            id="{{ field.id_for_label }}" 
-                            value="{{ field.value|default:'' }}"
-                            {% if field.field.required %}required{% endif %}
-                            class="w-full px-3.5 py-2 text-sm bg-gray-50 border {% if field.errors %}border-red-400 focus:ring-red-500{% else %}border-gray-200 focus:ring-[#173121]{% endif %} rounded-lg focus:outline-none focus:ring-2 focus:bg-white transition-all placeholder-gray-400"
-                        >
-
-                        <!-- Texto de ajuda (se houver) -->
-                        {% if field.help_text %}
-                            <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">
-                                {{ field.help_text|safe }}
-                            </p>
-                        {% endif %}
-
-                        <!-- Erros do campo -->
-                        {% if field.errors %}
-                            {% for error in field.errors %}
-                                <p class="text-xs text-red-600 font-medium mt-0.5">
-                                    {{ error }}
-                                </p>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <!-- Botão de Submissão -->
-                <div class="pt-2">
-                    <button 
-                        type="submit" 
-                        class="w-full py-2.5 bg-[#173121] hover:bg-[#13281b] text-white text-xs font-semibold rounded-full shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-[#173121] focus:ring-offset-1"
-                    >
-                        Registar
-                    </button>
-                </div>
-
-                <!-- Separador / Link para Entrar -->
-                <div class="pt-4 border-t border-gray-100 text-center">
-                    <p class="text-xs text-gray-600">
-                        Já tens uma conta? 
-                        <a href="{% url 'login' %}" class="font-bold text-[#173121] hover:underline ml-0.5">
-                            Entrar
-                        </a>
-                    </p>
-                </div>
-            </form>
-        </div>
+        </form>
 
     </div>
 </div>

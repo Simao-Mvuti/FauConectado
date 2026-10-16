@@ -58,18 +58,6 @@
 
     <!-- Filtros Rápidos (Atalhos Horizontais para Mobile) -->
     <div class="pt-2.5 border-t border-gray-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth -mx-1 px-1">
-        <span class="text-gray-400 uppercase text-[10px] tracking-wider shrink-0 font-bold mr-1 hidden sm:inline">Atalhos:</span>
-        
-        <a href="?q=Exame" class="inline-flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-700 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-red-100">
-            📝 Exames
-        </a>
-        <a href="?q=Resumo" class="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-emerald-100">
-            ⚡ Resumos
-        </a>
-        <a href="?q=Teste" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-800 active:scale-95 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 border border-amber-100">
-            🎯 Testes
-        </a>
-
         {% if busca or ano_selecionado or semestre_selecionado %}
             <a href="{% url 'listar_materia' %}" class="text-xs font-bold text-red-600 hover:underline ml-auto shrink-0 pl-2">
                 ✕ Limpar

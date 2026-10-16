@@ -1,73 +1,111 @@
-<div class="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md hover:border-emerald-400/80 transition-all duration-200 flex flex-col justify-between group relative overflow-hidden">
+<div class="bg-white rounded-2xl border border-gray-100 shadow-xs hover:shadow-md transition-all p-4 sm:p-5 flex flex-col justify-between group">
     
-    <!-- Linha de Destaque Superior por Tipo (Opcional: Exame vs Resumo) -->
-    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-[#173121] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <!-- Topo do Cartão: Tipo de Material & Botão de Votação (+1 Moeda) -->
+    <div class="flex items-start justify-between gap-3 mb-3">
+        <div class="flex items-center gap-2 flex-wrap">
+            <!-- Badge do Tipo de Conteúdo -->
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase tracking-wider
+                {% if 'Exame' in materia.titulo or 'Exame' in materia.tipo %} bg-red-50 text-red-700 border border-red-100
+                {% elif 'Resumo' in materia.titulo or 'Resumo' in materia.tipo %} bg-emerald-50 text-emerald-800 border border-emerald-100
+                {% else %} bg-blue-50 text-blue-800 border border-blue-100 {% endif %}">
+                📚 {{ materia.tipo|default:"Apontamento" }}
+            </span>
 
-    <div>
-        <!-- Header do Card: Categoria, Tipo e Data -->
-        <div class="flex items-center justify-between gap-2 mb-3">
-            <div class="flex flex-wrap items-center gap-1.5">
-                <!-- Tipo de Conteúdo -->
-                <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-lg border border-emerald-200/60">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                    {{ materia.get_tipo_display|default:"Material de Estudo" }}
-                </span>
-
-                <!-- Ano & Semestre -->
-                <span class="bg-[#f8f9f6] border border-gray-200 text-gray-700 text-[11px] font-bold px-2 py-0.5 rounded-lg">
-                    {{ materia.get_ano_display|default:materia.ano }}
-                </span>
-                <span class="bg-[#f8f9f6] border border-gray-200 text-gray-700 text-[11px] font-bold px-2 py-0.5 rounded-lg">
-                    {{ materia.get_semestre_display|default:materia.semestre }}
-                </span>
-            </div>
-
-            <!-- Data de Envio -->
-            <span class="text-[11px] text-gray-400 font-semibold shrink-0">
-                {{ materia.criado_em|date:"d/m/Y" }}
+            <!-- Ano e Semestre -->
+            <span class="text-[11px] font-semibold text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">
+                {{ materia.ano }}º Ano · {{ materia.semestre }}º Sem
             </span>
         </div>
 
-        <!-- Título do Material -->
-        <h3 class="text-base sm:text-lg font-extrabold text-[#173121] group-hover:text-emerald-700 transition-colors line-clamp-1 mb-1.5 tracking-tight">
+        <!-- Botão Interativo de Votação -->
+        {% if user.is_authenticated and materia.autor != user %}
+            <form method="POST" action="{% url 'votar_materia' materia.id %}" class="inline">
+                {% csrf_token %}
+                <button type="submit" title="Votar neste material (+1 Moeda para o autor)" class="flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-200/80 transition-all active:scale-95 cursor-pointer">
+                    <span>🔥 Votar</span>
+                    <span class="bg-amber-200/60 px-1.5 py-0.5 rounded-md text-[10px] font-extrabold">{{ materia.votos|default:0 }}</span>
+                </button>
+            </form>
+        {% else %}
+            <!-- Exibição Estática se for o próprio autor ou visitante -->
+            <div class="flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-50/80 px-2.5 py-1 rounded-lg shrink-0">
+                <span>🔥</span>
+                <span>{{ materia.votos|default:0 }}</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Bloco de Pré-visualização Visual (Preview Box) -->
+    <div class="relative w-full h-28 bg-[#f8f9f6] rounded-xl border border-gray-100 overflow-hidden mb-3.5 flex items-center justify-center group-hover:border-emerald-200 transition-colors">
+        {% if materia.ficheiro.url|lower|slice:"-4:" == ".png" or materia.ficheiro.url|lower|slice:"-4:" == ".jpg" or materia.ficheiro.url|lower|slice:"-5:" == ".jpeg" %}
+            <!-- Preview de Imagem Real -->
+            <img src="{{ materia.ficheiro.url }}" alt="{{ materia.titulo }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+        {% else %}
+            <!-- Preview Gráfico Elegante para PDFs e Documentos -->
+            <div class="flex flex-col items-center justify-center space-y-1 p-2 text-center">
+                <div class="w-10 h-10 rounded-xl bg-white shadow-xs border border-gray-200/80 flex items-center justify-center text-lg font-black text-[#173121]">
+                    {% if ".pdf" in materia.ficheiro.url|lower %}
+                        📄
+                    {% elif ".docx" in materia.ficheiro.url|lower or ".doc" in materia.ficheiro.url|lower %}
+                        📝
+                    {% else %}
+                        📁
+                    {% endif %}
+                </div>
+                <span class="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">
+                    {% if ".pdf" in materia.ficheiro.url|lower %} Documento PDF 
+                    {% elif ".docx" in materia.ficheiro.url|lower %} Ficheiro Word 
+                    {% else %} Material de Estudo {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+        <!-- Badge Flutuante de Extensão -->
+        <div class="absolute bottom-2 right-2 px-2 py-0.5 bg-black/60 backdrop-blur-xs text-white text-[9px] font-bold rounded-md uppercase">
+            {{ materia.ficheiro.name|slice:"-3:" }}
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal: Título e Descrição -->
+    <div class="space-y-1.5 mb-4">
+        <h3 class="text-sm sm:text-base font-extrabold text-[#173121] group-hover:text-emerald-800 transition-colors leading-snug line-clamp-1">
             {{ materia.titulo }}
         </h3>
-
-        <!-- Descrição -->
+        
         {% if materia.descricao %}
-            <p class="text-gray-600 text-xs leading-relaxed line-clamp-2 mb-4 font-normal">
+            <p class="text-xs text-gray-500 line-clamp-2 leading-relaxed">
                 {{ materia.descricao }}
             </p>
-        {% else %}
-            <p class="text-gray-400 italic text-xs mb-4">Sem descrição detalhada fornecida.</p>
         {% endif %}
     </div>
 
-    <!-- Rodapé do Card -->
-    <div class="pt-3.5 border-t border-gray-100 flex items-center justify-between gap-3">
-        
-        <!-- Indicador de Utilidade / Votos de Aprovação -->
-        <button type="button" class="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-emerald-700 bg-gray-50 hover:bg-emerald-50/80 px-2.5 py-1.5 rounded-lg transition-all border border-gray-100 hover:border-emerald-200" title="Marque se este material ajudou a estudar">
-            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 9.2a2 2 0 00-.8 1.133z"/>
-            </svg>
-            <span class="font-bold text-[11px]">Útil</span>
-            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.2 rounded-md">
-                {{ materia.votos|default:"1" }}
-            </span>
-        </button>
+    <!-- Rodapé do Cartão: Autor, Custo em Moedas e Ação de Download -->
+    <div class="pt-3 border-t border-gray-100 flex items-center justify-between gap-2 mt-auto">
+        <div class="flex items-center gap-2 text-xs text-gray-500 font-medium truncate">
+            <div class="w-6 h-6 rounded-full bg-emerald-100 text-[#173121] flex items-center justify-center font-bold text-[10px] shrink-0">
+                {{ materia.autor.username|slice:":2"|upper }}
+            </div>
+            <span class="truncate">Por <strong class="text-gray-700">{{ materia.autor.username|default:"Estudante" }}</strong></span>
+        </div>
 
-        <!-- Botão de Acesso / Download -->
+        <!-- Ação de Download com Lógica de Moedas -->
         {% if materia.ficheiro %}
-            <a href="{{ materia.ficheiro.url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-[#173121] hover:bg-[#234730] text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-xs hover:shadow-md">
-                <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-                <span>Abrir</span>
-            </a>
+            {% if materia.autor == user %}
+                <!-- Grátis para o próprio Autor -->
+                <a href="{% url 'baixar_materia' materia.id %}" class="inline-flex items-center gap-1.5 bg-gray-100 hover:bg-gray-200 text-[#173121] text-xs font-bold px-3.5 py-2 rounded-xl transition-all shrink-0 active:scale-95">
+                    <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span>O Meu PDF</span>
+                </a>
+            {% else %}
+                <!-- Requer 2 Moedas para Baixar -->
+                <a href="{% url 'baixar_materia' materia.id %}" class="inline-flex items-center gap-1.5 bg-[#173121] hover:bg-[#234730] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all shadow-xs shrink-0 active:scale-95">
+                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span>Baixar • 🪙 2</span>
+                </a>
+            {% endif %}
         {% else %}
-            <span class="text-[11px] font-semibold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg">Sem Ficheiro</span>
+            <span class="text-[11px] font-semibold text-gray-400 italic">Em breve</span>
         {% endif %}
     </div>
+
 </div>

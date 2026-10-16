@@ -1,108 +1,167 @@
 {% extends "base.html" %}
 
-{% block content %}
-<div class="max-w-4xl mx-auto my-4 sm:my-10 px-2 sm:px-4">
-    <!-- Card Principal: Flex vertical no mobile, horizontal no desktop -->
-    <div class="flex flex-col md:flex-row bg-white rounded-2xl md:rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-        
-        <!-- Coluna Esquerda: Informações / Boas-vindas (Fundo Verde Escuro) -->
-        <div class="w-full md:w-5/12 bg-[#173121] text-white p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-                <span class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-emerald-300">
-                    Comunidade FauConectado
-                </span>
-                <h2 class="text-2xl sm:text-3xl font-serif font-semibold mt-2 mb-3 leading-tight">
-                    Bem-vindo de volta
-                </h2>
-                <p class="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
-                    Acede à tua conta para consultar resumos, descarregar exames e interagir com os materiais da tua faculdade.
-                </p>
-            </div>
+{% block title %}Acesso ao Portal | FauConectado{% endblock %}
 
-            <!-- Caixinha de Lembrete / Informação -->
-            <div class="mt-6 p-4 bg-[#1e3c29] rounded-xl border border-emerald-800/40 text-xs text-emerald-100/90 space-y-2">
-                <div class="font-bold flex items-center gap-1.5 text-white">
-                    Acesso Seguro
-                </div>
-                <p class="text-emerald-200/80 text-[11px] leading-relaxed">
-                    Usa as tuas credenciais de estudante para aceder a todas as funcionalidades do repositório.
-                </p>
-            </div>
+{% block content %}
+<div class="max-w-md mx-auto my-2 sm:my-8 px-2 sm:px-0">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+        
+        <!-- Seletor de Abas (Tabs) para Mobile First -->
+        <div class="grid grid-cols-2 p-1 bg-gray-100/80 rounded-xl mb-6">
+            <button 
+                type="button" 
+                id="btn-tab-login"
+                onclick="switchAuthTab('login')" 
+                class="py-2.5 text-xs font-bold rounded-lg transition-all text-[#173121] bg-white shadow-xs">
+                Iniciar Sessão
+            </button>
+            <button 
+                type="button" 
+                id="btn-tab-registro"
+                onclick="switchAuthTab('registro')" 
+                class="py-2.5 text-xs font-bold rounded-lg transition-all text-gray-500 hover:text-gray-800">
+                Criar Conta
+            </button>
         </div>
 
-        <!-- Coluna Direita: Formulário de Login -->
-        <div class="w-full md:w-7/12 p-6 sm:p-8 bg-white flex flex-col justify-center">
-            <form method="post" class="space-y-4" novalidate>
+        <!-- ==================== FORMULÁRIO DE LOGIN ==================== -->
+        <div id="form-login-container" class="space-y-4">
+            <div class="mb-4 text-center sm:text-left">
+                <h1 class="text-xl font-bold text-[#173121]">Bem-vindo de volta</h1>
+                <p class="text-xs text-gray-500 mt-0.5">Introduza as suas credenciais para aceder ao portal.</p>
+            </div>
+
+            <form method="post" action="{% url 'login' %}" class="space-y-4" novalidate>
                 {% csrf_token %}
 
-                <!-- Parâmetro 'next' mantido para redirecionamento após o login -->
-                <input type="hidden" name="next" value="{{ next }}">
-
-                <!-- Mensagens de erro gerais do formulário (ex.: credenciais inválidas) -->
-                {% if form.non_field_errors %}
-                    <div class="p-3 text-xs text-red-700 bg-red-50 rounded-lg border border-red-200 space-y-1">
-                        {% for error in form.non_field_errors %}
+                {% if login_form.non_field_errors %}
+                    <div class="p-3 rounded-xl bg-red-50 text-xs font-medium text-red-700">
+                        {% for error in login_form.non_field_errors %}
                             <p>{{ error }}</p>
                         {% endfor %}
                     </div>
                 {% endif %}
 
-                <!-- Renderização dinâmica dos campos do formulário (Username/Email e Password) -->
-                {% for field in form %}
+                <!-- Campo Identificador / Email -->
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-gray-700">Utilizador ou Email</label>
+                    <input 
+                        type="text" 
+                        name="username" 
+                        required 
+                        class="w-full px-3.5 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all text-gray-800 placeholder-gray-400"
+                        placeholder="exemplo@email.com"
+                    >
+                </div>
+
+                <!-- Campo Password + Recuperação -->
+                <div class="flex flex-col gap-1">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-semibold text-gray-700">Palavra-passe</label>
+                        <a href="{% url 'password_reset' %}" class="text-[11px] font-medium text-emerald-800 hover:underline">
+                            Esqueceu-se?
+                        </a>
+                    </div>
+                    <input 
+                        type="password" 
+                        name="password" 
+                        required 
+                        class="w-full px-3.5 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all text-gray-800 placeholder-gray-400"
+                        placeholder="••••••••"
+                    >
+                </div>
+
+                <div class="pt-2">
+                    <button 
+                        type="submit" 
+                        class="w-full py-3 bg-[#173121] hover:bg-[#234730] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all active:scale-[0.99]"
+                    >
+                        Entrar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ==================== FORMULÁRIO DE REGISTO ==================== -->
+        <div id="form-registro-container" class="space-y-4 hidden">
+            <div class="mb-4 text-center sm:text-left">
+                <h1 class="text-xl font-bold text-[#173121]">Criar Nova Conta</h1>
+                <p class="text-xs text-gray-500 mt-0.5">Junte-se à comunidade académica do FauConectado.</p>
+            </div>
+
+            <form method="post" action="{% url 'registro' %}" class="space-y-4" novalidate>
+                {% csrf_token %}
+
+                {% if registro_form.non_field_errors %}
+                    <div class="p-3 rounded-xl bg-red-50 text-xs font-medium text-red-700">
+                        {% for error in registro_form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in registro_form %}
                     <div class="flex flex-col gap-1">
                         <label for="{{ field.id_for_label }}" class="text-xs font-semibold text-gray-700">
                             {{ field.label }}
                         </label>
-
                         <input 
                             type="{{ field.field.widget.input_type|default:'text' }}" 
                             name="{{ field.html_name }}" 
                             id="{{ field.id_for_label }}" 
                             value="{{ field.value|default:'' }}"
                             {% if field.field.required %}required{% endif %}
-                            class="w-full px-3.5 py-2 text-sm bg-gray-50 border {% if field.errors %}border-red-400 focus:ring-red-500{% else %}border-gray-200 focus:ring-[#173121]{% endif %} rounded-lg focus:outline-none focus:ring-2 focus:bg-white transition-all placeholder-gray-400"
+                            class="w-full px-3.5 py-2.5 text-sm bg-gray-50/50 border {% if field.errors %}border-red-400{% else %}border-gray-200{% endif %} rounded-xl focus:outline-none focus:ring-2 focus:ring-[#173121] focus:bg-white transition-all text-gray-800 placeholder-gray-400"
+                            placeholder="{% if 'username' in field.name %}Nome de utilizador{% elif 'email' in field.name %}exemplo@email.com{% else %}••••••••{% endif %}"
                         >
-
-                        <!-- Texto de ajuda (se houver) -->
-                        {% if field.help_text %}
-                            <p class="text-[11px] text-gray-500 mt-0.5 leading-tight">
-                                {{ field.help_text|safe }}
-                            </p>
-                        {% endif %}
-
-                        <!-- Erros específicos do campo -->
                         {% if field.errors %}
                             {% for error in field.errors %}
-                                <p class="text-xs text-red-600 font-medium mt-0.5">
-                                    {{ error }}
-                                </p>
+                                <p class="text-xs text-red-600 mt-0.5">{{ error }}</p>
                             {% endfor %}
                         {% endif %}
                     </div>
                 {% endfor %}
 
-                <!-- Botão de Submissão -->
                 <div class="pt-2">
                     <button 
                         type="submit" 
-                        class="w-full py-2.5 bg-[#173121] hover:bg-[#13281b] text-white text-xs font-semibold rounded-full shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-[#173121] focus:ring-offset-1"
+                        class="w-full py-3 bg-[#173121] hover:bg-[#234730] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all active:scale-[0.99]"
                     >
-                        Entrar
+                        Concluir Registo
                     </button>
-                </div>
-
-                <!-- Separador / Link para Registar -->
-                <div class="pt-4 border-t border-gray-100 text-center">
-                    <p class="text-xs text-gray-600">
-                        Ainda não tens uma conta? 
-                        <a href="{% url 'registro' %}" class="font-bold text-[#173121] hover:underline ml-0.5">
-                            Criar conta
-                        </a>
-                    </p>
                 </div>
             </form>
         </div>
 
     </div>
 </div>
+
+<!-- JavaScript Leve para Alternar entre Login e Registo -->
+<script>
+    function switchAuthTab(tab) {
+        const loginContainer = document.getElementById('form-login-container');
+        const registroContainer = document.getElementById('form-registro-container');
+        const btnLogin = document.getElementById('btn-tab-login');
+        const btnRegistro = document.getElementById('btn-tab-registro');
+
+        if (tab === 'login') {
+            loginContainer.classList.remove('hidden');
+            registroContainer.classList.add('hidden');
+            
+            btnLogin.className = "py-2.5 text-xs font-bold rounded-lg transition-all text-[#173121] bg-white shadow-xs";
+            btnRegistro.className = "py-2.5 text-xs font-bold rounded-lg transition-all text-gray-500 hover:text-gray-800";
+        } else {
+            registroContainer.classList.remove('hidden');
+            loginContainer.classList.add('hidden');
+
+            btnRegistro.className = "py-2.5 text-xs font-bold rounded-lg transition-all text-[#173121] bg-white shadow-xs";
+            btnLogin.className = "py-2.5 text-xs font-bold rounded-lg transition-all text-gray-500 hover:text-gray-800";
+        }
+    }
+
+    // Se houver erros no formulário de registo enviados pelo Django, abre automaticamente a aba de registo
+    {% if registro_form.errors %}
+        switchAuthTab('registro');
+    {% endif %}
+</script>
 {% endblock %}

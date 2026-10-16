@@ -3,8 +3,7 @@ from .models import Mentor
 
 @admin.register(Mentor)
 class MateriaAdmin(admin.ModelAdmin):
-    list_display = ("nome","sexo")
-    list_filter = ("sexo",)
+    list_display = ("nome",)
     search_fields = ("nome",)
-    ordering = ("nome", "sexo")
+    ordering = ("nome",)
     readonly_fields = ("criado_em",)

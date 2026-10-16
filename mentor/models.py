@@ -8,6 +8,6 @@ class Mentor(models.Model):
 
     nome = models.CharField(max_length=30)
     whatsapp = models.CharField(max_length=15, help_text="Exemplo: +2449XXXXXXXX",unique=True)
-    sexo = models.CharField(max_length=1, choices=SEXO_CHOICES)
+    aprovado = models.BooleanField(default=False)
     votos = models.FloatField(default=0.0)
     criado_em = models.DateTimeField(auto_now_add=True)

@@ -1,48 +1,36 @@
 {% extends "base.html" %}
 
+{% block title %}Painel do Estudante | FauConectado{% endblock %}
+
 {% block content %}
-<div class="max-w-7xl mx-auto my-6 px-3 sm:px-6 space-y-6">
+<div class="max-w-7xl mx-auto my-4 sm:my-6 px-3 sm:px-6 space-y-6">
 
-    {% include 'registration/componentes/banner-principal.html' %}
-
-    <!-- Grelha de Engajamento: Gamificação e Gamificação Rápida -->
+    <!-- Grelha de Métricas & Economia (4 Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- Dias Seguidos de Estudo (Streak) -->
-        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+        <!-- Saldo de Moedas (Sua Economia/Monetização) -->
+        <div class="bg-white p-5 rounded-2xl border border-amber-200/80 shadow-xs flex items-center justify-between relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-amber-400/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Sequência de Estudo</p>
+                <p class="text-[11px] font-extrabold text-amber-800 uppercase tracking-wider">Carteira FC Coins</p>
                 <div class="flex items-baseline gap-1.5 mt-1">
-                    <h3 class="text-2xl font-extrabold text-gray-900">5</h3>
-                    <span class="text-xs font-semibold text-emerald-600">dias seguidos 🔥</span>
+                    <h3 class="text-2xl font-black text-gray-900">{{ user.moedas|default:0 }}</h3>
+                    <span class="text-xs font-bold text-amber-600">Moedas 🪙</span>
                 </div>
             </div>
-            <div class="w-11 h-11 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center text-lg font-bold border border-orange-100">
-                ⚡
-            </div>
+            <a href="{% url 'apoiar' %}" title="Comprar mais moedas" class="w-11 h-11 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-lg font-bold border border-amber-200 transition-transform active:scale-95">
+                ➕
+            </a>
         </div>
 
-        <!-- Materiais Estudados -->
-        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
-            <div>
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Acervo Pessoal</p>
-                <div class="flex items-baseline gap-1.5 mt-1">
-                    <h3 class="text-2xl font-extrabold text-gray-900">{{ total_materiais|default:"0" }}</h3>
-                    <span class="text-xs text-gray-500">materiais</span>
-                </div>
-            </div>
-            <div class="w-11 h-11 bg-emerald-50 text-[#173121] rounded-xl flex items-center justify-center text-lg font-bold border border-emerald-100">
-                📚
-            </div>
-        </div>
 
         <!-- Conteúdos Aprovados -->
-        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs flex items-center justify-between">
             <div>
                 <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Materiais Validados</p>
                 <div class="flex items-baseline gap-1.5 mt-1">
                     <h3 class="text-2xl font-extrabold text-[#173121]">{{ materiais_aprovados|default:"0" }}</h3>
-                    <span class="text-xs text-emerald-600 font-medium">no repositório</span>
+                    <span class="text-xs text-emerald-600 font-medium">no acervo</span>
                 </div>
             </div>
             <div class="w-11 h-11 bg-emerald-50 text-emerald-700 rounded-xl flex items-center justify-center text-lg font-bold border border-emerald-100">
@@ -51,12 +39,12 @@
         </div>
 
         <!-- Em Revisão -->
-        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs flex items-center justify-between">
             <div>
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Aguardando Aprovação</p>
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Em Análise</p>
                 <div class="flex items-baseline gap-1.5 mt-1">
                     <h3 class="text-2xl font-extrabold text-amber-600">{{ materiais_pendentes|default:"0" }}</h3>
-                    <span class="text-xs text-amber-600 font-medium">em revisão</span>
+                    <span class="text-xs text-amber-600 font-medium">aguardando</span>
                 </div>
             </div>
             <div class="w-11 h-11 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-lg font-bold border border-amber-100">
@@ -66,23 +54,23 @@
 
     </div>
 
-    <!-- Layout Dividido: Painel de Atividades + Ferramentas do Tutor -->
+    <!-- Layout Dividido: Tabela de Materiais + Barra de Monetização/Tutoria -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- Coluna Esquerda/Centro: Os teus materiais e atividades de estudo (2 colunas) -->
+        <!-- Coluna Esquerda: Os teus materiais enviados (2 colunas) -->
         <div class="lg:col-span-2 space-y-6">
             
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-xs border border-gray-100 overflow-hidden">
                 <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                     <div>
-                        <h2 class="text-base font-serif font-bold text-gray-900">
-                            Os Teus Materiais de Estudo
+                        <h2 class="text-base font-extrabold text-[#173121]">
+                            Os Teus Materiais Submetidos
                         </h2>
-                        <p class="text-xs text-gray-500">Documentos submetidos para tutoria e revisão</p>
+                        <p class="text-xs text-gray-500">Documentos partilhados que geram moedas para a tua conta</p>
                     </div>
 
-                    <a href="{% url 'enviar_materia' %}" class="text-xs font-bold text-[#173121] hover:underline">
-                        + Submeter Novo
+                    <a href="{% url 'enviar_materia' %}" class="inline-flex items-center gap-1.5 text-xs font-bold bg-[#173121] text-white px-3.5 py-2 rounded-xl hover:bg-[#234730] transition-all shadow-xs">
+                        <span>+ Partilhar</span>
                     </a>
                 </div>
 
@@ -91,7 +79,7 @@
                         <table class="w-full text-left border-collapse text-xs sm:text-sm">
                             <thead>
                                 <tr class="bg-gray-50 text-gray-400 uppercase text-[10px] tracking-wider border-b border-gray-100">
-                                    <th class="py-3 px-5 font-bold">Título / Cadeira</th>
+                                    <th class="py-3 px-5 font-bold">Título</th>
                                     <th class="py-3 px-5 font-bold">Ano / Semestre</th>
                                     <th class="py-3 px-5 font-bold">Estado</th>
                                     <th class="py-3 px-5 font-bold text-right">Ação</th>
@@ -101,26 +89,26 @@
                                 {% for item in materiais %}
                                     <tr class="hover:bg-emerald-50/20 transition-colors">
                                         <td class="py-3.5 px-5 font-medium text-gray-900">
-                                            <div class="font-bold text-gray-900">{{ item.titulo }}</div>
-                                            <div class="text-[11px] text-gray-500">{{ item.tipo|default:"Documento" }}</div>
+                                            <div class="font-bold text-gray-900 line-clamp-1">{{ item.titulo }}</div>
+                                            <div class="text-[11px] text-gray-400">🔥 {{ item.votos|default:0 }} votos acumulados</div>
                                         </td>
-                                        <td class="py-3.5 px-5 text-gray-600">
+                                        <td class="py-3.5 px-5 text-gray-600 shrink-0">
                                             {{ item.ano }}º Ano · {{ item.semestre }}º Sem.
                                         </td>
                                         <td class="py-3.5 px-5">
-                                            {% if item.estado == 'aprovado' %}
+                                            {% if item.aprovado %}
                                                 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                                    ● Publicado
+                                                    ● Publicado (+5 Coins)
                                                 </span>
                                             {% else %}
                                                 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                                    ● Pendente
+                                                    ● Em Validação
                                                 </span>
                                             {% endif %}
                                         </td>
                                         <td class="py-3.5 px-5 text-right">
-                                            <a href="#" class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#173121] hover:text-white rounded-lg text-xs font-bold text-gray-700 transition-all">
-                                                Estudar
+                                            <a href="{% url 'baixar_materia' item.id %}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#173121] hover:text-white rounded-lg text-xs font-bold text-gray-700 transition-all">
+                                                Ver PDF
                                             </a>
                                         </td>
                                     </tr>
@@ -129,16 +117,18 @@
                         </table>
                     {% else %}
                         <!-- Estado Vazio -->
-                        <div class="py-12 px-4 text-center">
-                            <div class="w-12 h-12 bg-emerald-50 text-[#173121] rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl border border-emerald-100">
+                        <div class="py-12 px-4 text-center space-y-3">
+                            <div class="w-12 h-12 bg-emerald-50 text-[#173121] rounded-2xl flex items-center justify-center mx-auto text-xl border border-emerald-100">
                                 📖
                             </div>
-                            <h4 class="text-xs font-bold text-gray-800 mb-1">Nenhum material adicionado</h4>
-                            <p class="text-xs text-gray-500 max-w-sm mx-auto mb-4">
-                                Submete os teus apontamentos ou exames para teres apoio do tutor virtual e partilhares com a faculdade.
-                            </p>
-                            <a href="{% url 'enviar_materia' %}" class="inline-flex items-center gap-2 px-4 py-2 bg-[#173121] hover:bg-[#13281b] text-white text-xs font-bold rounded-xl transition-all">
-                                + Adicionar Material
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-800">Nenhum material publicado</h4>
+                                <p class="text-xs text-gray-500 max-w-sm mx-auto mt-1">
+                                    Submete exames ou resumos. Ganhas <strong>+5 FC Coins</strong> por cada material aprovado!
+                                </p>
+                            </div>
+                            <a href="{% url 'enviar_materia' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#173121] hover:bg-[#234730] text-white text-xs font-bold rounded-xl transition-all shadow-xs">
+                                + Submeter Primeiro Material
                             </a>
                         </div>
                     {% endif %}
@@ -147,51 +137,49 @@
 
         </div>
 
-        <!-- Coluna Direita: Ferramentas Interativas do Tutor (1 coluna) -->
+        <!-- Coluna Direita: Caixa de Recarga & Tutoria Premium (1 coluna) -->
         <div class="space-y-4">
             
-            <!-- Caixa de Ação Rápida de Tutoria -->
-            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+            <!-- Banner Monetizado: Tornar-se Tutor Oficial -->
+            <div class="bg-gradient-to-br from-[#173121] to-[#234730] text-white p-5 rounded-2xl shadow-sm border border-emerald-900/50 space-y-3 relative overflow-hidden">
+                <div class="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Oportunidade
+                </div>
+                <h3 class="text-lg font-extrabold text-white leading-snug">Seja um Tutor Oficial</h3>
+                <p class="text-xs text-emerald-100/80 leading-relaxed">
+                    Ative o seu perfil de explicador, ajude outros alunos e apareça em destaque no repositório.
+                </p>
+                <a href="{% url 'criar_mentor' %}" class="block text-center w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-[#173121] text-xs font-black rounded-xl transition-all shadow-md active:scale-[0.98]">
+                    Ativar Perfil de Explicador
+                </a>
+            </div>
+
+            <!-- Caixa de Ação Rápida de Tutoria Virtual -->
+            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs space-y-3">
                 <div class="flex items-center gap-2">
                     <span class="text-lg">🤖</span>
                     <h3 class="font-bold text-gray-900 text-sm">Assistente de Estudo</h3>
                 </div>
                 <p class="text-xs text-gray-500 leading-relaxed">
-                    Escolhe uma ação rápida para impulsionar os teus estudos de hoje:
+                    Ferramentas para impulsionar a tua preparação para as provas:
                 </p>
 
                 <div class="space-y-2">
-                    <a href="#" class="flex items-center justify-between p-3 bg-gray-50 hover:bg-emerald-50/60 rounded-xl border border-gray-100 text-xs font-bold text-gray-700 hover:text-[#173121] transition-all group">
+                    <a href="{% url 'listar_materia' %}?q=Exame" class="flex items-center justify-between p-3 bg-gray-50 hover:bg-emerald-50/60 rounded-xl border border-gray-100 text-xs font-bold text-gray-700 hover:text-[#173121] transition-all group">
                         <span class="flex items-center gap-2">
-                            <span>📝</span> Gerar Questionário / Quiz
+                            <span>📝</span> Exames Anteriores Resolvidos
                         </span>
                         <span class="text-gray-400 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
                     </a>
 
-                    <a href="#" class="flex items-center justify-between p-3 bg-gray-50 hover:bg-emerald-50/60 rounded-xl border border-gray-100 text-xs font-bold text-gray-700 hover:text-[#173121] transition-all group">
+                    <a href="{% url 'listar_materia' %}?q=Resumo" class="flex items-center justify-between p-3 bg-gray-50 hover:bg-emerald-50/60 rounded-xl border border-gray-100 text-xs font-bold text-gray-700 hover:text-[#173121] transition-all group">
                         <span class="flex items-center gap-2">
-                            <span>💡</span> Explicar Matéria Difícil
-                        </span>
-                        <span class="text-gray-400 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
-                    </a>
-
-                    <a href="#" class="flex items-center justify-between p-3 bg-gray-50 hover:bg-emerald-50/60 rounded-xl border border-gray-100 text-xs font-bold text-gray-700 hover:text-[#173121] transition-all group">
-                        <span class="flex items-center gap-2">
-                            <span>📌</span> Resumo Rápido de Exame
+                            <span>💡</span> Resumos Rápidos de Disciplinas
                         </span>
                         <span class="text-gray-400 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
                     </a>
                 </div>
-            </div>
-
-            <!-- Caixinha de Regras e Tutoria -->
-            <div class="p-5 bg-[#173121] text-white rounded-2xl border border-emerald-900/50 space-y-2 text-xs">
-                <div class="font-bold text-emerald-300 flex items-center gap-1.5">
-                    🎓 Dica de Aprendizagem
-                </div>
-                <p class="text-emerald-100/80 leading-relaxed text-[11px]">
-                    Partilhar resumos com a comunidade ajuda a consolidar o teu próprio conhecimento e desbloqueia novos exercícios recomendados pelo tutor.
-                </p>
             </div>
 
         </div>

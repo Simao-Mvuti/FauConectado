@@ -4,36 +4,41 @@
 <head>
     <title>{% block title %}FauConectado | O Teu Passaporte para Notas Positivas{% endblock %}</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Configurações e Meta Tags para PWA -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#173121">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FauConectado">
+    <link rel="apple-touch-icon" href="{% static 'images/icons/icon-192x192.png' %}">
+
     {% tailwind_css %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
     </style>
 </head>
-<body class="flex flex-col min-h-screen antialiased text-[#1c281d] bg-[#f8f9f6]">
+<body class="flex flex-col min-h-screen antialiased text-[#1c281d] bg-[#f8f9f6] select-none sm:select-text">
 
     <!-- Top Banner Promocional / Alerta de Provas -->
-    <div class="bg-[#173121] text-[#c0d4b8] text-xs font-medium py-2 px-4 shadow-inner">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-2 mx-auto sm:mx-0">
-                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>🔥 <strong>Época de Provas:</strong> Acede aos exames e testes resolvidos dos semestres passados!</span>
-            </div>
-            <a href="{% url 'apoiar' %}" class="hidden sm:inline-flex items-center gap-1 text-white hover:underline text-xs">
-                Apoiar servidor servidor
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </a>
+    <div class="bg-[#173121] text-[#c0d4b8] text-xs font-medium py-2 px-4 shadow-inner text-center">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>🔥 <strong>Época de Provas:</strong> Exames e testes resolvidos dos semestres passados!</span>
         </div>
     </div>
 
     <!-- Header / Navbar Principal -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200/80 sticky top-0 z-50">
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200/80 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 gap-4">
+            <div class="flex justify-between items-center h-14 sm:h-16 gap-4">
                 
                 <!-- Logo & Brand -->
                 <div class="flex items-center gap-6">
@@ -42,10 +47,10 @@
                             FC
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-lg font-extrabold text-[#173121] leading-tight tracking-tight">
+                            <span class="text-base sm:text-lg font-extrabold text-[#173121] leading-tight tracking-tight">
                                 FauConectado
                             </span>
-                            <span class="text-[10px] font-semibold tracking-wider uppercase text-emerald-700">Comunidade de Estudos</span>
+                            <span class="text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase text-emerald-700">Comunidade de Estudos</span>
                         </div>
                     </a>
 
@@ -63,67 +68,37 @@
                     </nav>
                 </div>
 
-                <!-- Ações do Utilizador e Login -->
-                <div class="hidden sm:flex items-center gap-3">
+                <!-- Ações do Utilizador e Login (Desktop & Mobile Header) -->
+                <div class="flex items-center gap-3">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'enviar_materia' %}" class="inline-flex items-center gap-1.5 bg-emerald-50 text-[#173121] border border-emerald-200/80 hover:bg-emerald-100 font-bold text-xs px-3.5 py-2 rounded-xl transition-all">
-                            <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            Submeter Material
-                        </a>
-                        <div class="h-6 w-px bg-gray-200"></div>
-                        <a href="#" class="flex items-center gap-2 text-xs font-bold text-gray-700 hover:text-[#173121] bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-xl transition-all">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                            {{ user.first_name|default:user.username }}
-                        </a>
+                        <div class="hidden sm:block h-6 w-px bg-gray-200"></div>
+
+                        <!-- Dropdown do Utilizador (Desktop) / Identificação (Mobile) -->
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-1.5 text-xs font-bold text-gray-700 bg-gray-100 px-3 py-2 rounded-xl">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                {{ user.first_name|default:user.username }}
+                            </span>
+
+                            <!-- Form de Logout (Seguro via POST) -->
+                            <form method="post" action="{% url 'logout' %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-xl transition-all flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                    <span>Sair</span>
+                                </button>
+                            </form>
+                        </div>
                     {% else %}
                         <a href="{% url 'login' %}" class="text-xs font-bold text-gray-600 hover:text-[#173121] px-3 py-2 rounded-xl hover:bg-gray-100 transition-all">
                             Entrar
                         </a>
-                        <a href="{% url 'registro' %}" class="text-xs font-bold bg-[#173121] hover:bg-[#234730] text-white px-4 py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md">
+                        <a href="{% url 'registro' %}" class="text-xs font-bold bg-[#173121] hover:bg-[#234730] text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all shadow-sm hover:shadow-md">
                             Criar Conta
                         </a>
                     {% endif %}
                 </div>
 
-                <!-- Botão Menu Mobile -->
-                <div class="flex lg:hidden items-center gap-2">
-                    <button type="button" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Menu Mobile com Animação -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-200 bg-white px-4 pt-3 pb-5 space-y-3">
-            <div class="grid grid-cols-2 gap-2">
-                <a href="{% url 'listar_materia' %}" class="flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-xs font-bold text-gray-800">
-                    <span>📚</span> Materiais
-                </a>
-                <a href="{% url 'mentoria' %}" class="flex items-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-xs font-bold text-gray-800">
-                    <span>👨‍🏫</span> Tutores
-                </a>
-                <a href="#" class="flex items-center gap-2 p-3 rounded-xl bg-amber-50/50 text-xs font-bold text-amber-900 col-span-2">
-                    <span>🧮</span> Calculadora de Média para Provas
-                </a>
-            </div>
-
-            <div class="pt-2 border-t border-gray-100 flex flex-col gap-2">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'enviar_materia' %}" class="w-full text-center text-xs font-bold bg-[#173121] text-white py-3 rounded-xl">
-                        + Submeter Material
-                    </a>
-                {% else %}
-                    <a href="#" class="w-full text-center text-xs font-bold bg-gray-100 text-gray-800 py-3 rounded-xl">
-                        Entrar na Conta
-                    </a>
-                    <a href="#" class="w-full text-center text-xs font-bold bg-[#173121] text-white py-3 rounded-xl">
-                        Criar Conta
-                    </a>
-                {% endif %}
             </div>
         </div>
     </header>
@@ -133,11 +108,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <div class="space-y-2">
             {% for message in messages %}
-                <div class="flex items-center justify-between p-4 rounded-2xl border text-xs font-semibold shadow-xs transition-all
+                <div class="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-xs font-semibold shadow-xs transition-all
                     {% if message.tags == 'error' %} bg-red-50 text-red-900 border-red-200/80
                     {% elif message.tags == 'success' %} bg-emerald-50 text-emerald-900 border-emerald-200/80
                     {% else %} bg-blue-50 text-blue-900 border-blue-200/80 {% endif %}">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2.5">
                         <span class="p-1 rounded-lg bg-white/60">ℹ️</span>
                         <span>{{ message }}</span>
                     </div>
@@ -149,33 +124,72 @@
     {% endif %}
 
     <!-- Conteúdo Dinâmico -->
-    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 sm:pb-8">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Rodapé Completo -->
-    <footer class="bg-white border-t border-gray-200/80 py-8 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-medium">
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                <span>&copy; {% now "Y" %} FauConectado • Feito por estudantes para estudantes.</span>
-            </div>
-            <div class="flex items-center gap-6 font-semibold">
-                <a href="{% url 'listar_materia' %}?q=Exame" class="hover:text-[#173121] transition-colors">
-                    Provas Passadas
-                </a>
-                <a href="{% url 'mentoria' %}" class="hover:text-[#173121] transition-colors">
-                    Ajuda
-                </a>
-            </div>
-        </div>
-    </footer>
+    <!-- Bottom Navigation Bar (Mobile Native App Bar) -->
+    <nav class="sm:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200/90 z-50 pb-safe shadow-lg">
+        <div class="grid grid-cols-4 h-16">
+            <a href="{% url 'listar_materia' %}" class="flex flex-col items-center justify-center gap-1 text-[#173121] font-bold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <span class="text-[10px]">Provas</span>
+            </a>
+            
+            <a href="{% url 'mentoria' %}" class="flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-[#173121] font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span class="text-[10px]">Tutores</span>
+            </a>
 
-    <!-- Script de Interação -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'enviar_materia' %}" class="flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-[#173121] font-semibold">
+                    <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="text-[10px]">Enviar</span>
+                </a>
+                
+                <!-- Botão de Sair no Mobile Navigation -->
+                <form method="post" action="{% url 'logout' %}" class="flex items-center justify-center">
+                    {% csrf_token %}
+                    <button type="submit" class="flex flex-col items-center justify-center gap-1 text-red-600 font-semibold w-full h-full">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <span class="text-[10px]">Sair</span>
+                    </button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-[#173121] font-semibold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                    <span class="text-[10px]">Entrar</span>
+                </a>
+                <a href="{% url 'registro' %}" class="flex flex-col items-center justify-center gap-1 text-emerald-800 font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    <span class="text-[10px]">Registo</span>
+                </a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Rodapé Completo -->
+   <footer class="hidden sm:block bg-white border-t border-gray-200/80 py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-medium">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span>&copy; {% now "Y" %} FauConectado • Feito por estudantes para estudantes.</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span>📚 {{ stats_materiais|default:"0" }} materiais</span>
+            <span>🎓 {{ stats_tutores|default:"0" }} tutores</span>
+        </div>
+    </div>
+</footer>
+
+    <!-- Registo do Service Worker para PWA -->
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register("{% static 'sw.js' %}")
+                    .then(reg => console.log('PWA Service Worker registado com sucesso.'))
+                    .catch(err => console.log('Falha ao registar Service Worker:', err));
+            });
         }
     </script>
 </body>

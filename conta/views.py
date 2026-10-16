@@ -47,7 +47,7 @@ class DashboardView(LoginRequiredMixin, CreateView):
 class RegistoView(CreateView):
     model = Utilizador
     form_class = RegistoForm
-    template_name = 'registration/login_registro.html'
+    template_name = 'registration/registro.html'
     success_url = reverse_lazy('login') # Redireciona para o login com aviso
 
     def form_valid(self, form):

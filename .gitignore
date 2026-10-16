@@ -5,6 +5,6 @@ db.sqlite3
 node_modules
 media/
 staticfiles/
-.env
 .DS_Store
 /materias
+.env

@@ -64,16 +64,17 @@ class RegistoView(CreateView):
         link_ativacao = self.request.build_absolute_uri(
             reverse('ativar_conta', kwargs={'uidb64': uid, 'token': token})
         )
-
-        # 4. Envia o email
-        assunto = 'Confirme a sua conta no FauConectado'
-        mensagem = f'Olá, {user.username}!\n\nPor favor, clique no link abaixo para ativar a sua conta no FauConectado:\n{link_ativacao}\n\nSe não solicitou isto, ignore esta mensagem.'
         
+
+      # Em vez de 'Olá, ...' e 'ativar ...'
+        assunto = 'Confirme a sua conta no FauConectado'
+        mensagem = f'Ola, {user.username}!\n\nPor favor, clique no link abaixo para ativar a sua conta no FauConectado:\n{link_ativacao}\n\nSe nao solicitou isto, ignore esta mensagem.'
+
         send_mail(
-            assunto, 
-            mensagem, 
-            'no-reply@fauconectado.ao', 
-            [user.email], 
+            assunto,
+            mensagem,
+            'FauConectado <simaolusimbadiolutondamvuti@gmail.com>',
+            [user.email],
             fail_silently=False
         )
 

@@ -18,6 +18,22 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+# settings.py
+
+# 1. Configura o Backend SMTP real do Gmail
+EMAIL_BACKEND = env("EMAIL_BACKEND")
+
+# 2. Configurações do Servidor SMTP
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env.int("EMAIL_PORT")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
+
+# 3. As tuas credenciais do Gmail
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+
+# 4. Remetente Padrão
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
 # Application definition
 
@@ -114,13 +130,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
 
 AUTH_USER_MODEL = "conta.Utilizador"
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "listar_materia"
 LOGIN_URL = "login"
+# Garante codificação correta para o envio de emails
+DEFAULT_CHARSET = 'utf-8'
